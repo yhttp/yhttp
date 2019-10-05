@@ -2,7 +2,6 @@
 env:
   global:
     - COMMIT_AUTHOR_EMAIL: vahid.mardani@gmail.com
-    - ENCRYPTION_LABEL: 1ba779fff1ea
 
 language: python
 
@@ -33,5 +32,5 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: Carrene/rehttp
+    repo: pylover/rehttp
     condition: $TRAVIS_PYTHON_VERSION = 3.6

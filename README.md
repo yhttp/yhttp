@@ -1,11 +1,5 @@
 # rehttp
 
-A very micro HTTP framework. [documentation](http://rehttp.org)
-
-## WARNING
-
-This is the version 2, unstable and under reconstruction, so please refer to
-branch `release/1` for a stable release.
 
 
 [![PyPI](http://img.shields.io/pypi/v/rehttp.svg)](https://pypi.python.org/pypi/rehttp)
@@ -24,7 +18,6 @@ wsgi.py
 ```python
 
 app = Applicatin()
-
 
 @app.route('/foos')
 def get():
