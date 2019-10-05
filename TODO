@@ -1,0 +1,25 @@
+
+# exception handling
+# test verb, route
+# Test headers
+# url arguments
+# query string, kwargsonly
+# form
+# cookies
+# json
+# validation
+# Lowercase statuses
+# stream
+# Static
+# CLI
+# Options verb
+# Hooks & events
+- document:
+	Code comments
+    mention about route definition order
+	authentication
+	authorize decorataor
+
+Next release:
+- template ssr
+

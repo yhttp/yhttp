@@ -1,0 +1,81 @@
+from bddrest import status, response
+
+from rehttp import contenttypes
+
+
+def test_pipeline(app, session, when):
+    endresponseiscalled = 0
+
+    @app.event
+    def endresponse():
+        nonlocal endresponseiscalled
+        endresponseiscalled += 1
+
+    @app.route('/foos')
+    def get():
+        assert app.request is not None
+        assert app.response is not None
+        return 'foo1, foo2, foo3'
+
+    @app.route()
+    def get():
+        app.response.headers.add('x-foo', 'a', 'b')
+        return 'index'
+
+    @app.route()
+    def post():
+        return
+
+    with session(app):
+        assert status == 200
+        assert response == 'index'
+        assert 'content-type' not in response.headers
+        assert 'x-foo' in response.headers
+        assert endresponseiscalled == 1
+
+        when('/foos')
+        assert status == 200
+        assert response == 'foo1, foo2, foo3'
+        assert endresponseiscalled == 2
+
+        when(verb='post')
+        assert status == 200
+        assert response == ''
+        assert endresponseiscalled == 3
+
+
+def test_stream(app, session, when):
+    endresponseiscalled = 0
+    text = contenttypes.text(app)
+    binary = contenttypes.binary(app)
+
+    @app.event
+    def endresponse():
+        nonlocal endresponseiscalled
+        endresponseiscalled += 1
+
+    @app.route()
+    @text
+    def get():
+        yield 'foo'
+        yield 'bar'
+        yield 'baz'
+
+    @app.route('/binary')
+    def get():
+        app.response.length = 9
+        yield b'foo'
+        yield b'bar'
+        yield b'baz'
+
+    with session(app):
+        assert status == 200
+        assert response.text == 'foobarbaz'
+        assert endresponseiscalled == 1
+
+        when('/binary')
+        assert status == 200
+        assert response.text == 'foobarbaz'
+        assert response.headers['content-length'] == '9'
+        assert endresponseiscalled == 2
+
