@@ -5,28 +5,28 @@ from bddrest import status, response, when
 from rehttp import static
 
 
-def test_staticfile(app, session, when, tmpdir):
+def test_staticfile(app, story, when, tmpdir):
     indexfilename = path.join(tmpdir, 'index.txt')
     with open(indexfilename, 'w') as f:
         f.write('foo')
 
     app.staticfile(r'/a\.txt', indexfilename)
 
-    with session(app, '/a.txt'):
+    with story(app, '/a.txt'):
         assert status == 200
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
         assert response == 'foo'
 
 
-def test_staticdirectory(app, session, when, tmpdir):
+def test_staticdirectory(app, story, when, tmpdir):
     indexfilename = path.join(tmpdir, 'index.txt')
     with open(indexfilename, 'w') as f:
         f.write('foo')
 
     app.staticdirectory(tmpdir)
 
-    with session(app, '/index.txt'):
+    with story(app, '/index.txt'):
         assert status == 200
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'

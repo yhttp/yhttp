@@ -3,7 +3,7 @@ from bddrest import status, response
 from rehttp import contenttypes
 
 
-def test_pipeline(app, session, when):
+def test_pipeline(app, story, when):
     endresponseiscalled = 0
 
     @app.event
@@ -26,7 +26,7 @@ def test_pipeline(app, session, when):
     def post():
         return
 
-    with session(app):
+    with story(app):
         assert status == 200
         assert response == 'index'
         assert 'content-type' not in response.headers
@@ -44,7 +44,7 @@ def test_pipeline(app, session, when):
         assert endresponseiscalled == 3
 
 
-def test_stream(app, session, when):
+def test_stream(app, story, when):
     endresponseiscalled = 0
     text = contenttypes.text(app)
     binary = contenttypes.binary(app)
@@ -68,7 +68,7 @@ def test_stream(app, session, when):
         yield b'bar'
         yield b'baz'
 
-    with session(app):
+    with story(app):
         assert status == 200
         assert response.text == 'foobarbaz'
         assert endresponseiscalled == 1

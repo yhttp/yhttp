@@ -12,7 +12,7 @@ def app():
 
 
 @pytest.fixture
-def session():
+def story():
     def given_(app, *a, **kw):
         return bddrest.Given(app, None, *a, **kw)
 

@@ -3,7 +3,7 @@ from bddrest import response, status
 from rehttp import contenttypes
 
 
-def test_jsonencoding(app, session):
+def test_jsonencoding(app, story):
 
     json = contenttypes.json(app)
 
@@ -12,7 +12,7 @@ def test_jsonencoding(app, session):
     def get():
         return dict(foo='bar')
 
-    with session(app):
+    with story(app):
         assert status == 200
         assert response.json == dict(foo='bar')
         assert response.content_type == 'application/json'

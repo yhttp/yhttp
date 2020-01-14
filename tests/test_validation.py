@@ -3,7 +3,7 @@ from bddrest import status, response, given
 from rehttp import validator, statuses
 
 
-def test_nobody(app, session, when):
+def test_nobody(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -11,14 +11,14 @@ def test_nobody(app, session, when):
     def foo():
         assert app.request.form == {}
 
-    with session(app, verb='foo'):
+    with story(app, verb='foo'):
         assert status == 200
 
         when(form=dict(bar='baz'))
         assert status == '400 Body Not Allowed'
 
 
-def test_required(app, session, when):
+def test_required(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -29,7 +29,7 @@ def test_required(app, session, when):
     def post():
         pass
 
-    with session(
+    with story(
             app, verb='post', form=dict(bar='bar', baz='baz')):
         assert status == 200
 
@@ -43,7 +43,7 @@ def test_required(app, session, when):
         assert status == '700 Please provide baz'
 
 
-def test_notnone(app, session, when):
+def test_notnone(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -54,7 +54,7 @@ def test_notnone(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', json=dict(bar='bar', baz='baz')):
+    with story(app, verb='post', json=dict(bar='bar', baz='baz')):
         assert status == 200
 
         when(json=given - 'bar')
@@ -70,7 +70,7 @@ def test_notnone(app, session, when):
         assert status == '700 baz cannot be null'
 
 
-def test_readonly(app, session, when):
+def test_readonly(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -80,14 +80,14 @@ def test_readonly(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post'):
+    with story(app, verb='post'):
         assert status == 200
 
         when(form=dict(bar='bar'))
         assert status == '400 Field bar is readonly'
 
 
-def test_type(app, session, when):
+def test_type(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -97,14 +97,14 @@ def test_type(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post'):
+    with story(app, verb='post'):
         assert status == 200
 
         when(json=dict(bar='bar'))
         assert status == '400 Invalid type: bar'
 
 
-def test_minimummaximum(app, session, when):
+def test_minimummaximum(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -117,7 +117,7 @@ def test_minimummaximum(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', json=dict(bar=2)):
+    with story(app, verb='post', json=dict(bar=2)):
         assert status == 200
 
         when(json=dict(bar='bar'))
@@ -130,7 +130,7 @@ def test_minimummaximum(app, session, when):
         assert status == '400 Maximum allowed value for field bar is 9'
 
 
-def test_minmaxlength(app, session, when):
+def test_minmaxlength(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -140,7 +140,7 @@ def test_minmaxlength(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', form=dict(bar='123')):
+    with story(app, verb='post', form=dict(bar='123')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -153,7 +153,7 @@ def test_minmaxlength(app, session, when):
         assert status == '400 Maximum allowed length for field bar is 5'
 
 
-def test_regexpattern(app, session, when):
+def test_regexpattern(app, story, when):
     validate = validator(app)
 
     @app.route()
@@ -163,7 +163,7 @@ def test_regexpattern(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', form=dict(bar='123')):
+    with story(app, verb='post', form=dict(bar='123')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -173,7 +173,7 @@ def test_regexpattern(app, session, when):
         assert status == '400 Invalid format: bar'
 
 
-def test_customvalildator(app, session, when):
+def test_customvalildator(app, story, when):
     from rehttp.validation import Field
 
     validate = validator(app)
@@ -191,7 +191,7 @@ def test_customvalildator(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', form=dict(bar='a')):
+    with story(app, verb='post', form=dict(bar='a')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -207,7 +207,7 @@ def test_customvalildator(app, session, when):
     def post():
         pass
 
-    with session(app, verb='post', form=dict(bar='a')):
+    with story(app, verb='post', form=dict(bar='a')):
         assert status == 200
 
         when(form=given - 'bar')

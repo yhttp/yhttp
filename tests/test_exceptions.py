@@ -4,19 +4,19 @@ from bddrest import status, response
 from rehttp import statuses
 
 
-def test_httpstatus(app, session):
+def test_httpstatus(app, story):
 
     @app.route()
     def get():
         raise statuses.badrequest()
 
-    with session(app):
+    with story(app):
         assert status == '400 Bad Request'
         assert response.text.startswith('400 Bad Request\r\n')
         assert response.headers['content-type'] == 'text/plain; charset=utf-8'
 
 
-def test_unhandledexception(app, session):
+def test_unhandledexception(app, story):
 
     class MyException(Exception):
         pass
@@ -25,17 +25,17 @@ def test_unhandledexception(app, session):
     def get():
         raise MyException()
 
-    with pytest.raises(MyException), session(app):
+    with pytest.raises(MyException), story(app):
         pass
 
 
-def test_redirect(app, session):
+def test_redirect(app, story):
 
     @app.route()
     def get():
         raise statuses.found('http://example.com')
 
-    with session(app):
+    with story(app):
         assert status == 302
         assert response.headers['location'] == 'http://example.com'
 
