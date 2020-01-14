@@ -20,7 +20,7 @@ wsgi.py
 app = Applicatin()
 
 @app.route('/foos')
-def get():
+def get(req, resp):
     return 'Hello world!'
 
 ```

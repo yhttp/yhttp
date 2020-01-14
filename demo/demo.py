@@ -11,7 +11,7 @@ binary = contenttypes.binary(app)
 
 
 @app.route()
-def get():
+def get(res, resp):
     i = 0
     while True:
         yield f'{i:04}\r\n'.encode()
