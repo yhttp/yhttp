@@ -82,7 +82,7 @@ class Application:
 
         return decorator
 
-    def event(self, f):
+    def when(self, f):
         callbacks = self.events.setdefault(f.__name__, set())
         if f not in callbacks:
             callbacks.add(f)

@@ -5,8 +5,7 @@ import rehttp
 
 def test_pipeline(app, story, when):
     endresponseiscalled = 0
-    # FIXME: rename to hook
-    @app.event
+    @app.when
     def endresponse():
         nonlocal endresponseiscalled
         endresponseiscalled += 1
@@ -47,7 +46,7 @@ def test_pipeline(app, story, when):
 def test_stream(app, story, when):
     endresponseiscalled = 0
 
-    @app.event
+    @app.when
     def endresponse():
         nonlocal endresponseiscalled
         endresponseiscalled += 1
