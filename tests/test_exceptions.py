@@ -39,4 +39,3 @@ def test_redirect(app, session):
         assert status == 302
         assert response.headers['location'] == 'http://example.com'
 
-
