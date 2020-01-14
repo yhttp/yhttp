@@ -46,8 +46,8 @@ def test_routing_argument(app, session, when):
         assert status == 404
 
 
-    @app.route(r'/(\d+)/(\w*)')
-    def post(id, title):
+    @app.route(r'/(\d+)/?(\w+)?')
+    def post(id, title='Empty'):
         return f'{id} {title}'
 
     with session(app, '/12/foo', 'post'):
@@ -55,6 +55,7 @@ def test_routing_argument(app, session, when):
         assert response == '12 foo'
 
         when('/12')
-        assert status == 404
+        assert status == 200
+        assert response == '12 Empty'
 
 

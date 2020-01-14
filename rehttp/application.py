@@ -37,14 +37,13 @@ class Application:
             if not match:
                 continue
 
-            kwargs = {}
-            kwargs.update(match.groupdict())
-            kwargs.update(
-                (k, v) for k, v in self.request.query.items()
+            arguments = [a for a in match.groups() if a is not None]
+            querystrings = {
+                k: v for k, v in self.request.query.items()
                 if k in info['kwonly']
-            )
+            }
 
-            return func, match.groups(), kwargs
+            return func, arguments, querystrings
 
         raise statuses.notfound()
 
@@ -56,8 +55,8 @@ class Application:
             self.threadlocal.response = response
 
             try:
-                handler, positionals, optionals = self._findhandler(request)
-                body = handler(*positionals, **optionals)
+                handler, arguments, querystrings = self._findhandler(request)
+                body = handler(*arguments, **querystrings)
                 if isinstance(body, types.GeneratorType):
                     response.firstchunk = next(body)
 
