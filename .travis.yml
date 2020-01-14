@@ -12,7 +12,6 @@ before_install:
 install: pip install -e .
 script: py.test -v --cov=rehttp
 after_success: coveralls
-after_deploy: "./scripts/travis-gh-pages.sh"
 deploy:
   provider: pypi
   skip_cleanup: true
