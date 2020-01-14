@@ -3,7 +3,7 @@ import functools
 import bddrest
 import pytest
 
-from rehttp import Application
+from yhttp import Application
 
 
 @pytest.fixture

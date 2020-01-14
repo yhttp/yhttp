@@ -1,6 +1,6 @@
 from bddrest import status, response
 
-import rehttp
+import yhttp
 
 
 def test_pipeline(app, story, when):
@@ -52,7 +52,7 @@ def test_stream(app, story, when):
         endresponseiscalled += 1
 
     @app.route()
-    @rehttp.text
+    @yhttp.text
     def get(req, resp):
         yield 'foo'
         yield 'bar'

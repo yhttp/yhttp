@@ -5,7 +5,7 @@ import re
 
 # reading package's version (same way sqlalchemy does)
 with open(
-    os.path.join(os.path.dirname(__file__), 'rehttp', '__init__.py')
+    os.path.join(os.path.dirname(__file__), 'yhttp', '__init__.py')
 ) as v_file:
     package_version = \
         re.compile('.*__version__ = \'(.*?)\'', re.S)\
@@ -21,11 +21,11 @@ dependencies = [
 
 
 setup(
-    name='rehttp',
+    name='yhttp',
     version=package_version,
     author='Vahid Mardani',
     author_email='vahid.mardani@gmail.com',
-    url='http://github.com/Carrene/rehttp',
+    url='http://github.com/yhttp/yhttp',
     description='A very micro http framework.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',  # This is important!

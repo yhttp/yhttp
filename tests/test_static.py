@@ -2,7 +2,7 @@ from os import path
 
 from bddrest import status, response, when
 
-from rehttp import static
+from yhttp import static
 
 
 def test_staticfile(app, story, when, tmpdir):

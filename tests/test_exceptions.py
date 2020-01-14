@@ -1,7 +1,7 @@
 import pytest
 from bddrest import status, response
 
-from rehttp import statuses
+from yhttp import statuses
 
 
 def test_httpstatus(app, story):

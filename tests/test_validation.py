@@ -1,6 +1,6 @@
 from bddrest import status, response, given
 
-from rehttp import validate, statuses
+from yhttp import validate, statuses
 
 
 def test_nobody(app, story, when):
@@ -161,7 +161,7 @@ def test_regexpattern(app, story, when):
 
 
 def test_customvalildator(app, story, when):
-    from rehttp.validation import Field
+    from yhttp.validation import Field
 
     def customvalidator(value, container, field):
         assert isinstance(field, Field)

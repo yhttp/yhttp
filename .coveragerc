@@ -1,10 +1,10 @@
 [run]
-source=rehttp
+source=yhttp
 omit = 
-    rehttp/tests/**/*
+    yhttp/tests/**/*
 
 [tool:pytest]
-addopts= --cov=rehttp rehttp/tests
+addopts= --cov=yhttp yhttp/tests
 
 [report]
 exclude_lines =

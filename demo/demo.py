@@ -2,7 +2,7 @@
 import time
 from wsgiref.simple_server import make_server
 
-from rehttp import Application, text
+from yhttp import Application, text
 
 
 app = Application()
