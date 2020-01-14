@@ -1,36 +1,26 @@
-
-env:
-  global:
-    - COMMIT_AUTHOR_EMAIL: vahid.mardani@gmail.com
-
 language: python
-
 python: 3.6
-
 branches:
   only:
   - master
   - nightly
   - ci
-  - /^(release\/)?v([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$/
-
+  - "/^(release\\/)?v([1-9]\\d*!)?(0|[1-9]\\d*)(\\.(0|[1-9]\\d*))*((a|b|rc)(0|[1-9]\\d*))?(\\.post(0|[1-9]\\d*))?(\\.dev(0|[1-9]\\d*))?$/"
 before_install:
-  - pip install -U pip setuptools wheel
-  - pip install -r requirements-ci.txt
-
+- pip install -U pip setuptools wheel
+- pip install -r requirements-ci.txt
 install: pip install -e .
-script: py.test -v --cov=rehttp 
+script: py.test -v --cov=rehttp
 after_success: coveralls
-after_deploy: ./scripts/travis-gh-pages.sh
+after_deploy: "./scripts/travis-gh-pages.sh"
 deploy:
   provider: pypi
   skip_cleanup: true
   user: Vahid.Mardani
-  skip_cleanup: true
   password:
-    secure: KkO9k3Ig0Jy6MifKarIOKYLA4lIK/GYFvpvQCbO3K+G+G938xcUnPb5GpN3XCPx+uaoOo/Q3nS7GC8fK0NETM1UdrGOjbuPC3GdGwjqapT5N110bJvbZg9CyUqI+qQ0sXFqPM1BdbtPtJT1LYgEbM/zGC68cOrYzxsVfNhOe3yMTIQEmONr6p+NEJd0we5F+P1OqlxHy6hlImLzPGs88zofr3JI/vXGMFoAYmpZHjRJrioWwjQtsiiEGGp1GxCOAKgDHiNyT0MLC9QP3TP8k7WdaOpLdl/xSvd/rNM7BE7aqEVIA+YTCjzyhT4rciiq8bOBcyeprawm8ozzeDpxn1Lx1qX685F8h6Oc9XACBGKOttN1IwMGHFfFsRLkYGNzdllDyhO5ONQpaZupGcMYrUH7iGZL85Js1slHyZ7eztQWvOf6suqYU3Ru3fW9vzTgJYKKK6UB15dt9+7b/qKQTEobabjxb7G5vPQUWq2I4jIymPnPShtHlS1sIZtJqEKHygl32XM+Qn4J8msLZ6yJo9dRcaFtXf3LnH0kAxH2KHh/1dqioYoA8boXpdYfj3Hj37F72a/poWoVWixVNAAfM8yN5jUC6U4lXPP5FO6iVNnwjBzAnWcNZbnDTrinRZBCVR88JU1L4knkFlUwhpny7+HBF0Op5hkz5SFUpQJPYlBU=
+    secure: ai8Z8fFSv8slFPpweqC+nFCm3aogAu6QPvrEgiiSu9IeJdFyclbGVGho0BEc7mAF5wAUo/0HdlvFkllNnjuaSmgzCARd85Dmhs6Q+OLdoXugjiE1AriJOsnpyoySui5zm/70Vrvg9zPetG7ZW07j5CIE4IAxekWkOiw1jRegdA82lb5MuGCedU7R6SSgjMHiEc5/qzLIzamUxiJ9xpuTlYBou9Qd/WPzx2dFPAsE5WcP6xoCntIHMDwo1+0hQnewlslSVOQE9269VkHEa5lN0h05VJSTxvNswxbPl8DcYVEjf/R4J8yVm7Bs8eAQX4GSVQqnB/8Wsq5vq6BfWFFHRd90owTvjTalTitcYnRLydgTp3D18zhcPeMIosyQqL1jzB7XQWwBrsE9Ml24ItStoHP0HOoU9T6OYNncpmBkKUCmDIc/3vXO/z+6rFWvlgKytKYBF69wRJTYeqXxUMRax8WJZp8YmvNy0zNDcXOveOnI4jaMeERmStlDFR714ATLmemWNZC2MvX1n70vTn/Hi4cQdD+qQw6/GDgi2NNblitk8sUJ8I6vRfSPc89Ko1i2/eq7OOdyBrmWxS5mjt6T9Sg3ljHvWE8H414D8A3ncn9RxpwtJ1Rl82JCkwD5RCBfFbcUvZUZnpJsuL2vAb1uzkNRQzwCV2/vJMfiJYXCVDc=
   on:
     tags: true
     distributions: sdist bdist_wheel
     repo: pylover/rehttp
-    condition: $TRAVIS_PYTHON_VERSION = 3.6
+    condition: "$TRAVIS_PYTHON_VERSION = 3.6"
