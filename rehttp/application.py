@@ -1,7 +1,6 @@
+import inspect
 import re
 import types
-import inspect
-import functools
 
 import pymlconf
 

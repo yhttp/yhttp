@@ -1,5 +1,5 @@
-import re
 import functools
+import re
 from _decimal import InvalidOperation
 
 from . import statuses

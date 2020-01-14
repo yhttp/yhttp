@@ -2,8 +2,8 @@ import wsgiref.util as wsgiutil
 from http import cookies
 from urllib.parse import parse_qs
 
-from .lazyattribute import lazyattribute
 from .forms import parseanyform
+from .lazyattribute import lazyattribute
 
 
 class Request:

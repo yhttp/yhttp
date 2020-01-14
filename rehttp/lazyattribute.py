@@ -1,4 +1,3 @@
-
 class lazyattribute:
     """ ``lazy`` decorator is intended to promote a
         function call to object attribute. This means the

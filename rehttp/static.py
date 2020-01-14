@@ -1,5 +1,5 @@
-from os import path
 from mimetypes import guess_type
+from os import path
 
 from . import statuses
 
