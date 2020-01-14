@@ -40,6 +40,7 @@ def test_urlencodedform(app, session, when):
         assert status == 200
         assert response == ''
 
+
 def test_urlencodedform_duplicatedfield(app, session, when):
 
     @app.route()

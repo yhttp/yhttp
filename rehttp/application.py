@@ -3,7 +3,6 @@ import types
 import inspect
 import functools
 import threading
-import contextlib
 
 import pymlconf
 
@@ -53,18 +52,13 @@ class Application:
 
         raise statuses.notfound()
 
-    @contextlib.contextmanager
-    def _newsession(self, environ, startresponse):
-        request = self.__requestfactory__(self, environ)
-        response = self.__responsefactory__(self, startresponse)
-        self.threadlocal.request = request
-        self.threadlocal.response = response
-        yield request, response
-        del self.threadlocal.request
-        del self.threadlocal.response
-
     def __call__(self, environ, startresponse):
-        with self._newsession(environ, startresponse) as (request, response):
+        try:
+            request = self.__requestfactory__(self, environ)
+            response = self.__responsefactory__(self, startresponse)
+            self.threadlocal.request = request
+            self.threadlocal.response = response
+
             try:
                 handler = self._dispatch(request.verb, request.path)
                 body = handler()
@@ -83,6 +77,10 @@ class Application:
                     response.headers.add(line)
 
             return response.start()
+
+        finally:
+            del self.threadlocal.request
+            del self.threadlocal.response
 
     def route(self, pattern='/', verb=None):
         def decorator(f):
