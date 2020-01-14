@@ -61,7 +61,7 @@ def test_stream(app, story, when):
 
     @app.route('/binary')
     def get(req, resp):
-        app.response.length = 9
+        resp.length = 9
         yield b'foo'
         yield b'bar'
         yield b'baz'

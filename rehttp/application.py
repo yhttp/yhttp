@@ -2,7 +2,6 @@ import re
 import types
 import inspect
 import functools
-import threading
 
 import pymlconf
 
@@ -14,7 +13,6 @@ from .response import Response
 class Application:
     __requestfactory__ = Request
     __responsefactory__ = Response
-    threadlocal = threading.local()
     builtinsettings = '''
     debug: true
     cookie:
@@ -39,7 +37,7 @@ class Application:
 
             arguments = [a for a in match.groups() if a is not None]
             querystrings = {
-                k: v for k, v in self.request.query.items()
+                k: v for k, v in request.query.items()
                 if k in info['kwonly']
             }
 
@@ -48,35 +46,28 @@ class Application:
         raise statuses.notfound()
 
     def __call__(self, environ, startresponse):
+        request = self.__requestfactory__(self, environ)
+        response = self.__responsefactory__(self, startresponse)
+
         try:
-            request = self.__requestfactory__(self, environ)
-            response = self.__responsefactory__(self, startresponse)
-            # TODO: remove them
-            self.threadlocal.request = request
-            self.threadlocal.response = response
+            handler, arguments, querystrings = self._findhandler(request)
+            body = handler(request, response, *arguments, **querystrings)
+            if isinstance(body, types.GeneratorType):
+                response.firstchunk = next(body)
 
-            try:
-                handler, arguments, querystrings = self._findhandler(request)
-                body = handler(request, response, *arguments, **querystrings)
-                if isinstance(body, types.GeneratorType):
-                    response.firstchunk = next(body)
+            response.body = body
 
-                response.body = body
+        except statuses.HTTPStatus as ex:
+            ex.setupresponse(response, stacktrace=self.settings.debug)
 
-            except statuses.HTTPStatus as ex:
-                ex.setupresponse(response, stacktrace=self.settings.debug)
+        # Setting cookies in response headers, if any
+        cookie = request.cookies.output()
+        if cookie:
+            for line in cookie.split('\r\n'):
+                response.headers.add(line)
 
-            # Setting cookies in response headers, if any
-            cookie = request.cookies.output()
-            if cookie:
-                for line in cookie.split('\r\n'):
-                    response.headers.add(line)
+        return response.start()
 
-            return response.start()
-
-        finally:
-            del self.threadlocal.request
-            del self.threadlocal.response
 
     def route(self, pattern='/', verb=None):
         def decorator(f):
@@ -103,14 +94,6 @@ class Application:
 
         for c in callbacks:
             c(*a, **kw)
-
-    @property
-    def request(self):
-        return self.threadlocal.request
-
-    @property
-    def response(self):
-        return self.threadlocal.response
 
     def staticfile(self, pattern, filename):
         return self.route(pattern)(static.file(filename))

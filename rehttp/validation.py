@@ -212,8 +212,7 @@ class CustomValidator(Criterion):
 
 
 class RequestValidator:
-    def __init__(self, app, nobody=None, fields=None):
-        self.app = app
+    def __init__(self, nobody=None, fields=None):
         self.nobody = nobody
 
         self.fields = {}
@@ -230,8 +229,7 @@ class RequestValidator:
 
             self.fields[name] = Field(name, **kw)
 
-    def validate(self):
-        request = self.app.request
+    def validate(self, request):
 
         if self.nobody and request.form:
             raise statuses.status(400, 'Body Not Allowed')
@@ -247,13 +245,11 @@ class RequestValidator:
     def __call__(self, handler):
 
         @functools.wraps(handler)
-        def wrapper(*a, **kw):
-            self.validate()
-            return handler(*a, **kw)
+        def wrapper(request, response, *a, **kw):
+            self.validate(request)
+            return handler(request, response, *a, **kw)
 
         return wrapper
 
 
-def validator(app):
-    return functools.partial(RequestValidator, app)
-
+validate = RequestValidator

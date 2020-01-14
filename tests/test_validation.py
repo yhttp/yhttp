@@ -1,10 +1,9 @@
 from bddrest import status, response, given
 
-from rehttp import validator, statuses
+from rehttp import validate, statuses
 
 
 def test_nobody(app, story, when):
-    validate = validator(app)
 
     @app.route()
     @validate(nobody=True)
@@ -19,7 +18,6 @@ def test_nobody(app, story, when):
 
 
 def test_required(app, story, when):
-    validate = validator(app)
 
     @app.route()
     @validate(fields=dict(
@@ -44,8 +42,6 @@ def test_required(app, story, when):
 
 
 def test_notnone(app, story, when):
-    validate = validator(app)
-
     @app.route()
     @validate(fields=dict(
         bar=dict(notnone=True),
@@ -71,7 +67,6 @@ def test_notnone(app, story, when):
 
 
 def test_readonly(app, story, when):
-    validate = validator(app)
 
     @app.route()
     @validate(fields=dict(
@@ -88,8 +83,6 @@ def test_readonly(app, story, when):
 
 
 def test_type(app, story, when):
-    validate = validator(app)
-
     @app.route()
     @validate(fields=dict(
         bar=dict(type_=int),
@@ -105,8 +98,6 @@ def test_type(app, story, when):
 
 
 def test_minimummaximum(app, story, when):
-    validate = validator(app)
-
     @app.route()
     @validate(fields=dict(
         bar=dict(
@@ -131,8 +122,6 @@ def test_minimummaximum(app, story, when):
 
 
 def test_minmaxlength(app, story, when):
-    validate = validator(app)
-
     @app.route()
     @validate(fields=dict(
         bar=dict(minlength=2, maxlength=5),
@@ -154,8 +143,6 @@ def test_minmaxlength(app, story, when):
 
 
 def test_regexpattern(app, story, when):
-    validate = validator(app)
-
     @app.route()
     @validate(fields=dict(
         bar=dict(pattern=r'^\d+$'),
@@ -176,10 +163,7 @@ def test_regexpattern(app, story, when):
 def test_customvalildator(app, story, when):
     from rehttp.validation import Field
 
-    validate = validator(app)
-
     def customvalidator(value, container, field):
-        assert container is app.request.form
         assert isinstance(field, Field)
         if value not in 'ab':
             raise statuses.status(400, 'Value must be either a or b')

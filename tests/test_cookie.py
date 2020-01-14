@@ -7,7 +7,7 @@ from bddrest import status, response
 def test_cookie(app, story):
     @app.route()
     def get(req, resp):
-        counter = app.request.cookies['counter']
+        counter = req.cookies['counter']
         # FIXME: resp.cookies, maybe!
         req.cookies['counter'] = str(int(counter.value) + 1)
         req.cookies['counter']['max-age'] = 1
