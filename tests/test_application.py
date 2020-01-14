@@ -1,6 +1,6 @@
 from bddrest import status, response
 
-from rehttp import contenttypes
+import rehttp
 
 
 def test_pipeline(app, story, when):
@@ -46,8 +46,6 @@ def test_pipeline(app, story, when):
 
 def test_stream(app, story, when):
     endresponseiscalled = 0
-    text = contenttypes.text(app)
-    binary = contenttypes.binary(app)
 
     @app.event
     def endresponse():
@@ -55,7 +53,7 @@ def test_stream(app, story, when):
         endresponseiscalled += 1
 
     @app.route()
-    @text
+    @rehttp.text
     def get(req, resp):
         yield 'foo'
         yield 'bar'

@@ -1,14 +1,12 @@
 from bddrest import response, status
 
-from rehttp import contenttypes
+import rehttp
 
 
 def test_jsonencoding(app, story):
 
-    json = contenttypes.json(app)
-
     @app.route()
-    @json
+    @rehttp.json
     def get(req, resp):
         return dict(foo='bar')
 

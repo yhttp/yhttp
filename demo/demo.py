@@ -2,15 +2,14 @@
 import time
 from wsgiref.simple_server import make_server
 
-from rehttp import Application, contenttypes
+from rehttp import Application, text
 
 
 app = Application()
-text = contenttypes.text(app)
-binary = contenttypes.binary(app)
 
 
 @app.route()
+@text
 def get(res, resp):
     i = 0
     while True:
