@@ -4,12 +4,12 @@ from bddrest import status, response
 def test_querystringform(app, story, when):
 
     @app.route('/empty')
-    def get():
-        assert app.request.form == {}
+    def get(req, resp):
+        assert req.form == {}
 
     @app.route()
-    def get():
-        assert app.request.form['foo'] == 'bar'
+    def get(req, resp):
+        assert req.form['foo'] == 'bar'
 
     with story(app, query=dict(foo='bar')):
         assert status == 200
@@ -21,13 +21,13 @@ def test_querystringform(app, story, when):
 def test_urlencodedform(app, story, when):
 
     @app.route()
-    def post():
-        assert app.request.contenttype == 'application/x-www-form-urlencoded'
-        assert app.request.form['foo'] == 'bar'
+    def post(req, resp):
+        assert req.contenttype == 'application/x-www-form-urlencoded'
+        assert req.form['foo'] == 'bar'
 
     @app.route()
-    def patch():
-        assert app.request.contenttype == 'application/x-www-form-urlencoded'
+    def patch(req, resp):
+        assert req.contenttype == 'application/x-www-form-urlencoded'
 
     with story(app, verb='post', form=dict(foo='bar')):
         assert status == 200
@@ -44,8 +44,8 @@ def test_urlencodedform(app, story, when):
 def test_urlencodedform_duplicatedfield(app, story, when):
 
     @app.route()
-    def post():
-        assert app.request.form['foo'] == ['bar', 'baz']
+    def post(req, resp):
+        assert req.form['foo'] == ['bar', 'baz']
 
     with story(
             app,
@@ -60,9 +60,9 @@ def test_jsonform(app, story, when):
     app.settings.debug = False
 
     @app.route()
-    def post():
-        assert app.request.contenttype == 'application/json'
-        assert app.request.form['foo'] == 'bar'
+    def post(req, resp):
+        assert req.contenttype == 'application/json'
+        assert req.form['foo'] == 'bar'
 
     with story(app, verb='post', json=dict(foo='bar')):
         assert status == 200
@@ -82,9 +82,9 @@ def test_multipartform(app, story, when):
     app.settings.debug = False
 
     @app.route()
-    def post():
-        assert app.request.contenttype.startswith('multipart/form')
-        assert app.request.form['foo'] == 'bar'
+    def post(req, resp):
+        assert req.contenttype.startswith('multipart/form')
+        assert req.form['foo'] == 'bar'
 
     with story(app, verb='post', multipart=dict(foo='bar')):
         assert status == 200

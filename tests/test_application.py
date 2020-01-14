@@ -5,25 +5,25 @@ from rehttp import contenttypes
 
 def test_pipeline(app, story, when):
     endresponseiscalled = 0
-
+    # FIXME: rename to hook
     @app.event
     def endresponse():
         nonlocal endresponseiscalled
         endresponseiscalled += 1
 
     @app.route('/foos')
-    def get():
-        assert app.request is not None
-        assert app.response is not None
+    def get(req, resp):
+        assert req is not None
+        assert resp is not None
         return 'foo1, foo2, foo3'
 
     @app.route()
-    def get():
-        app.response.headers.add('x-foo', 'a', 'b')
+    def get(req, resp):
+        resp.headers.add('x-foo', 'a', 'b')
         return 'index'
 
     @app.route()
-    def post():
+    def post(req, resp):
         return
 
     with story(app):
@@ -56,13 +56,13 @@ def test_stream(app, story, when):
 
     @app.route()
     @text
-    def get():
+    def get(req, resp):
         yield 'foo'
         yield 'bar'
         yield 'baz'
 
     @app.route('/binary')
-    def get():
+    def get(req, resp):
         app.response.length = 9
         yield b'foo'
         yield b'bar'

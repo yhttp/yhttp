@@ -40,3 +40,4 @@ def test_staticdirectory(app, story, when, tmpdir):
 
         when('/invalid/file.html')
         assert status == 404
+

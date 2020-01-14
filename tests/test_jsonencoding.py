@@ -9,7 +9,7 @@ def test_jsonencoding(app, story):
 
     @app.route()
     @json
-    def get():
+    def get(req, resp):
         return dict(foo='bar')
 
     with story(app):

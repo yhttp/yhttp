@@ -51,12 +51,13 @@ class Application:
         try:
             request = self.__requestfactory__(self, environ)
             response = self.__responsefactory__(self, startresponse)
+            # TODO: remove them
             self.threadlocal.request = request
             self.threadlocal.response = response
 
             try:
                 handler, arguments, querystrings = self._findhandler(request)
-                body = handler(*arguments, **querystrings)
+                body = handler(request, response, *arguments, **querystrings)
                 if isinstance(body, types.GeneratorType):
                     response.firstchunk = next(body)
 
@@ -112,8 +113,8 @@ class Application:
         return self.threadlocal.response
 
     def staticfile(self, pattern, filename):
-        return self.route(pattern)(static.file(self, filename))
+        return self.route(pattern)(static.file(filename))
 
     def staticdirectory(self, directory):
-        return self.route(r'/(.*)')(static.directory(self, directory))
+        return self.route(r'/(.*)')(static.directory(directory))
 

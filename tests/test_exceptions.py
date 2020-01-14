@@ -7,7 +7,7 @@ from rehttp import statuses
 def test_httpstatus(app, story):
 
     @app.route()
-    def get():
+    def get(req, resp):
         raise statuses.badrequest()
 
     with story(app):
@@ -22,7 +22,7 @@ def test_unhandledexception(app, story):
         pass
 
     @app.route()
-    def get():
+    def get(req, resp):
         raise MyException()
 
     with pytest.raises(MyException), story(app):
@@ -32,7 +32,7 @@ def test_unhandledexception(app, story):
 def test_redirect(app, story):
 
     @app.route()
-    def get():
+    def get(req, resp):
         raise statuses.found('http://example.com')
 
     with story(app):

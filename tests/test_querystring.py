@@ -4,7 +4,7 @@ from bddrest import status
 def test_querystring(app, story, when):
 
     @app.route()
-    def get(*, baz=None):
+    def get(req, resp, *, baz=None):
         assert app.request.query['foo'] == 'bar'
         assert baz == 'qux'
 
