@@ -27,13 +27,13 @@ class Application:
         self.events = {}
         self.settings = pymlconf.Root(self.builtinsettings, context=context)
 
-    def _dispatch(self, verb, path):
-        patterns = self.routes.get(verb)
+    def _findhandler(self, request):
+        patterns = self.routes.get(request.verb)
         if not patterns:
             raise statuses.methodnotallowed()
 
         for pattern, func, info in patterns:
-            match = pattern.match(path)
+            match = pattern.match(request.path)
             if not match:
                 continue
 
@@ -44,11 +44,7 @@ class Application:
                 if k in info['kwonly']
             )
 
-            return functools.partial(
-                func,
-                *match.groups(),
-                **kwargs,
-            )
+            return func, match.groups(), kwargs
 
         raise statuses.notfound()
 
@@ -60,8 +56,8 @@ class Application:
             self.threadlocal.response = response
 
             try:
-                handler = self._dispatch(request.verb, request.path)
-                body = handler()
+                handler, positionals, optionals = self._findhandler(request)
+                body = handler(*positionals, **optionals)
                 if isinstance(body, types.GeneratorType):
                     response.firstchunk = next(body)
 
