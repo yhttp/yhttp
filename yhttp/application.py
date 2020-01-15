@@ -68,7 +68,6 @@ class Application:
 
         return response.start()
 
-
     def route(self, pattern='/', verb=None):
         def decorator(f):
             routes = self.routes.setdefault(verb or f.__name__, [])
@@ -83,9 +82,9 @@ class Application:
         return decorator
 
     def when(self, f):
-        callbacks = self.events.setdefault(f.__name__, set())
+        callbacks = self.events.setdefault(f.__name__, [])
         if f not in callbacks:
-            callbacks.add(f)
+            callbacks.append(f)
 
     def hook(self, name, *a, **kw):
         callbacks = self.events.get(name)

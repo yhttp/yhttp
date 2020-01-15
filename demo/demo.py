@@ -8,9 +8,9 @@ from yhttp import Application, text
 app = Application()
 
 
-@app.route()
+@app.route('/')
 @text
-def get(res, resp):
+def get(req):
     i = 0
     while True:
         yield f'{i:04}\r\n'.encode()
