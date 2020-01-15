@@ -4,11 +4,11 @@ from bddrest import status, response
 def test_routing_basic(app, story, when):
 
     @app.route()
-    def get(req, resp):
+    def get(req):
         return 'get index'
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         return 'post index'
 
     with story(app):
@@ -29,7 +29,7 @@ def test_routing_basic(app, story, when):
 def test_routing_argument(app, story, when):
 
     @app.route(r'/(\d+)')
-    def get(req, resp, id):
+    def get(req, id):
         return id
 
     with story(app, '/12'):
@@ -47,7 +47,7 @@ def test_routing_argument(app, story, when):
 
 
     @app.route(r'/(\d+)/?(\w+)?')
-    def post(req, resp, id, title='Empty'):
+    def post(req, id, title='Empty'):
         return f'{id} {title}'
 
     with story(app, '/12/foo', 'post'):

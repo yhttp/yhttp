@@ -46,11 +46,12 @@ class Application:
 
     def __call__(self, environ, startresponse):
         request = self.__requestfactory__(self, environ)
-        response = self.__responsefactory__(self, startresponse)
+        request.response = response = \
+            self.__responsefactory__(self, startresponse)
 
         try:
             handler, arguments, querystrings = self._findhandler(request)
-            body = handler(request, response, *arguments, **querystrings)
+            body = handler(request, *arguments, **querystrings)
             if isinstance(body, types.GeneratorType):
                 response.firstchunk = next(body)
 

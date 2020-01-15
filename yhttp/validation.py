@@ -245,9 +245,9 @@ class RequestValidator:
     def __call__(self, handler):
 
         @functools.wraps(handler)
-        def wrapper(request, response, *a, **kw):
+        def wrapper(request, *a, **kw):
             self.validate(request)
-            return handler(request, response, *a, **kw)
+            return handler(request, *a, **kw)
 
         return wrapper
 

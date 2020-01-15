@@ -6,14 +6,14 @@ import ujson
 def contenttype(contenttype=None, charset=None, dump=None):
     def decorator(handler):
         @wraps(handler)
-        def wrapper(request, response, *a, **kw):
+        def wrapper(request, *a, **kw):
             if contenttype:
-                response.type = contenttype
+                request.response.type = contenttype
 
             if charset:
-                response.charset = charset
+                request.response.charset = charset
 
-            body = handler(request, response, *a, **kw)
+            body = handler(request, *a, **kw)
             return dump(body) if dump else body
 
         return wrapper

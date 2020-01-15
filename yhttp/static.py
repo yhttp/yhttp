@@ -10,7 +10,8 @@ CHUNKSIZE = 1024 * 10
 def file(filename):
     length = path.getsize(filename)
     type_ = guess_type(path.split(filename)[1])[0]
-    def get(request, response):
+    def get(request):
+        response = request.response
         response.length = length
         response.type = type_
         with open(filename, 'rb') as f:
@@ -25,7 +26,8 @@ def file(filename):
 
 
 def directory(rootpath):
-    def get(request, response, location):
+    def get(request, location):
+        response = request.response
         filename = path.join(rootpath, location)
 
         if not path.exists(filename):

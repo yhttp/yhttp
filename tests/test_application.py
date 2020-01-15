@@ -11,18 +11,18 @@ def test_pipeline(app, story, when):
         endresponseiscalled += 1
 
     @app.route('/foos')
-    def get(req, resp):
+    def get(req):
         assert req is not None
-        assert resp is not None
+        assert req.response is not None
         return 'foo1, foo2, foo3'
 
     @app.route()
-    def get(req, resp):
-        resp.headers.add('x-foo', 'a', 'b')
+    def get(req):
+        req.response.headers.add('x-foo', 'a', 'b')
         return 'index'
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         return
 
     with story(app):
@@ -53,14 +53,14 @@ def test_stream(app, story, when):
 
     @app.route()
     @yhttp.text
-    def get(req, resp):
+    def get(req):
         yield 'foo'
         yield 'bar'
         yield 'baz'
 
     @app.route('/binary')
-    def get(req, resp):
-        resp.length = 9
+    def get(req):
+        req.response.length = 9
         yield b'foo'
         yield b'bar'
         yield b'baz'

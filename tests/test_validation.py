@@ -7,7 +7,7 @@ def test_nobody(app, story, when):
 
     @app.route()
     @validate(nobody=True)
-    def foo(req, resp):
+    def foo(req):
         assert req.form == {}
 
     with story(app, verb='foo'):
@@ -24,7 +24,7 @@ def test_required(app, story, when):
         bar=dict(required=True),
         baz=dict(required='700 Please provide baz'),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(
@@ -47,7 +47,7 @@ def test_notnone(app, story, when):
         bar=dict(notnone=True),
         baz=dict(notnone='700 baz cannot be null')
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', json=dict(bar='bar', baz='baz')):
@@ -72,7 +72,7 @@ def test_readonly(app, story, when):
     @validate(fields=dict(
         bar=dict(readonly=True),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post'):
@@ -87,7 +87,7 @@ def test_type(app, story, when):
     @validate(fields=dict(
         bar=dict(type_=int),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post'):
@@ -105,7 +105,7 @@ def test_minimummaximum(app, story, when):
             maximum=9
         ),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', json=dict(bar=2)):
@@ -126,7 +126,7 @@ def test_minmaxlength(app, story, when):
     @validate(fields=dict(
         bar=dict(minlength=2, maxlength=5),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', form=dict(bar='123')):
@@ -147,7 +147,7 @@ def test_regexpattern(app, story, when):
     @validate(fields=dict(
         bar=dict(pattern=r'^\d+$'),
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', form=dict(bar='123')):
@@ -172,7 +172,7 @@ def test_customvalildator(app, story, when):
     @validate(fields=dict(
         bar=dict(callback=customvalidator)
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', form=dict(bar='a')):
@@ -188,7 +188,7 @@ def test_customvalildator(app, story, when):
     @validate(fields=dict(
         bar=customvalidator
     ))
-    def post(req, resp):
+    def post(req):
         pass
 
     with story(app, verb='post', form=dict(bar='a')):

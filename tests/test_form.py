@@ -4,11 +4,11 @@ from bddrest import status, response
 def test_querystringform(app, story, when):
 
     @app.route('/empty')
-    def get(req, resp):
+    def get(req):
         assert req.form == {}
 
     @app.route()
-    def get(req, resp):
+    def get(req):
         assert req.form['foo'] == 'bar'
 
     with story(app, query=dict(foo='bar')):
@@ -21,12 +21,12 @@ def test_querystringform(app, story, when):
 def test_urlencodedform(app, story, when):
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
         assert req.form['foo'] == 'bar'
 
     @app.route()
-    def patch(req, resp):
+    def patch(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
 
     with story(app, verb='post', form=dict(foo='bar')):
@@ -44,7 +44,7 @@ def test_urlencodedform(app, story, when):
 def test_urlencodedform_duplicatedfield(app, story, when):
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         assert req.form['foo'] == ['bar', 'baz']
 
     with story(
@@ -60,7 +60,7 @@ def test_jsonform(app, story, when):
     app.settings.debug = False
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         assert req.contenttype == 'application/json'
         assert req.form['foo'] == 'bar'
 
@@ -82,7 +82,7 @@ def test_multipartform(app, story, when):
     app.settings.debug = False
 
     @app.route()
-    def post(req, resp):
+    def post(req):
         assert req.contenttype.startswith('multipart/form')
         assert req.form['foo'] == 'bar'
 

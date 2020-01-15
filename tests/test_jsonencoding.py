@@ -7,7 +7,7 @@ def test_jsonencoding(app, story):
 
     @app.route()
     @yhttp.json
-    def get(req, resp):
+    def get(req):
         return dict(foo='bar')
 
     with story(app):

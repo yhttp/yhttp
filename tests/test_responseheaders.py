@@ -4,8 +4,8 @@ from bddrest import status, response
 def test_responseheader(app, story):
 
     @app.route()
-    def get(req, resp):
-        resp.headers.add('x-foo', 'a', 'b')
+    def get(req):
+        req.response.headers.add('x-foo', 'a', 'b')
         return 'index'
 
     with story(app):

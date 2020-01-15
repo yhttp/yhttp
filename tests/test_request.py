@@ -3,7 +3,7 @@ from bddrest import status
 
 def test_request(app, story, when):
     @app.route('/foo')
-    def get(req, resp):
+    def get(req):
         assert req.fullpath == 'http://bddrest-interceptor/foo?bar=baz'
         assert req.scheme == 'http'
 
