@@ -14,9 +14,6 @@ class Application:
     __responsefactory__ = Response
     builtinsettings = '''
     debug: true
-    cookie:
-      http_only: false
-      secure: false
     '''
 
     def __init__(self, **context):
