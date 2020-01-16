@@ -31,7 +31,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',  # This is important!
     install_requires=dependencies,
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     license='MIT',
     classifiers=[
         'Environment :: Console',

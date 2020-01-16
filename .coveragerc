@@ -2,6 +2,7 @@
 source=yhttp
 omit = 
     yhttp/tests/**/*
+    yhttp/extensions/*
 
 [tool:pytest]
 addopts= --cov=yhttp yhttp/tests
