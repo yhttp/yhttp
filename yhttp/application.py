@@ -14,12 +14,12 @@ from .cli import Main
 class Application:
     __requestfactory__ = Request
     __responsefactory__ = Response
-    __cliarguments__ = []
     builtinsettings = '''
     debug: true
     '''
 
     def __init__(self, name='yhttp-application', **context):
+        self.cliarguments = []
         self.name = name
         self.routes = {}
         self.events = {}
@@ -101,10 +101,6 @@ class Application:
     def staticdirectory(self, directory):
         return self.route(r'/(.*)')(static.directory(directory))
 
-    @lazyattribute
-    def cliroot(self):
-        return Main(self)
-
     def climain(self, argv=None):
-        return self.cliroot.main()
+        return Main(self).main()
 

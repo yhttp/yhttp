@@ -3,22 +3,22 @@ from easycli import SubCommand
 from bddcli import Application as CLIApplication, Given, stdout, \
     status, stderr, when
 
+
 class Foo(SubCommand):
     __command__ = 'foo'
 
     def __call__(self, args):
+        assert args.application is app
         print('foo')
 
 
 app = Application()
-app.__cliarguments__.append(Foo)
-main = app.climain
+app.cliarguments.append(Foo)
 
 
 def test_applicationcli_default():
-    cliapp = CLIApplication('foo', 'tests.test_applicationcli:main')
+    cliapp = CLIApplication('foo', 'tests.test_applicationcli:app.climain')
     with Given(cliapp, '--help'):
-        print(stderr)
         assert status == 0
 
         when('foo')
