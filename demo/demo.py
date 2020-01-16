@@ -8,12 +8,12 @@ from yhttp import Application, text
 app = Application()
 
 
-@app.route('/')
+@app.route(r'/(.*)')
 @text
-def get(req):
+def get(req, resource):
     i = 0
     while True:
-        yield f'{i:04}\r\n'.encode()
+        yield f'{req.path} {i:04}\r\n'.encode()
         time.sleep(1)
         i += 1
 

@@ -3,3 +3,4 @@ coverage
 coveralls
 pytest >= 4.4.0
 pytest-cov
+bddcli

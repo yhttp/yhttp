@@ -7,16 +7,20 @@ import pymlconf
 from . import statuses, static
 from .request import Request
 from .response import Response
+from .lazyattribute import lazyattribute
+from .cli import Main
 
 
 class Application:
     __requestfactory__ = Request
     __responsefactory__ = Response
+    __cliarguments__ = []
     builtinsettings = '''
     debug: true
     '''
 
-    def __init__(self, **context):
+    def __init__(self, name='yhttp-application', **context):
+        self.name = name
         self.routes = {}
         self.events = {}
         self.settings = pymlconf.Root(self.builtinsettings, context=context)
@@ -96,4 +100,11 @@ class Application:
 
     def staticdirectory(self, directory):
         return self.route(r'/(.*)')(static.directory(directory))
+
+    @lazyattribute
+    def cliroot(self):
+        return Main(self)
+
+    def climain(self, argv=None):
+        return self.cliroot.main()
 
