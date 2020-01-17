@@ -18,11 +18,11 @@ class Application:
     debug: true
     '''
 
-    def __init__(self, name='yhttp-application', **context):
+    def __init__(self, **context):
         self.cliarguments = []
-        self.name = name
         self.routes = {}
         self.events = {}
+        self.extensions = set()
         self.settings = pymlconf.Root(self.builtinsettings, context=context)
 
     def _findhandler(self, request):
@@ -103,4 +103,16 @@ class Application:
 
     def climain(self, argv=None):
         return Main(self).main()
+
+    def extend(self, extension):
+        self.extensions.add(extension)
+        if hasattr(extension, 'setup'):
+            extension.setup(self)
+
+    def configure(self):
+        for e in self.extensions:
+            if not hasattr(e, 'configure'):
+                continue
+
+            e.configure(self)
 
