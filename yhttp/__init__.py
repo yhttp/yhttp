@@ -5,5 +5,5 @@ from .validation import validate
 from .contenttypes import contenttype, binary, utf8, json, text
 from .lazyattribute import lazyattribute
 
-__version__ = '1.2.0'
+__version__ = '1.3.0'
 
