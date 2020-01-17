@@ -109,10 +109,9 @@ class Application:
         if hasattr(extension, 'setup'):
             extension.setup(self)
 
-    def configure(self):
+    def configure_extensions(self):
         for e in self.extensions:
-            if not hasattr(e, 'configure'):
-                continue
+            if hasattr(e, 'configure'):
+                e.configure(self)
 
-            e.configure(self)
 
