@@ -19,8 +19,8 @@ wsgi.py
 
 app = Applicatin()
 
-@app.route('/foos')
-def get(req, resp):
+@app.route('/')
+def get(req):
     return 'Hello world!'
 
 ```
@@ -29,18 +29,4 @@ def get(req, resp):
 ```bash
 gunicorn wsgi:app
 ```
-
-#### Master branch
-
-The master branch is an integration branch where bug fixes/features are 
-gathered for compiling and functional testing. so it would be unstable.
-
-#### Release branch
-
-The release branch is where releases are maintained and hot fixes 
-(with names like release/v2.x.x) are added. Please ensure that all your 
-production-related work are tracked with the release branches.
-
-With this new model, we can push out bug fixes more quickly and achieve 
-simpler maintenance.
 
