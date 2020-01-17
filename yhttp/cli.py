@@ -1,6 +1,38 @@
 import sys
+from wsgiref.simple_server import make_server
 
-from easycli import Root, Argument
+from easycli import Root, Argument, SubCommand
+
+
+DEFAULT_ADDRESS = '8080'
+
+
+class Serve(SubCommand):
+    __command__ = 'serve'
+    __aliases__ = ['s']
+    __arguments__ = [
+        Argument(
+            '-b', '--bind',
+            default=DEFAULT_ADDRESS,
+            metavar='{HOST:}PORT',
+            help='Bind Address. default: %s' % DEFAULT_ADDRESS
+        ),
+        Argument(
+            '-C',
+            '--directory',
+            default='.',
+            help='Change to this path before starting, default is: `.`'
+        )
+    ]
+
+    def __call__(self, args):
+        host, port = args.bind.split(':')\
+            if ':' in args.bind else ('', args.bind)
+
+        args.application.configure_extensions()
+        httpd = make_server(host, int(port), args.application)
+        print(f'Demo server started http://{host}:{port}')
+        httpd.serve_forever()
 
 
 class Main(Root):
@@ -12,6 +44,7 @@ class Main(Root):
             dest='configurationfile',
             help='Configuration file',
         ),
+        Serve,
     ]
 
     def __init__(self, application):
