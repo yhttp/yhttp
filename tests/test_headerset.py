@@ -29,4 +29,5 @@ def test_headerset():
     headers = HeaderSet(['foo: bar', ('baz', 'qux')])
     assert headers['foo'] == 'bar'
     assert headers['baz'] == 'qux'
-
+    assert headers.get('foo') == 'bar'
+    assert headers.get('NotExists') is None
