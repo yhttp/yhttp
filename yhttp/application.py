@@ -22,7 +22,6 @@ class Application:
         self.cliarguments = []
         self.routes = {}
         self.events = {}
-        self.extensions = set()
         self.settings = pymlconf.Root(self.builtinsettings, context=context)
 
     def _findhandler(self, request):
@@ -104,14 +103,6 @@ class Application:
     def climain(self, argv=None):
         return Main(self).main()
 
-    def extend(self, extension):
-        self.extensions.add(extension)
-        if hasattr(extension, 'setup'):
-            extension.setup(self)
-
-    def configure_extensions(self):
-        for e in self.extensions:
-            if hasattr(e, 'configure'):
-                e.configure(self)
-
+    def ready(self):
+        self.hook('ready', self)
 

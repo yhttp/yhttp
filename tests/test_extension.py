@@ -1,29 +1,15 @@
 from bddrest import status
 
 
-class Foo:
-    setupdone = False
-    configuredone = False
-
-    def setup(self, app):
-        self.setupdone = True
-
-    def configure(self, app):
-        self.configuredone = True
+def fooextension(app):
+    @app.when
+    def ready(app):
+        app.fooready = True
 
 
 def test_extension(app, story, when):
-    extension = Foo()
-    app.extend(extension)
-    assert extension.setupdone
+    fooextension(app)
 
-    app.configure_extensions()
-    assert extension.configuredone
-
-    @app.route()
-    def get(req):
-        return 'index'
-
-    with story(app):
-        assert status == 200
+    app.ready()
+    assert app.fooready
 

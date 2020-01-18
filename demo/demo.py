@@ -2,10 +2,25 @@
 import time
 from wsgiref.simple_server import make_server
 
-from yhttp import Application, text
+from yhttp import Application, text, json
 
 
 app = Application()
+
+
+app.staticfile('/demo', 'demo/demo.py')
+
+
+@app.route('/json')
+@json
+def get(req):
+    return {'foo': 'bar'}
+
+
+@app.route('/json')
+@json
+def post(req):
+    return req.form
 
 
 @app.route(r'/(.*)')
@@ -16,13 +31,6 @@ def get(req, resource):
         yield f'{req.path} {i:04}\r\n'.encode()
         time.sleep(1)
         i += 1
-
-
-#@app.route()
-#@text
-#def get():
-#    return 'index'
-
 
 
 if __name__ == '__main__':
