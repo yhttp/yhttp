@@ -101,7 +101,7 @@ class Application:
         return self.route(r'/(.*)')(static.directory(directory))
 
     def climain(self, argv=None):
-        return Main(self).main()
+        return Main(self).main(argv)
 
     def ready(self):
         self.hook('ready', self)
