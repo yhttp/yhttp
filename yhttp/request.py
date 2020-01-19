@@ -61,8 +61,8 @@ class Request:
     @lazyattribute
     def cookies(self):
         result = cookies.SimpleCookie()
-        if 'HTTP_COOKIE' in self.environ:
-            result.load(self.environ['HTTP_COOKIE'])
+        if 'COOKIE' in self.headers:
+            result.load(self.headers['COOKIE'])
         return result
 
     @lazyattribute
@@ -71,10 +71,32 @@ class Request:
         """
         return wsgiutil.guess_scheme(self.environ)
 
+    @lazyattribute
+    def headers(self):
+        return HeadersMask(self.environ)
+
 #    def prevent_form(self, message): ## HEAD  prevent_body
 #        if self.request_content_length:
 #            raise exceptions.HTTPStatus(message)
 #
 #        self.environ['wsgi.input'] = io.BytesIO()
 #
+
+
+class HeadersMask:
+    def __init__(self, environ):
+        self.environ = environ
+
+    @staticmethod
+    def getkey(k):
+        return f'HTTP_{k.upper()}'
+
+    def __getitem__(self, key):
+        return self.environ[self.getkey(key)]
+
+    def get(self, key):
+        return self.environ.get(self.getkey(key))
+
+    def __contains__(self, key):
+        return self.getkey(key) in self.environ
 
