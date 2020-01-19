@@ -1,18 +1,8 @@
 [run]
 source=yhttp
+concurrency=multiprocessing
 omit = 
-    yhttp/tests/**/*
     yhttp/extensions/*
 
 [tool:pytest]
-addopts= --cov=yhttp yhttp/tests
-
-[report]
-exclude_lines =
-    # Have to re-enable the standard pragma
-    pragma: no cover
-
-    # Don't complain if tests don't hit defensive assertion code:
-    raise NotImplementedError()
-	pass
-
+addopts= --cov=yhttp tests

@@ -1,4 +1,4 @@
 -r requirements-ci.txt
-pytest-pudb
 ipython
+pytest-pudb
 

@@ -1,4 +1,5 @@
 import functools
+import socket
 
 import bddrest
 import pytest
@@ -23,4 +24,13 @@ def story():
 def when():
     return functools.partial(bddrest.when, None)
 
+
+@pytest.fixture
+def freetcpport():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((socket.gethostname(), 0))
+        return s.getsockname()[1]
+    finally:
+        s.close()
 

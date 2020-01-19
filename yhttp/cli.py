@@ -25,11 +25,15 @@ class Serve(SubCommand):
         )
     ]
 
-    def __call__(self, args):
+    def __call__(self, args):  # pragma: no cover
+        """the no cover pragma was set, because the coverae meassurement in
+        subprocess is so complicated, but this function is covered by
+        test_builtincli.py.
+        """
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('', args.bind)
 
-        args.application.configure_extensions()
+        args.application.ready()
         httpd = make_server(host, int(port), args.application)
         print(f'Demo server started http://{host}:{port}')
         httpd.serve_forever()
