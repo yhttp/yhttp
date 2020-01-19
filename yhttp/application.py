@@ -106,3 +106,6 @@ class Application:
     def ready(self):
         self.hook('ready', self)
 
+    def shutdown(self):
+        self.hook('shutdown', self)
+
