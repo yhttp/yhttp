@@ -13,16 +13,8 @@ def app():
 
 
 @pytest.fixture
-def story():
-    def given_(app, *a, **kw):
-        return bddrest.Given(app, None, *a, **kw)
-
-    return given_
-
-
-@pytest.fixture
-def when():
-    return functools.partial(bddrest.when, None)
+def Given(app):
+    return functools.partial(bddrest.Given, app)
 
 
 @pytest.fixture

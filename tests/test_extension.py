@@ -11,7 +11,7 @@ def fooextension(app):
         app.fooshutdown = True
 
 
-def test_extension(app, story, when):
+def test_extension(app):
     fooextension(app)
 
     app.ready()

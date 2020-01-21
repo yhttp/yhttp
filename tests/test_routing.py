@@ -1,7 +1,7 @@
-from bddrest import status, response
+from bddrest import status, response, when
 
 
-def test_routing_basic(app, story, when):
+def test_routing_basic(app, Given):
 
     @app.route()
     def get(req):
@@ -11,7 +11,7 @@ def test_routing_basic(app, story, when):
     def post(req):
         return 'post index'
 
-    with story(app):
+    with Given():
         assert status == 200
         assert response == 'get index'
 
@@ -26,13 +26,13 @@ def test_routing_basic(app, story, when):
         assert status == 404
 
 
-def test_routing_argument(app, story, when):
+def test_routing_argument(app, Given):
 
     @app.route(r'/(\d+)')
     def get(req, id):
         return id
 
-    with story(app, '/12'):
+    with Given('/12'):
         assert status == 200
         assert response == '12'
 
@@ -50,7 +50,7 @@ def test_routing_argument(app, story, when):
     def post(req, id, title='Empty'):
         return f'{id} {title}'
 
-    with story(app, '/12/foo', 'post'):
+    with Given('/12/foo', 'post'):
         assert status == 200
         assert response == '12 foo'
 

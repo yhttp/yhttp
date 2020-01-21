@@ -1,13 +1,13 @@
-from bddrest import status
+from bddrest import status, when
 
 
-def test_querystring(app, story, when):
+def test_querystring(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
         assert req.query['foo'] == 'bar'
         assert baz == 'qux'
 
-    with story(app, '/?foo=bar&baz=qux'):
+    with Given('/?foo=bar&baz=qux'):
         assert status == 200
 

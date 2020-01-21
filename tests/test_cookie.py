@@ -1,10 +1,9 @@
-
 from http import cookies
 
 from bddrest import status, response
 
 
-def test_cookie(app, story):
+def test_cookie(app, Given):
     @app.route()
     def get(req):
         counter = req.cookies['counter']
@@ -15,7 +14,7 @@ def test_cookie(app, story):
         req.cookies['counter']['domain'] = 'example.com'
 
     headers = {'Cookie': 'counter=1;'}
-    with story(app, headers=headers):
+    with Given(headers=headers):
         assert status == 200
         assert 'Set-cookie' in response.headers
 

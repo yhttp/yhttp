@@ -1,9 +1,9 @@
-from bddrest import status, response
+from bddrest import status, response, when
 
 import yhttp
 
 
-def test_pipeline(app, story, when):
+def test_pipeline(app, Given):
     endresponseiscalled = 0
     @app.when
     def endresponse():
@@ -25,7 +25,7 @@ def test_pipeline(app, story, when):
     def post(req):
         return
 
-    with story(app):
+    with Given():
         assert status == 200
         assert response == 'index'
         assert 'content-type' not in response.headers
@@ -43,7 +43,7 @@ def test_pipeline(app, story, when):
         assert endresponseiscalled == 3
 
 
-def test_stream(app, story, when):
+def test_stream(app, Given):
     endresponseiscalled = 0
 
     @app.when
@@ -65,7 +65,7 @@ def test_stream(app, story, when):
         yield b'bar'
         yield b'baz'
 
-    with story(app):
+    with Given():
         assert status == 200
         assert response.text == 'foobarbaz'
         assert endresponseiscalled == 1

@@ -1,7 +1,7 @@
-from bddrest import status, response
+from bddrest import status, response, when
 
 
-def test_querystringform(app, story, when):
+def test_querystringform(app, Given):
 
     @app.route('/empty')
     def get(req):
@@ -11,14 +11,14 @@ def test_querystringform(app, story, when):
     def get(req):
         assert req.form['foo'] == 'bar'
 
-    with story(app, query=dict(foo='bar')):
+    with Given(query=dict(foo='bar')):
         assert status == 200
 
         when('/empty', query={})
         assert status == 200
 
 
-def test_urlencodedform(app, story, when):
+def test_urlencodedform(app, Given):
 
     @app.route()
     def post(req):
@@ -29,7 +29,7 @@ def test_urlencodedform(app, story, when):
     def patch(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
 
-    with story(app, verb='post', form=dict(foo='bar')):
+    with Given(verb='post', form=dict(foo='bar')):
         assert status == 200
 
         when(
@@ -41,14 +41,13 @@ def test_urlencodedform(app, story, when):
         assert response == ''
 
 
-def test_urlencodedform_duplicatedfield(app, story, when):
+def test_urlencodedform_duplicatedfield(app, Given):
 
     @app.route()
     def post(req):
         assert req.form['foo'] == ['bar', 'baz']
 
-    with story(
-            app,
+    with Given(
             verb='post',
             body='foo=bar&foo=baz',
             content_type='application/x-www-form-urlencoded'
@@ -56,7 +55,7 @@ def test_urlencodedform_duplicatedfield(app, story, when):
         assert status == 200
 
 
-def test_jsonform(app, story, when):
+def test_jsonform(app, Given):
     app.settings.debug = False
 
     @app.route()
@@ -64,7 +63,7 @@ def test_jsonform(app, story, when):
         assert req.contenttype == 'application/json'
         assert req.form['foo'] == 'bar'
 
-    with story(app, verb='post', json=dict(foo='bar')):
+    with Given(verb='post', json=dict(foo='bar')):
         assert status == 200
 
         # No content length
@@ -78,7 +77,7 @@ def test_jsonform(app, story, when):
         assert response.text == '400 Cannot parse the request'
 
 
-def test_multipartform(app, story, when):
+def test_multipartform(app, Given):
     app.settings.debug = False
 
     @app.route()
@@ -86,7 +85,7 @@ def test_multipartform(app, story, when):
         assert req.contenttype.startswith('multipart/form')
         assert req.form['foo'] == 'bar'
 
-    with story(app, verb='post', multipart=dict(foo='bar')):
+    with Given(verb='post', multipart=dict(foo='bar')):
         assert status == 200
 
         when(body='', content_type='multipart/form-data; boundary=')

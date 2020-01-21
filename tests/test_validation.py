@@ -1,23 +1,23 @@
-from bddrest import status, response, given
+from bddrest import status, response, given, when
 
 from yhttp import validate, statuses
 
 
-def test_nobody(app, story, when):
+def test_nobody(app, Given):
 
     @app.route()
     @validate(nobody=True)
     def foo(req):
         assert req.form == {}
 
-    with story(app, verb='foo'):
+    with Given(verb='foo'):
         assert status == 200
 
         when(form=dict(bar='baz'))
         assert status == '400 Body Not Allowed'
 
 
-def test_required(app, story, when):
+def test_required(app, Given):
 
     @app.route()
     @validate(fields=dict(
@@ -27,8 +27,7 @@ def test_required(app, story, when):
     def post(req):
         pass
 
-    with story(
-            app, verb='post', form=dict(bar='bar', baz='baz')):
+    with Given(verb='post', form=dict(bar='bar', baz='baz')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -41,7 +40,7 @@ def test_required(app, story, when):
         assert status == '700 Please provide baz'
 
 
-def test_notnone(app, story, when):
+def test_notnone(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(notnone=True),
@@ -50,7 +49,7 @@ def test_notnone(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', json=dict(bar='bar', baz='baz')):
+    with Given(verb='post', json=dict(bar='bar', baz='baz')):
         assert status == 200
 
         when(json=given - 'bar')
@@ -66,7 +65,7 @@ def test_notnone(app, story, when):
         assert status == '700 baz cannot be null'
 
 
-def test_readonly(app, story, when):
+def test_readonly(app, Given):
 
     @app.route()
     @validate(fields=dict(
@@ -75,14 +74,14 @@ def test_readonly(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post'):
+    with Given(verb='post'):
         assert status == 200
 
         when(form=dict(bar='bar'))
         assert status == '400 Field bar is readonly'
 
 
-def test_type(app, story, when):
+def test_type(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(type_=int),
@@ -90,14 +89,14 @@ def test_type(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post'):
+    with Given(verb='post'):
         assert status == 200
 
         when(json=dict(bar='bar'))
         assert status == '400 Invalid type: bar'
 
 
-def test_minimummaximum(app, story, when):
+def test_minimummaximum(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(
@@ -108,7 +107,7 @@ def test_minimummaximum(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', json=dict(bar=2)):
+    with Given(verb='post', json=dict(bar=2)):
         assert status == 200
 
         when(json=dict(bar='bar'))
@@ -121,7 +120,7 @@ def test_minimummaximum(app, story, when):
         assert status == '400 Maximum allowed value for field bar is 9'
 
 
-def test_minmaxlength(app, story, when):
+def test_minmaxlength(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(minlength=2, maxlength=5),
@@ -129,7 +128,7 @@ def test_minmaxlength(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', form=dict(bar='123')):
+    with Given(verb='post', form=dict(bar='123')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -142,7 +141,7 @@ def test_minmaxlength(app, story, when):
         assert status == '400 Maximum allowed length for field bar is 5'
 
 
-def test_regexpattern(app, story, when):
+def test_regexpattern(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(pattern=r'^\d+$'),
@@ -150,7 +149,7 @@ def test_regexpattern(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', form=dict(bar='123')):
+    with Given(verb='post', form=dict(bar='123')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -160,7 +159,7 @@ def test_regexpattern(app, story, when):
         assert status == '400 Invalid format: bar'
 
 
-def test_customvalildator(app, story, when):
+def test_customvalildator(app, Given):
     from yhttp.validation import Field
 
     def customvalidator(value, container, field):
@@ -175,7 +174,7 @@ def test_customvalildator(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', form=dict(bar='a')):
+    with Given(verb='post', form=dict(bar='a')):
         assert status == 200
 
         when(form=given - 'bar')
@@ -191,7 +190,7 @@ def test_customvalildator(app, story, when):
     def post(req):
         pass
 
-    with story(app, verb='post', form=dict(bar='a')):
+    with Given(verb='post', form=dict(bar='a')):
         assert status == 200
 
         when(form=given - 'bar')
