@@ -16,8 +16,15 @@ Create a file name: ``hello.py``:
    def get(req):
        return b'Hello World!'
 
+   app.ready()
+
 
 .. testcode:: 
    :hide:
 
-   from bddrest import Given
+   from bddrest import Given, status, response
+
+   with Given(app):
+       assert status == 200
+       assert response.text == 'Hello World!'
+
