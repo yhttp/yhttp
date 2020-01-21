@@ -22,7 +22,21 @@ copyright = '2020, Vahid Mardani'
 author = 'Vahid Mardani'
 
 # The full version, including alpha/beta/rc tags
-release = '2.1.0'
+import os.path
+import re
+
+# reading package's version (same way sqlalchemy does)
+with open(
+    os.path.join(os.path.dirname(__file__), '../yhttp', '__init__.py')
+)as v_file:
+
+    package_version = \
+        re.compile('.*__version__ = \'(.*?)\'', re.S)\
+        .match(v_file.read())\
+        .group(1)
+
+
+release = package_version
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,6 +45,7 @@ release = '2.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+  'sphinx.ext.doctest'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
