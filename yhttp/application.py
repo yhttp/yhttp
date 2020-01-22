@@ -18,11 +18,11 @@ class Application:
     debug: true
     '''
 
-    def __init__(self, **context):
+    def __init__(self):
         self.cliarguments = []
         self.routes = {}
         self.events = {}
-        self.settings = pymlconf.Root(self.builtinsettings, context=context)
+        self.settings = pymlconf.Root(self.builtinsettings)
 
     def _findhandler(self, request):
         patterns = self.routes.get(request.verb)
@@ -101,6 +101,8 @@ class Application:
         return self.route(r'/(.*)')(static.directory(directory))
 
     def climain(self, argv=None):
+        """Provide a callable to call as the CLI entry point
+        """
         return Main(self).main(argv)
 
     def ready(self):

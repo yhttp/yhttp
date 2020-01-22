@@ -45,7 +45,9 @@ release = package_version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-  'sphinx.ext.doctest'
+  'sphinx.ext.doctest',
+  'sphinx.ext.autodoc',
+  'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -68,3 +70,11 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3.6', None),
+#    'sqlalchemy': ('http://docs.sqlalchemy.org/en/latest/', None)
+
+}
+

@@ -23,14 +23,15 @@ Features
 - Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ 
   arguments for query strings (>= 0.24.0).
 - Easy to extend.
+- Builtin extensible CLI.
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    tutorials/index
-
-
+   api
 
 
 Indices and tables

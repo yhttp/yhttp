@@ -23,6 +23,7 @@ livehtml:
 	sphinx-autobuild . -b html $(ALLSPHINXOPTS) \
 		--delay=3 \
 		--watch=. \
+		--watch=../yhttp \
 		--ignore='**/*~' \
 		--ignore='_build' \
         --ignore "*.sw*" \
