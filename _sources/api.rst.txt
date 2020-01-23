@@ -2,7 +2,7 @@ API
 ===
 
 .. module:: yhttp
-
+.. currentmodule:: yhttp
 
 Application Class
 ^^^^^^^^^^^^^^^^^ 
@@ -20,4 +20,30 @@ Request Class
    .. autoproperty:: form
    .. autoproperty:: cookies
 
- 
+
+HTTPStatus Class
+^^^^^^^^^^^^^^^^
+
+.. autoclass:: HTTPStatus
+
+
+statuses Module
+^^^^^^^^^^^^^^^
+
+
+.. automodule:: yhttp.statuses
+   
+   .. autofunction:: badrequest()
+   .. autofunction:: unauthorized()
+   .. autofunction:: forbidden()
+   .. autofunction:: notfound()
+   .. autofunction:: methodnotallowed()
+   .. autofunction:: conflict()
+   .. autofunction:: gone()
+   .. autofunction:: preconditionfailed()
+   .. autofunction:: notmodified()
+   .. autofunction:: internalservererror()
+   .. autofunction:: badgateway()
+   .. autofunction:: movedpermanently(url)
+   .. autofunction:: found(url)
+

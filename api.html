@@ -70,6 +70,95 @@ multipart form.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="httpstatus-class">
+<h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yhttp.HTTPStatus">
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HTTPStatus</code><span class="sig-paren">(</span><em class="sig-param">code</em>, <em class="sig-param">text</em>, <em class="sig-param">keepheaders=False</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-yhttp.statuses">
+<span id="statuses-module"></span><h2>statuses Module<a class="headerlink" href="#module-yhttp.statuses" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="yhttp.statuses.badrequest">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">badrequest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.badrequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 400 Bad Request exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.unauthorized">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">unauthorized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.unauthorized" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 401 Unauthorized exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.forbidden">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">forbidden</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.forbidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 403 Forbidden exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.notfound">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">notfound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.notfound" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 404 Not Found exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.methodnotallowed">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">methodnotallowed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.methodnotallowed" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 405 Method Not Allowed exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.conflict">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">conflict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.conflict" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 409 Conflict exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.gone">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">gone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.gone" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 410 Gone exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.preconditionfailed">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">preconditionfailed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.preconditionfailed" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 412 Precondition Failed exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.notmodified">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">notmodified</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.notmodified" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 304 Not Modified exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.internalservererror">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">internalservererror</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.internalservererror" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 500 Internal Server Error exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.badgateway">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">badgateway</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.badgateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 502 Bad Gateway exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.movedpermanently">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">movedpermanently</code><span class="sig-paren">(</span><em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.movedpermanently" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 301 Moved Permanently exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.found">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">found</code><span class="sig-paren">(</span><em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.found" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP 302 Found exception factory</p>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -96,6 +185,8 @@ multipart form.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#application-class">Application Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-class">Request Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#httpstatus-class">HTTPStatus Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-yhttp.statuses">statuses Module</a></li>
 </ul>
 </li>
 </ul>

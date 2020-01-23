@@ -86,6 +86,43 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 </div>
+<div class="section" id="http-status">
+<h2>HTTP Status<a class="headerlink" href="#http-status" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways for to set HTTP status code for response: raise an instance
+of <a class="reference internal" href="api.html#yhttp.HTTPStatus" title="yhttp.HTTPStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code></a> class or set
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code> directly.</p>
+<p>There are some builtins HTTP status factory functions:</p>
+<p><a class="reference internal" href="api.html#yhttp.statuses.badrequest" title="yhttp.statuses.badrequest"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.unauthorized" title="yhttp.statuses.unauthorized"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.forbidden" title="yhttp.statuses.forbidden"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.forbidden()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.notfound" title="yhttp.statuses.notfound"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notfound()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.methodnotallowed" title="yhttp.statuses.methodnotallowed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.methodnotallowed()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.conflict" title="yhttp.statuses.conflict"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.conflict()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.gone" title="yhttp.statuses.gone"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.gone()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.preconditionfailed" title="yhttp.statuses.preconditionfailed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.preconditionfailed()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.notmodified" title="yhttp.statuses.notmodified"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notmodified()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.internalservererror" title="yhttp.statuses.internalservererror"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.internalservererror()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.badgateway" title="yhttp.statuses.badgateway"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badgateway()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.movedpermanently" title="yhttp.statuses.movedpermanently"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></a>
+<a class="reference internal" href="api.html#yhttp.statuses.found" title="yhttp.statuses.found"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></a></p>
+<p>See the example below for usage:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">statuses</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">notfound</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">404</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;404 Not Found&#39;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="http-cookie">
 <h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Permalink to this headline">¶</a></h2>
 <p>There is how to use <a class="reference internal" href="api.html#yhttp.Request.cookies" title="yhttp.Request.cookies"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code></a>:</p>
@@ -142,6 +179,7 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#query-string">Query String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-form">HTTP Form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-status">HTTP Status</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
 </ul>
 </li>
