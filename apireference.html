@@ -35,18 +35,18 @@
 <dt id="yhttp.Application">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Application</code><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="yhttp.Application.climain">
-<code class="sig-name descname">climain</code><span class="sig-paren">(</span><em class="sig-param">argv=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.climain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide a callable to call as the CLI entry point</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="yhttp.Application.route">
 <code class="sig-name descname">route</code><span class="sig-paren">(</span><em class="sig-param">pattern='/'</em>, <em class="sig-param">verb=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.route" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator factory to register a handler for given regex pattern.
 if <code class="docutils literal notranslate"><span class="pre">verb</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> then the function name will used instead.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/.*&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>You can bypass this behavior by passing <code class="docutils literal notranslate"><span class="pre">verb</span></code> keyword argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;get&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">somethingelse</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="o">...</span>
 </pre></div>
 </div>
@@ -78,14 +78,57 @@ it like:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="yhttp.Application.climain">
+<code class="sig-name descname">climain</code><span class="sig-paren">(</span><em class="sig-param">argv=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.climain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a callable to call as the CLI entry point</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">climain</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>You can use this method as the setuptools entry point for
+<a class="reference external" href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation">Automatic Script Creation</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span>
+    <span class="o">...</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;console_scripts&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s1">&#39;foo = foo:app.climain&#39;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="yhttp.Application.staticfile">
 <code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Register a filename with a regular expression pattern to be served.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="yhttp.Application.staticdirectory">
 <code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Register a directory with a regular expression pattern, So the
+files inside the directory are accessible by their names:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You you can do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8080/foo/a.txt
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="yhttp.Application.when">
@@ -113,6 +156,57 @@ aware when <code class="docutils literal notranslate"><span class="pre">app.read
     <span class="o">...</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Application.hook">
+<code class="sig-name descname">hook</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>The only way to fire registered hooks with <a class="reference internal" href="#yhttp.Application.when" title="yhttp.Application.when"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.when()</span></code></a>
+by the name</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="s1">&#39;endresponse&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Extra parameters: <code class="docutils literal notranslate"><span class="pre">*a,</span> <span class="pre">**kw</span></code> will be passed to event handlers.</p>
+<p>Normally, users no need to call this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span></dt>
+<dd><p>Register a filename with a regular expression pattern to be served.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span></dt>
+<dd><p>Register a directory with a regular expression pattern, So the
+files inside the directory are accessible by their names:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You you can do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8080/foo/a.txt
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Application.__call__">
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">environ</em>, <em class="sig-param">startresponse</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The actual WSGI Application.</p>
+<p>So, will be called on every request.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Checkout the <a class="reference external" href="https://www.python.org/dev/peps/pep-0333/">PEP 333</a>
+for more info.</p>
 </dd></dl>
 
 </dd></dl>
