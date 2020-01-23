@@ -167,9 +167,9 @@ Use ``--help`` anywhere to know command line options:
                            Change to this path before starting, default is: `.`
 
 
---------------
+==============
 Python Package
---------------
+==============
 
 Create a ``setup.py``.
 
@@ -211,9 +211,9 @@ setuptools ``entry_points`` feature.
    hello serve --bind 8088
 
 
--------------------
+===================
 Bash Autocompletion
--------------------
+===================
 
 Just run:
 
