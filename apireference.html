@@ -271,8 +271,40 @@ for more info.</p>
 <h2>Request Class<a class="headerlink" href="#request-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="yhttp.Request">
-<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Request</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">environ</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Request" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Request</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">environ</em>, <em class="sig-param">response</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent an HTTP request, <a class="reference internal" href="#yhttp.Application.__call__" title="yhttp.Application.__call__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.__call__()</span></code></a> instantiates
+this class on each call.</p>
+<dl class="method">
+<dt id="yhttp.Request.verb">
+<em class="property">property </em><code class="sig-name descname">verb</code><a class="headerlink" href="#yhttp.Request.verb" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.path">
+<em class="property">property </em><code class="sig-name descname">path</code><a class="headerlink" href="#yhttp.Request.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request URL without query string and <code class="docutils literal notranslate"><span class="pre">scheme://domain.ext</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.fullpath">
+<em class="property">property </em><code class="sig-name descname">fullpath</code><a class="headerlink" href="#yhttp.Request.fullpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request full URI including query string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.contentlength">
+<em class="property">property </em><code class="sig-name descname">contentlength</code><a class="headerlink" href="#yhttp.Request.contentlength" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> header value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.contenttype">
+<em class="property">property </em><code class="sig-name descname">contenttype</code><a class="headerlink" href="#yhttp.Request.contenttype" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code> header value without encoding.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="yhttp.Request.query">
 <em class="property">property </em><code class="sig-name descname">query</code><a class="headerlink" href="#yhttp.Request.query" title="Permalink to this definition">¶</a></dt>
 <dd><p>A dictionary representing the submitted query string</p>
@@ -291,6 +323,52 @@ multipart form.</p>
 <dd><p>A dictionary representing the HTTP cookie data.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="yhttp.Request.scheme">
+<em class="property">property </em><code class="sig-name descname">scheme</code><a class="headerlink" href="#yhttp.Request.scheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP Request Scheme (http|https)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.headers">
+<em class="property">property </em><code class="sig-name descname">headers</code><a class="headerlink" href="#yhttp.Request.headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP Request headers set. see <a class="reference internal" href="#yhttp.HeadersMask" title="yhttp.HeadersMask"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeadersMask</span></code></a> class to figure
+out how it works.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.response">
+<em class="property">property </em><code class="sig-name descname">response</code><a class="headerlink" href="#yhttp.Request.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#yhttp.Response" title="yhttp.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code></a> instance associated to this request.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Request.environ">
+<em class="property">property </em><code class="sig-name descname">environ</code><a class="headerlink" href="#yhttp.Request.environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>WSIG environ dictionary</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="headersmask-class">
+<h2>HeadersMask Class<a class="headerlink" href="#headersmask-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yhttp.HeadersMask">
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HeadersMask</code><span class="sig-paren">(</span><em class="sig-param">environ</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeadersMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple proxy over <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code> to get headers by their
+original name without the <code class="docutils literal notranslate"><span class="pre">HTTP_</span></code> prefix, which is the python’s WSGI
+servers default behavior.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;baz&#39;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
+        <span class="n">baz</span> <span class="o">=</span> <span class="kc">True</span>
+
+     <span class="o">...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -299,18 +377,73 @@ multipart form.</p>
 <dl class="class">
 <dt id="yhttp.Response">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">startresponse</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>Represent the HTTP response which accessible by
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code> inside the handler</p>
+<dl class="attribute">
 <dt id="yhttp.Response.status">
 <code class="sig-name descname">status</code><em class="property"> = '200 Ok'</em><a class="headerlink" href="#yhttp.Response.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP Status code</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="yhttp.Response.charset">
+<code class="sig-name descname">charset</code><em class="property"> = None</em><a class="headerlink" href="#yhttp.Response.charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Response encoding, <code class="docutils literal notranslate"><span class="pre">None</span></code> for binary</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="yhttp.Response.length">
+<code class="sig-name descname">length</code><em class="property"> = None</em><a class="headerlink" href="#yhttp.Response.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Response content length</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="yhttp.Response.type">
+<code class="sig-name descname">type</code><em class="property"> = None</em><a class="headerlink" href="#yhttp.Response.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Response content type without charset.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="yhttp.Response.contenttype">
 <code class="sig-name descname">contenttype</code><a class="headerlink" href="#yhttp.Response.contenttype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Response content type incuding charset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Response.conclude">
+<code class="sig-name descname">conclude</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response.conclude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conclude the response, calls WSGI start_response callback and
+encode response body to transfer to the client</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>response body</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Response.startstream">
+<code class="sig-name descname">startstream</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response.startstream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start streaming the response chunk by chunk iustead of what
+<a class="reference internal" href="#yhttp.Response.conclude" title="yhttp.Response.conclude"><code class="xref py py-meth docutils literal notranslate"><span class="pre">conclude()</span></code></a> does.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Response.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the response, <a class="reference internal" href="#yhttp.Application" title="yhttp.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> call this method when
+response is ready to transfered to user.</p>
+</dd></dl>
 
 </dd></dl>
+
+</div>
+<div class="section" id="httpstatus-class">
+<h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yhttp.HTTPStatus">
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HTTPStatus</code><span class="sig-paren">(</span><em class="sig-param">code</em>, <em class="sig-param">text</em>, <em class="sig-param">keepheaders=False</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="contenttype-decorators">
@@ -400,14 +533,6 @@ and encode the returned value by handler to json byte-string format.</p>
 </pre></div>
 </div>
 </dd></dl>
-
-</div>
-<div class="section" id="httpstatus-class">
-<h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="yhttp.HTTPStatus">
-<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HTTPStatus</code><span class="sig-paren">(</span><em class="sig-param">code</em>, <em class="sig-param">text</em>, <em class="sig-param">keepheaders=False</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 <div class="section" id="module-yhttp.statuses">
@@ -523,9 +648,10 @@ and encode the returned value by handler to json byte-string format.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#application-class">Application Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-class">Request Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#headersmask-class">HeadersMask Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#response-class">Response Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contenttype-decorators">contenttype decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#httpstatus-class">HTTPStatus Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contenttype-decorators">contenttype decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-yhttp.statuses">statuses Module</a></li>
 </ul>
 </li>
