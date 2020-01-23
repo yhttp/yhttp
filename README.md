@@ -28,3 +28,12 @@ pytest
 pytest --cov=yhtml
 ```
 
+#### Documentation
+
+```bash
+cd sphinx
+make doctest
+make html
+make livehtml
+```
+
