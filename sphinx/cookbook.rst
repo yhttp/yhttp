@@ -87,6 +87,56 @@ given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and
    with Given(app, verb='POST', multipart={'foo': 'bar'}):
        assert response.text == 'bar'
 
+HTTP Status
+-----------
+
+There are two ways for to set HTTP status code for response: raise an instance
+of :class:`.HTTPStatus` class or set 
+:attr:`req.response.status <yhttp.Response.status>` directly.
+
+There are some builtins HTTP status factory functions: 
+
+:func:`.statuses.badrequest`
+:func:`.statuses.unauthorized`
+:func:`.statuses.forbidden`
+:func:`.statuses.notfound`
+:func:`.statuses.methodnotallowed`
+:func:`.statuses.conflict`
+:func:`.statuses.gone`
+:func:`.statuses.preconditionfailed`
+:func:`.statuses.notmodified`
+:func:`.statuses.internalservererror`
+:func:`.statuses.badgateway`
+:func:`.statuses.movedpermanently`
+:func:`.statuses.found`
+
+See the example below for usage:
+
+
+.. testsetup:: cookbook/status
+
+   from yhttp import Application, text
+   app = Application()
+
+.. testcode:: cookbook/status
+
+   from yhttp import statuses
+
+   @app.route()
+   def get(req):
+       raise statuses.notfound()
+    
+   app.ready()
+   
+
+.. testcode:: cookbook/status
+
+   from bddrest import Given, when, given, status
+
+   with Given(app):
+       assert status == 404
+       assert status == '404 Not Found'
+
 
 HTTP Cookie
 -----------
@@ -131,7 +181,6 @@ Test:
        assert counter['max-age'] == '1'
 
 ..
-   cookie
    exceptions
    201 status code
    static

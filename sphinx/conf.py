@@ -78,3 +78,8 @@ intersphinx_mapping = {
 
 }
 
+autodoc_default_flags = [
+#    'members',
+#    'show-inheritance',
+]
+
