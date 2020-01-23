@@ -179,6 +179,8 @@ Or set :attr:`req.response.status <yhttp.Response.status>` directly.
        return ... 
 
 
+.. _cookbook-routing:
+
 Routing
 -------
 
@@ -203,6 +205,7 @@ example stands for the HTTP ``GET`` method.
    def get(req, id): 
        ...
 
+.. _cookbook-static:
 
 Static Contents 
 ---------------

@@ -62,6 +62,8 @@ Use your favorite http clinet to check it:
    curl localhost:8000
 
 
+.. _quickstart-commandlineinterface:
+
 ======================
 Command Line Interface
 ======================

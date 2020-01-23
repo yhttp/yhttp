@@ -146,7 +146,7 @@ of <a class="reference internal" href="apireference.html#yhttp.HTTPStatus" title
 </div>
 </div>
 <div class="section" id="routing">
-<h2>Routing<a class="headerlink" href="#routing" title="Permalink to this headline">¶</a></h2>
+<span id="cookbook-routing"></span><h2>Routing<a class="headerlink" href="#routing" title="Permalink to this headline">¶</a></h2>
 <p>the only way to register handler for http requests is
 <a class="reference internal" href="apireference.html#yhttp.Application.route" title="yhttp.Application.route"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.route()</span></code></a> decorator factory.</p>
 <p>Hanler function’s name will be used as HTTP verb. so, the <code class="docutils literal notranslate"><span class="pre">get</span></code> in these
@@ -166,7 +166,7 @@ example stands for the HTTP <code class="docutils literal notranslate"><span cla
 </div>
 </div>
 <div class="section" id="static-contents">
-<h2>Static Contents<a class="headerlink" href="#static-contents" title="Permalink to this headline">¶</a></h2>
+<span id="cookbook-static"></span><h2>Static Contents<a class="headerlink" href="#static-contents" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="apireference.html#yhttp.Application" title="yhttp.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class has two methods: <a class="reference internal" href="apireference.html#yhttp.Application.staticfile" title="yhttp.Application.staticfile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticfile()</span></code></a>
 and <a class="reference internal" href="apireference.html#yhttp.Application.staticdirectory" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a> to complete this mission!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/a\.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/a.txt&#39;</span><span class="p">)</span>
