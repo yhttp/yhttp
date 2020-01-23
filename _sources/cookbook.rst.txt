@@ -97,17 +97,29 @@ of :class:`.HTTPStatus` class or set
 There are some builtins HTTP status factory functions: 
 
 :func:`.statuses.badrequest`
+
 :func:`.statuses.unauthorized`
+
 :func:`.statuses.forbidden`
+
 :func:`.statuses.notfound`
+
 :func:`.statuses.methodnotallowed`
+
 :func:`.statuses.conflict`
+
 :func:`.statuses.gone`
+
 :func:`.statuses.preconditionfailed`
+
 :func:`.statuses.notmodified`
+
 :func:`.statuses.internalservererror`
+
 :func:`.statuses.badgateway`
+
 :func:`.statuses.movedpermanently`
+
 :func:`.statuses.found`
 
 See the example below for usage:
@@ -210,7 +222,6 @@ Test:
        assert counter['max-age'] == '1'
 
 ..
-   201 status code
    static
    routing
    validation
