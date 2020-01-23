@@ -24,7 +24,7 @@ rest of the system python packages.
 
 Create a file named: ``hello.py``:
 
-.. testcode:: 
+.. testcode::
 
    from yhttp import Application
 
@@ -36,7 +36,7 @@ Create a file named: ``hello.py``:
 
    app.ready()
 
-.. testcode:: 
+.. testcode::
    :hide:
 
    from bddrest import Given, status, response
@@ -73,7 +73,7 @@ Let's edit ``hello.py`` to act as both command line interface and WSGI
 application:
 
 
-.. code-block::
+.. code-block:: python
 
    import sys
 
@@ -108,7 +108,7 @@ And insert it at the first line:
 
 Lets take a look at ``hello.py``.
 
-.. code-block::
+.. code-block:: python
 
    #! /usr/bin/env python3
    
@@ -173,7 +173,7 @@ Python Package
 
 Create a ``setup.py``.
 
-.. code-block::
+.. code-block:: python
 
    from setuptools import setup
    
