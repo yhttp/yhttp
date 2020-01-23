@@ -1,4 +1,3 @@
-
 Hello World!
 ============
 
@@ -6,7 +5,7 @@ There is how to server simple string using `yhttp`.
 
 
 Install ``yhttp`` if you are not installed it yet. it's highly recommended to 
-use virtual environemnt before that. I use
+use virtual environment before that. I use
 `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/>`_.
 
 Create a virtual environment to isolate your hello world application from the 
@@ -107,7 +106,7 @@ And insert it at the first line:
    #! /usr/bin/env python3
 
 
-Now, ``hello.py`` would be like this:
+Lets take a look at ``hello.py``.
 
 .. code-block::
 
@@ -133,7 +132,7 @@ Now, ``hello.py`` would be like this:
    app.ready()
 
 
-Use it like:
+Use it as an executable python script:
 
 .. code-block:: bash
 
