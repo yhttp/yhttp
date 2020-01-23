@@ -5,25 +5,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master)](https://coveralls.io/github/yhttp/yhttp?branch=master)
 [![Documentation](https://img.shields.io/badge/Documentation-under%20construction-orange)](http://yhttp.dobisel.com)
 
-### Quickstart
 
-wsgi.py
-
-
-```python
-
-app = Applicatin()
-
-@app.route('/')
-def get(req):
-    return 'Hello world!'
-
-```
-
-
-```bash
-gunicorn wsgi:app
-```
+[Documentation](http://yhttp.dobisel.com)
 
 ### Contribution
 
