@@ -234,3 +234,4 @@ Write ``hello`` and hit the ``TAB`` key twice to see the avaiable options:
 
    hello TAB TAB
 
+Check out the other tutorials to discover the ``yhttp`` features.
