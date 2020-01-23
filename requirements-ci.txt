@@ -1,4 +1,4 @@
-bddrest >= 3, < 4
+bddrest >= 3.0.1, < 4
 coveralls
 coverage
 pytest >= 4.4.0

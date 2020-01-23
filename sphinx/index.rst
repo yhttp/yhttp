@@ -12,6 +12,29 @@ Python >= 3.6
 
    pip install yhttp
 
+
+.. testcode::
+
+   from yhttp import Application
+
+   app = Application()
+
+   @app.route()
+   def get(req):
+       return b'Hello World!'
+
+   app.ready()
+
+.. testcode::
+   :hide:
+
+   from bddrest import Given, status, response
+
+   with Given(app):
+       assert status == 200
+       assert response.text == 'Hello World!'
+
+
 Features
 ********
 
@@ -26,10 +49,14 @@ Features
 - Builtin extensible CLI.
 
 
+Contents
+********
+
 .. toctree::
    :maxdepth: 3
-   :caption: Contents:
 
+   quickstart
+   cookbook
    tutorials/index
    api
 

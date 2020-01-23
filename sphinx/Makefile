@@ -24,10 +24,10 @@ livehtml:
 		--delay=3 \
 		--watch=. \
 		--watch=../yhttp \
-		--ignore='**/*~' \
+		--ignore='*~' \
 		--ignore='_build' \
         --ignore "*.sw*" \
-        --ignore "**/4913" \
+        --ignore "4913" \
         --ignore "*.pdf" \
         --ignore "*.log" \
         --ignore "*.out" \
