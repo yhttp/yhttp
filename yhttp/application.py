@@ -69,6 +69,42 @@ class Application:
         return response.start()
 
     def route(self, pattern='/', verb=None):
+        """Decorator factory to register a handler for given regex pattern.
+        if ``verb`` is ``None`` then the function name will used instead.
+
+        .. code-block::
+
+           @app.route(r'/.*')
+           def get(req):
+               ...
+
+        Regular expression groups will be capture and dispatched as the
+        positional arguments of the handler afet ``req``:
+
+        .. code-block::
+
+           @app.route(r'/(\d+)/(\w*)')
+           def get(req, id, name):
+               ...
+
+        This method returns a decorator for handler fucntions. So, you can use
+        it like:
+
+        .. code-block::
+
+           books = app.route(s'/books/(.*)')
+
+           @books
+           def get(req, id):
+               ...
+
+           @books
+           def post(req, id):
+               ...
+
+        :param pattern: Regular expression to match the requests.
+        """
+
         def decorator(f):
             routes = self.routes.setdefault(verb or f.__name__, [])
             info = dict(

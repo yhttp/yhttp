@@ -58,7 +58,7 @@ Contents
    quickstart
    cookbook
    tutorials/index
-   api
+   apireference
 
 
 Indices and tables

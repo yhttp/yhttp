@@ -179,6 +179,31 @@ Or set :attr:`req.response.status <yhttp.Response.status>` directly.
        return ... 
 
 
+Routing
+-------
+
+the only way to register handler for http requests is
+:meth:`.Application.route` decorator factory.
+
+Hanler function's name will be used as HTTP verb. so, the ``get`` in these 
+example stands for the HTTP ``GET`` method.
+
+
+.. code-block::
+
+   @app.route()                 # Default route
+   def get(req): 
+       ...
+
+   @app.route('/foo')           # Not match with: /foo/bar
+   def get(req): 
+       ...
+
+   @app.route('/books/(\d+)')   # Match with: /books/1
+   def get(req, id): 
+       ...
+
+
 HTTP Cookie
 -----------
 
@@ -223,6 +248,5 @@ Test:
 
 ..
    static
-   routing
    validation
 
