@@ -34,7 +34,7 @@ cd ..
 $GIT rm \*.\*
 cp -r sphinx/_build/html/* ../${DOC}
 cp -r sphinx/_build/html/.buildinfo ../${DOC}
-touch sphinx/_build/html/.nojekyll ../${DOC}
+touch ../${DOC}/.nojekyll 
 echo "yhttp.dobisel.com" > ../${DOC}/CNAME
 $GIT add .
 
