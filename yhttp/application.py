@@ -12,7 +12,7 @@ from .cli import Main
 
 
 class Application:
-    """Web Application representation, instance of this class can be used as 
+    """Web Application representation, instance of this class can be used as
     WSGI application.
 
     """
@@ -127,6 +127,10 @@ class Application:
            def post(req, id):
                ...
 
+        .. seealso::
+
+           :ref:`cookbook-routing`
+
         :param pattern: Regular expression to match the requests.
         """
 
@@ -202,6 +206,10 @@ class Application:
 
             app.staticfile('/a.txt', 'physical/path/to/a.txt')
 
+        .. seealso::
+
+           :ref:`cookbook-static`
+
         """
         return self.route(pattern)(static.file(filename))
 
@@ -218,6 +226,10 @@ class Application:
         .. code-block:: bash
 
            curl localhost:8080/foo/a.txt
+
+        .. seealso::
+
+           :ref:`cookbook-static`
 
         """
 
@@ -253,6 +265,11 @@ class Application:
                    ]
                }
            )
+
+        .. seealso::
+
+           :ref:`quickstart-commandlineinterface`
+
         """
         return Main(self).main(argv)
 
