@@ -12,7 +12,7 @@ before_install:
 install: pip install -e .
 script: py.test -v --cov=yhttp
 after_success: coveralls
-after_deploy: .travis-upload-doc.sh
+after_deploy: ./.travis-upload-doc.sh
 deploy:
   provider: pypi
   skip_cleanup: true
