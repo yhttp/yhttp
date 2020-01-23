@@ -26,6 +26,7 @@ class HTTPStatus(Exception):
         response.charset = 'utf-8'
 
 
+#: Alias for :class:`.HTTPStatus`
 status = HTTPStatus
 
 #: HTTP 400 Bad Request exception factory

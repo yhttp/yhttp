@@ -2,7 +2,10 @@ from .headerset import HeaderSet
 
 
 class Response:
+
+    #: HTTP Status code
     status = '200 Ok'
+
     charset = None
     firstchunk = None
     length = None

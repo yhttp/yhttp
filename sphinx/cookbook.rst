@@ -137,6 +137,35 @@ See the example below for usage:
        assert status == 404
        assert status == '404 Not Found'
 
+HTTP Redirect
+^^^^^^^^^^^^^
+
+To redirect the request to another location raise a 
+:func:`.statuses.movedpermanently` or :func:`.statuses.found`
+
+.. code-block:: python
+
+   raise statuses.found('http://example.com')
+
+
+Custom HTTP Status
+^^^^^^^^^^^^^^^^^^
+
+Use :func:`.statuses.status` to raise your very own status code and text.
+
+.. code-block:: python
+
+   raise statuses.status(700, 'Custom Status Text')
+
+Or set :attr:`req.response.status <yhttp.Response.status>` directly.
+
+.. code-block:: python
+
+   @app.route()
+   def get(req):
+       req.response.status = '201 Created'
+       return ... 
+
 
 HTTP Cookie
 -----------
@@ -181,7 +210,6 @@ Test:
        assert counter['max-age'] == '1'
 
 ..
-   exceptions
    201 status code
    static
    routing
