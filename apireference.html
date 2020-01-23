@@ -34,7 +34,9 @@
 <dl class="class">
 <dt id="yhttp.Application">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Application</code><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Web Application representation, instance of this class can be used as 
+WSGI application.</p>
+<dl class="method">
 <dt id="yhttp.Application.route">
 <code class="sig-name descname">route</code><span class="sig-paren">(</span><em class="sig-param">pattern='/'</em>, <em class="sig-param">verb=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.route" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator factory to register a handler for given regex pattern.
@@ -121,7 +123,7 @@ it like:</p>
 <code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a directory with a regular expression pattern, So the
 files inside the directory are accessible by their names:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You you can do:</p>
@@ -184,13 +186,42 @@ by the name</p>
 <code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span></dt>
 <dd><p>Register a directory with a regular expression pattern, So the
 files inside the directory are accessible by their names:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You you can do:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8080/foo/a.txt
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Application.ready">
+<code class="sig-name descname">ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the <code class="docutils literal notranslate"><span class="pre">ready</span></code> <a class="reference internal" href="#yhttp.Application.hook" title="yhttp.Application.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a></p>
+<p>You need to call this method before using the instance as the WSGI
+application.</p>
+<p>Typical usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello World!&#39;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Application.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the <code class="docutils literal notranslate"><span class="pre">shutdown</span></code> <a class="reference internal" href="#yhttp.Application.hook" title="yhttp.Application.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
