@@ -66,6 +66,8 @@ class Request:
 
     @lazyattribute
     def cookies(self):
+        """A dictionary representing the HTTP cookie data.
+        """
         result = cookies.SimpleCookie()
         if 'COOKIE' in self.headers:
             result.load(self.headers['COOKIE'])

@@ -18,5 +18,6 @@ Request Class
 
    .. autoproperty:: query
    .. autoproperty:: form
+   .. autoproperty:: cookies
 
  

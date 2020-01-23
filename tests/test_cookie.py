@@ -7,7 +7,6 @@ def test_cookie(app, Given):
     @app.route()
     def get(req):
         counter = req.cookies['counter']
-        # FIXME: resp.cookies, maybe!
         req.cookies['counter'] = str(int(counter.value) + 1)
         req.cookies['counter']['max-age'] = 1
         req.cookies['counter']['path'] = '/a'
@@ -17,6 +16,8 @@ def test_cookie(app, Given):
     with Given(headers=headers):
         assert status == 200
         assert 'Set-cookie' in response.headers
+        assert response.headers['Set-cookie'] == \
+            'counter=2; Domain=example.com; Max-Age=1; Path=/a'
 
         cookie = cookies.SimpleCookie(response.headers['Set-cookie'])
         counter = cookie['counter']
