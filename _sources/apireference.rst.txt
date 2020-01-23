@@ -42,7 +42,6 @@ HTTPStatus Class
 statuses Module
 ^^^^^^^^^^^^^^^
 
-
 .. automodule:: yhttp.statuses
    
    .. autofunction:: status(code, text)
