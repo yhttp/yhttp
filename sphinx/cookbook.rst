@@ -222,8 +222,6 @@ and :meth:`.Application.staticdirectory` to complete this mission!
    :meth:`.Application.staticdirectory`'s ``pattern`` parameter.
 
 
-
-
 HTTP Cookie
 -----------
 
@@ -266,7 +264,163 @@ Test:
        assert counter['domain'] == 'example.com'
        assert counter['max-age'] == '1'
 
-..
-   static
-   validation
+
+Request Valiation
+-----------------
+
+``yhttp`` has a very flexible request validation system. these are some 
+examples:
+
+
+required
+^^^^^^^^
+
+.. testsetup:: cookbook/validation/required
+
+   from yhttp import Application
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/required
+
+   from yhttp import validate
+
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(required=True),
+       baz=dict(required='700 Please provide baz'),
+   ))
+   def post(req):
+       ...
+
+   with Given(app, verb='POST', form=dict(bar='bar', baz='baz')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == '400 Field bar is required'
+
+       when(form=given - 'baz', query=dict(baz='baz'))
+       assert status == 200
+
+       when(form=given - 'baz')
+       assert status == '700 Please provide baz'
+
+notnone
+^^^^^^^
+
+.. testsetup:: cookbook/validation/notnone
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/notnone
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(notnone=True),
+       baz=dict(notnone='700 baz cannot be null')
+   ))
+   def post(req):
+       ...
+
+   with Given(app, verb='POST', json=dict(bar='bar', baz='baz')):
+       assert status == 200
+
+       when(json=given - 'bar')
+       assert status == 200
+
+       when(json=given | dict(bar=None))
+       assert status == '400 Field bar cannot be null'
+
+       when(json=given - 'baz')
+       assert status == 200
+
+       when(json=given | dict(baz=None))
+       assert status == '700 baz cannot be null'
+
+nobody
+^^^^^^
+
+Use ``nobody`` validator when you need to prevent users to post any HTTP body
+to the server.
+
+.. testsetup:: cookbook/validation/nobody
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/nobody
+
+   @app.route()
+   @validate(nobody=True)
+   def foo(req):
+       assert req.form == {}
+
+   with Given(app, verb='FOO'):
+       assert status == 200
+
+       when(form=dict(bar='baz'))
+       assert status == '400 Body Not Allowed'
+
+
+readonly
+^^^^^^^^
+
+``readonly`` means the field should not exists on the request form.
+
+.. testsetup:: cookbook/validation/readonly
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/readonly
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(readonly=True),
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST'):
+       assert status == 200
+
+       when(form=dict(bar='bar'))
+       assert status == '400 Field bar is readonly'
+
+
+type
+^^^^
+
+Type validator gets a callable as the ``type`` and tries to cast the field's 
+value by ``form[field] = type(form[field])``.
+
+.. testsetup:: cookbook/validation/type
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/type
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(type_=int),
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST'):
+       assert status == 200
+
+       when(json=dict(bar='bar'))
+       assert status == '400 Invalid type: bar'
+
+
+minimum
+^^^^^^^
 
