@@ -8,7 +8,7 @@ DOC="project-gh-pages"
 SSH_PRIVATEKEY=".githubdeploy-rsa"
 
 
-- openssl aes-256-cbc -K $encrypted_860b5b2beef7_key \
+openssl aes-256-cbc -K $encrypted_860b5b2beef7_key \
 	-iv $encrypted_860b5b2beef7_iv \
 	-in .githubdeploy-rsa.enc \
 	-out $SSH_PRIVATEKEY -d
