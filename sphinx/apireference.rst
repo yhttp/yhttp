@@ -26,9 +26,22 @@ Request Class
 
 .. autoclass:: Request
 
+   .. autoproperty:: verb
+   .. autoproperty:: path
+   .. autoproperty:: fullpath
+   .. autoproperty:: contentlength
+   .. autoproperty:: contenttype
    .. autoproperty:: query
    .. autoproperty:: form
    .. autoproperty:: cookies
+   .. autoproperty:: scheme
+   .. autoproperty:: headers
+
+
+HeadersMask Class
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: HeadersMask
 
 
 Response Class

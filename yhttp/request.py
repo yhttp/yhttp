@@ -7,6 +7,10 @@ from .lazyattribute import lazyattribute
 
 
 class Request:
+    """Represent an HTTP request, :meth:`.Application.__call__` instantiates
+    this class on each call.
+    """
+
     application = None
 
     def __init__(self, app, environ):
@@ -15,25 +19,33 @@ class Request:
 
     @lazyattribute
     def verb(self):
+        """HTTP method.
+        """
         return self.environ['REQUEST_METHOD'].lower()
 
     @lazyattribute
     def path(self):
+        """Request URL without query string and ``scheme://domain.ext``.
+        """
         return self.environ['PATH_INFO']
 
     @lazyattribute
     def fullpath(self):
-        """Request full URI (includes query string)
+        """Request full URI including query string.
         """
         return wsgiutil.request_uri(self.environ, include_query=True)
 
     @lazyattribute
     def contentlength(self):
+        """HTTP Request ``Content-Length`` header value.
+        """
         v = self.environ.get('CONTENT_LENGTH')
         return None if not v or not v.strip() else int(v)
 
     @lazyattribute
     def contenttype(self):
+        """HTTP Request ``Content-Type`` header value without encoding.
+        """
         contenttype = self.environ.get('CONTENT_TYPE')
         if contenttype:
             return contenttype.split(';')[0]
@@ -75,23 +87,37 @@ class Request:
 
     @lazyattribute
     def scheme(self):
-        """Request Scheme (http|https)
+        """HTTP Request Scheme (http|https)
         """
         return wsgiutil.guess_scheme(self.environ)
 
     @lazyattribute
     def headers(self):
-        return HeadersMask(self.environ)
+        """HTTP Request headers set. see :class:`.HeadersMask` class to figure
+        out how it works.
 
-#    def prevent_form(self, message): ## HEAD  prevent_body
-#        if self.request_content_length:
-#            raise exceptions.HTTPStatus(message)
-#
-#        self.environ['wsgi.input'] = io.BytesIO()
-#
+        """
+        return HeadersMask(self.environ)
 
 
 class HeadersMask:
+    """A simple proxy over :attr:`.Request.environ` to get headers by their
+    original name without the ``HTTP_`` prefix, which is the python's WSGI
+    servers default behavior.
+
+    .. code-block::
+
+       @app.route()
+       def get(req):
+           foo = req.headers['foo']
+           bar = req.headers.get('bar')
+           if 'baz' in req.headers:
+               baz = True
+
+            ...
+
+    """
+
     def __init__(self, environ):
         self.environ = environ
 
@@ -102,8 +128,8 @@ class HeadersMask:
     def __getitem__(self, key):
         return self.environ[self.getkey(key)]
 
-    def get(self, key):
-        return self.environ.get(self.getkey(key))
+    def get(self, key, default):
+        return self.environ.get(self.getkey(key), default)
 
     def __contains__(self, key):
         return self.getkey(key) in self.environ
