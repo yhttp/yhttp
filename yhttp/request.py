@@ -41,6 +41,8 @@ class Request:
 
     @lazyattribute
     def query(self):
+        """A dictionary representing the submitted query string
+        """
         if 'QUERY_STRING' not in self.environ:
             return {}
 
@@ -52,6 +54,10 @@ class Request:
 
     @lazyattribute
     def form(self):
+        """A dictionary representing the submitted json, urlencoded and or
+        multipart form.
+        """
+
         return parseanyform(
             self.environ,
             contentlength=self.contentlength,
