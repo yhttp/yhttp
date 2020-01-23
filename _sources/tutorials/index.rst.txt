@@ -7,3 +7,4 @@ Tutorials
 
 ..
    extension
+   complete project example
