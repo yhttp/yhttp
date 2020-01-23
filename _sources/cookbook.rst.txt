@@ -204,6 +204,26 @@ example stands for the HTTP ``GET`` method.
        ...
 
 
+Static Contents 
+---------------
+
+:class:`.Application` class has two methods: :meth:`.Application.staticfile`
+and :meth:`.Application.staticdirectory` to complete this mission!
+
+
+.. code-block::
+
+   app.staticfile(r'/a\.txt', 'path/to/a.txt')
+   app.staticdirectory(r'/foo/', 'path/to/foo/directory')
+
+.. note::
+
+   Do not use any regular expression group inside 
+   :meth:`.Application.staticdirectory`'s ``pattern`` parameter.
+
+
+
+
 HTTP Cookie
 -----------
 
