@@ -304,6 +304,27 @@ to the server.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="pattern">
+<h3>pattern<a class="headerlink" href="#pattern" title="Permalink to this headline">¶</a></h3>
+<p>You can use regular expression to validate request fields:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^\d+$&#39;</span><span class="p">),</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Invalid format: bar&#39;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="type">
 <h3>type<a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
 <p>Type validator gets a callable as the <code class="docutils literal notranslate"><span class="pre">type</span></code> and tries to cast the field’s
@@ -323,8 +344,98 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 </pre></div>
 </div>
 </div>
-<div class="section" id="minimum">
-<h3>minimum<a class="headerlink" href="#minimum" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="minimum-maximum">
+<h3>minimum/maximum<a class="headerlink" href="#minimum-maximum" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">minimum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">maximum</span><span class="o">=</span><span class="mi">9</span>
+    <span class="p">),</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">2</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed value for field bar is 2&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed value for field bar is 2&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Maximum allowed value for field bar is 9&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="minlength-maxlength">
+<h3>minlength/maxlength<a class="headerlink" href="#minlength-maxlength" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">minlength</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed length for field bar is 2&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Maximum allowed length for field bar is 5&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom">
+<h3>custom<a class="headerlink" href="#custom" title="Permalink to this headline">¶</a></h3>
+<p>Use can use your very own callable as the request validator:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp.validation</span> <span class="kn">import</span> <span class="n">Field</span>
+
+<span class="k">def</span> <span class="nf">customvalidator</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Field</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;ab&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Value must be either a or b&#39;</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">customvalidator</span><span class="p">)</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Value must be either a or b&#39;</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="n">customvalidator</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Value must be either a or b&#39;</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -364,8 +475,11 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 <li class="toctree-l3"><a class="reference internal" href="#notnone">notnone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nobody">nobody</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#readonly">readonly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pattern">pattern</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#type">type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#minimum">minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-maximum">minimum/maximum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minlength-maxlength">minlength/maxlength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom">custom</a></li>
 </ul>
 </li>
 </ul>

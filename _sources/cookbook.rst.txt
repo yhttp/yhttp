@@ -393,6 +393,36 @@ readonly
        assert status == '400 Field bar is readonly'
 
 
+pattern
+^^^^^^^
+
+You can use regular expression to validate request fields:
+
+.. testsetup:: cookbook/validation/regex
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/regex
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(pattern=r'^\d+$'),
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST', form=dict(bar='123')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == 200
+
+       when(form=given | dict(bar='a'))
+       assert status == '400 Invalid format: bar'
+
+
 type
 ^^^^
 
@@ -421,6 +451,122 @@ value by ``form[field] = type(form[field])``.
        assert status == '400 Invalid type: bar'
 
 
-minimum
-^^^^^^^
+minimum/maximum
+^^^^^^^^^^^^^^^
 
+.. testsetup:: cookbook/validation/minmax
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/minmax
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(
+           minimum=2,
+           maximum=9
+       ),
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST', json=dict(bar=2)):
+       assert status == 200
+
+       when(json=dict(bar='bar'))
+       assert status == '400 Minimum allowed value for field bar is 2'
+
+       when(json=dict(bar=1))
+       assert status == '400 Minimum allowed value for field bar is 2'
+
+       when(json=dict(bar=10))
+       assert status == '400 Maximum allowed value for field bar is 9'
+
+
+minlength/maxlength
+^^^^^^^^^^^^^^^^^^^
+
+.. testsetup:: cookbook/validation/minmaxlength
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/minmaxlength
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(minlength=2, maxlength=5),
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST', form=dict(bar='123')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == 200
+
+       when(form=given | dict(bar='1'))
+       assert status == '400 Minimum allowed length for field bar is 2'
+
+       when(form=given | dict(bar='123456'))
+       assert status == '400 Maximum allowed length for field bar is 5'
+
+
+custom
+^^^^^^
+
+Use can use your very own callable as the request validator:
+
+.. testsetup:: cookbook/validation/custom
+
+   from yhttp import Application, validate, statuses
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/custom
+
+   from yhttp.validation import Field
+
+   def customvalidator(value, container, field):
+       assert isinstance(field, Field)
+       if value not in 'ab':
+           raise statuses.status(400, 'Value must be either a or b')
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(callback=customvalidator)
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST', form=dict(bar='a')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == 200
+
+       when(form=given | dict(bar='c'))
+       assert status == '400 Value must be either a or b'
+
+   @app.route()
+   @validate(fields=dict(
+       bar=customvalidator
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='POST', form=dict(bar='a')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == 200
+
+       when(form=given | dict(bar='c'))
+       assert status == '400 Value must be either a or b'
+
+
+ 
