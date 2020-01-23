@@ -46,6 +46,18 @@ class Application:
         """The actual WSGI Application.
 
         So, will be called on every request.
+
+        .. code-block::
+
+           from yhttp import Application
+
+
+           app = Application()
+           result = app(environ, start_response)
+
+        Checkout the `PEP 333 <https://www.python.org/dev/peps/pep-0333/>`_
+        for more info.
+
         """
         request = Request(self, environ)
         request.response = response = Response(self, startresponse)
@@ -77,6 +89,14 @@ class Application:
 
            @app.route(r'/.*')
            def get(req):
+               ...
+
+        You can bypass this behavior by passing ``verb`` keyword argument:
+
+        .. code-block::
+
+           @app.route('/', verb='get')
+           def somethingelse(req):
                ...
 
         Regular expression groups will be capture and dispatched as the
@@ -152,6 +172,18 @@ class Application:
             callbacks.append(func)
 
     def hook(self, name, *a, **kw):
+        """The only way to fire registered hooks with :meth:`.Application.when`
+        by the name
+
+        .. code-block::
+
+           app.hook('endresponse')
+
+        Extra parameters: ``*a, **kw`` will be passed to event handlers.
+
+        Normally, users no need to call this method.
+        """
+
         callbacks = self.events.get(name)
         if not callbacks:
             return
@@ -160,13 +192,63 @@ class Application:
             c(*a, **kw)
 
     def staticfile(self, pattern, filename):
+        """Register a filename with a regular expression pattern to be served.
+
+        .. code-block::
+
+            app.staticfile('/a.txt', 'physical/path/to/a.txt')
+
+        """
         return self.route(pattern)(static.file(filename))
 
     def staticdirectory(self, pattern, directory):
+        """Register a directory with a regular expression pattern, So the
+        files inside the directory are accessible by their names:
+
+        .. code-block::
+
+            app.staticdirectory('/foo', 'physical/path/to/foo')
+
+        You you can do:
+
+        .. code-block:: bash
+
+           curl localhost:8080/foo/a.txt
+
+        """
+
         return self.route(f'{pattern}(.*)')(static.directory(directory))
 
     def climain(self, argv=None):
         """Provide a callable to call as the CLI entry point
+
+        .. code-block::
+
+           import sys
+
+
+           if __name__ == '__main__':
+               sys.exit(app.climain(sys.argv))
+
+        You can use this method as the setuptools entry point for
+        `Automatic Script Creation <https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation>`_
+
+        ``setup.py``
+
+        .. code-block::
+
+           from setuptools import setup
+
+
+           setup(
+               name='foo',
+               ...
+               entry_points={
+                   'console_scripts': [
+                       'foo = foo:app.climain'
+                   ]
+               }
+           )
         """
         return Main(self).main(argv)
 

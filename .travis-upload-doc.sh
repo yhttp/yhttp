@@ -27,6 +27,7 @@ ${GIT} config user.email "vahid.mardani@gmail.com"
 pip install -r requirements-doc.txt
 
 cd sphinx
+make doctest
 make html
 cd ..
 

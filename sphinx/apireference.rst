@@ -9,11 +9,15 @@ Application Class
 
 .. autoclass:: Application
 
-   .. automethod:: climain
    .. automethod:: route
+   .. automethod:: climain
    .. automethod:: staticfile
    .. automethod:: staticdirectory
    .. automethod:: when
+   .. automethod:: hook
+   .. automethod:: staticfile
+   .. automethod:: staticdirectory
+   .. automethod:: __call__
 
 
 Request Class
