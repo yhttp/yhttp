@@ -2,15 +2,27 @@ from .headerset import HeaderSet
 
 
 class Response:
+    """Represent the HTTP response which accessible by
+    :attr:`.Request.response` inside the handler
+
+    """
 
     #: HTTP Status code
     status = '200 Ok'
 
+    #: Response encoding, ``None`` for binary
     charset = None
-    firstchunk = None
+
+    #: Response content length
     length = None
+
+    #: Response body
     body = None
+
+    #: Response content type without charset.
     type = None
+
+    _firstchunk = None
 
     def __init__(self, app, startresponse):
         self.application = app
@@ -19,6 +31,8 @@ class Response:
 
     @property
     def contenttype(self):
+        """Response content type incuding charset
+        """
         if not self.type:
             return None
 
@@ -29,6 +43,12 @@ class Response:
         return result
 
     def conclude(self):
+        """Conclude the response, calls WSGI start_response callback and
+        encode response body to transfer to the client
+
+        :return: response body
+        """
+
         body = self.body
         if body is None:
             body = []
@@ -52,6 +72,10 @@ class Response:
         return body
 
     def startstream(self):
+        """Start streaming the response chunk by chunk iustead of what
+        :meth:`.conclude` does.
+
+        """
         body = self.body
 
         if self.length is not None:
@@ -63,25 +87,29 @@ class Response:
         )
 
         # encode if required
-        if self.charset and not isinstance(self.firstchunk, bytes):
-            yield self.firstchunk.encode(self.charset)
+        if self.charset and not isinstance(self._firstchunk, bytes):
+            yield self._firstchunk.encode(self.charset)
             for chunk in body:
                 yield chunk.encode(self.charset)
 
         else:
-            yield self.firstchunk
+            yield self._firstchunk
             for chunk in body:
                 yield chunk
 
-        self.application.hook('endresponse')
+        self.application.hook('endresponse', self)
 
     def start(self):
+        """Start the response, :class:`.Application` call this method when
+        response is ready to transfered to user.
+        """
+
         # settingn contenttype.
         contenttype = self.contenttype
         if contenttype:
             self.headers.add('content-type', contenttype)
 
-        if self.firstchunk is not None:
+        if self._firstchunk is not None:
             return self.startstream()
 
         return self.conclude()

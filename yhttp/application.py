@@ -63,14 +63,14 @@ class Application:
         for more info.
 
         """
-        request = Request(self, environ)
-        request.response = response = Response(self, startresponse)
+        response = Response(self, startresponse)
+        request = Request(self, environ, response)
 
         try:
             handler, arguments, querystrings = self._findhandler(request)
             body = handler(request, *arguments, **querystrings)
             if isinstance(body, types.GeneratorType):
-                response.firstchunk = next(body)
+                response._firstchunk = next(body)
 
             response.body = body
 

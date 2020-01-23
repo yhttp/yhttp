@@ -13,9 +13,16 @@ class Request:
 
     application = None
 
-    def __init__(self, app, environ):
+    #: The :class:`.Response` instance associated to this request.
+    response = None
+
+    #: WSIG environ dictionary
+    environ = None
+
+    def __init__(self, app, environ, response):
         self.application = app
         self.environ = environ
+        self.response = response
 
     @lazyattribute
     def verb(self):
@@ -128,7 +135,7 @@ class HeadersMask:
     def __getitem__(self, key):
         return self.environ[self.getkey(key)]
 
-    def get(self, key, default):
+    def get(self, key, default=None):
         return self.environ.get(self.getkey(key), default)
 
     def __contains__(self, key):

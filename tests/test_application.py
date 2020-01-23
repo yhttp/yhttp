@@ -47,7 +47,7 @@ def test_stream(app, Given):
     endresponseiscalled = 0
 
     @app.when
-    def endresponse():
+    def endresponse(resp):
         nonlocal endresponseiscalled
         endresponseiscalled += 1
 

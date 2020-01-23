@@ -36,6 +36,8 @@ Request Class
    .. autoproperty:: cookies
    .. autoproperty:: scheme
    .. autoproperty:: headers
+   .. autoproperty:: response
+   .. autoproperty:: environ
 
 
 HeadersMask Class
@@ -50,7 +52,20 @@ Response Class
 .. autoclass:: Response
 
    .. autoattribute:: status
+   .. autoattribute:: charset
+   .. autoattribute:: length
+   .. autoattribute:: type
    .. autoattribute:: contenttype
+
+   .. automethod:: conclude
+   .. automethod:: startstream
+   .. automethod:: start
+
+
+HTTPStatus Class
+^^^^^^^^^^^^^^^^
+
+.. autoclass:: HTTPStatus
 
 
 contenttype decorators
@@ -61,11 +76,6 @@ contenttype decorators
 .. autofunction:: json
 .. autofunction:: text
 
-
-HTTPStatus Class
-^^^^^^^^^^^^^^^^
-
-.. autoclass:: HTTPStatus
 
 
 statuses Module
@@ -87,8 +97,4 @@ statuses Module
    .. autofunction:: badgateway()
    .. autofunction:: movedpermanently(url)
    .. autofunction:: found(url)
-
-
-.. 
-  Field class
 
