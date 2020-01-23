@@ -37,8 +37,18 @@ Response Class
 .. autoclass:: Response
 
    .. autoattribute:: status
+   .. autoattribute:: contenttype
 
- 
+
+contenttype decorators
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: contenttype
+.. autofunction:: binary
+.. autofunction:: json
+.. autofunction:: text
+
+
 HTTPStatus Class
 ^^^^^^^^^^^^^^^^
 

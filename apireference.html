@@ -281,6 +281,100 @@ multipart form.</p>
 <dd><p>HTTP Status code</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="yhttp.Response.contenttype">
+<code class="sig-name descname">contenttype</code><a class="headerlink" href="#yhttp.Response.contenttype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="contenttype-decorators">
+<h2>contenttype decorators<a class="headerlink" href="#contenttype-decorators" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="yhttp.contenttype">
+<code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">contenttype</code><span class="sig-paren">(</span><em class="sig-param">contenttype=None</em>, <em class="sig-param">charset=None</em>, <em class="sig-param">dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.contenttype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields a decorator to set response content type and encoding.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">contenttype</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@contenttype</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>There are ready to use contenttype decorators which can importes from
+<code class="docutils literal notranslate"><span class="pre">yhttp</span></code> package, like: <a class="reference internal" href="#yhttp.json" title="yhttp.json"><code class="xref py py-func docutils literal notranslate"><span class="pre">json()</span></code></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#yhttp.binary" title="yhttp.binary"><code class="xref py py-func docutils literal notranslate"><span class="pre">binary()</span></code></a>
+<a class="reference internal" href="#yhttp.json" title="yhttp.json"><code class="xref py py-func docutils literal notranslate"><span class="pre">json()</span></code></a>
+<a class="reference internal" href="#yhttp.text" title="yhttp.text"><code class="xref py py-func docutils literal notranslate"><span class="pre">text()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contenttype</strong> – HTTP Content-Type, example: application/json</p></li>
+<li><p><strong>charset</strong> – Character set, example: utf8</p></li>
+<li><p><strong>dump</strong> – A <code class="docutils literal notranslate"><span class="pre">callable(body)</span> <span class="pre">-&gt;</span> <span class="pre">body</span></code> to transform the body to
+appropriate content type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>decorator for HTTP handlers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.binary">
+<code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">binary</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">application/octet-stream</span></code>.</p>
+<p>Handlers must return <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#bytes" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> when this decorator is used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">binary</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@binary</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;binarydata&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.json">
+<code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">json</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">application/json;charset=utf-8</span></code>
+and encode the returned value by handler to json byte-string format.</p>
+<p>Handlers must return <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> when this decorator is used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">json</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@json</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.text">
+<code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">text</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">text/plain;charset=utf-8</span></code>.</p>
+<p>Handlers must return <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> when this decorator is used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">text</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Unicode String&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -406,6 +500,7 @@ multipart form.</p>
 <li class="toctree-l2"><a class="reference internal" href="#application-class">Application Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-class">Request Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#response-class">Response Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contenttype-decorators">contenttype decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#httpstatus-class">HTTPStatus Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-yhttp.statuses">statuses Module</a></li>
 </ul>
