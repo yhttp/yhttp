@@ -6,6 +6,12 @@ REPO="git@github.com:${TRAVIS_REPO_SLUG}.git"
 SHA=`git rev-parse --verify HEAD`
 DOC="project-gh-pages"
 SSH_PRIVATEKEY=".githubdeploy-rsa"
+
+
+- openssl aes-256-cbc -K $encrypted_860b5b2beef7_key \
+	-iv $encrypted_860b5b2beef7_iv \
+	-in .githubdeploy-rsa.enc \
+	-out $SSH_PRIVATEKEY -d
 chmod 600 $SSH_PRIVATEKEY
 eval `ssh-agent -s`
 ssh-add $SSH_PRIVATEKEY
