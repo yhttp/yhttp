@@ -26,7 +26,9 @@ of-course, all query string will available as a dictionary via
        return f'{foo} {req.query.get("bar")}'
     
    app.ready()
-   
+
+.. `*  due the vim editor bug
+
 
 A painless way to test our code is `bddrest
 <https://github.com/pylover/bddrest>`_.
@@ -85,6 +87,48 @@ given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and
    with Given(app, verb='POST', multipart={'foo': 'bar'}):
        assert response.text == 'bar'
 
+
+HTTP Cookie
+-----------
+
+There is how to use :attr:`req.cookies <yhttp.Request.cookies>`:
+
+.. testsetup:: cookbook/cookie
+
+   from yhttp import Application, text
+   app = Application()
+
+.. testcode:: cookbook/cookie
+
+   @app.route()
+   def get(req):
+       counter = req.cookies['counter']
+       req.cookies['counter'] = str(int(counter.value) + 1)
+       req.cookies['counter']['max-age'] = 1
+       req.cookies['counter']['path'] = '/a'
+       req.cookies['counter']['domain'] = 'example.com'
+    
+   app.ready()
+   
+
+Test:
+
+.. testcode:: cookbook/cookie
+
+   from http import cookies
+
+   from bddrest import Given, response, when, given
+
+   headers = {'Cookie': 'counter=1;'}
+   with Given(app, headers=headers):
+       assert 'Set-cookie' in response.headers
+        
+       cookie = cookies.SimpleCookie(response.headers['Set-cookie'])
+       counter = cookie['counter']
+       assert counter.value == '2'
+       assert counter['path'] == '/a'
+       assert counter['domain'] == 'example.com'
+       assert counter['max-age'] == '1'
 
 ..
    cookie

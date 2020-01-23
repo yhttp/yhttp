@@ -16,11 +16,7 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorials/index.html" />
     <link rel="prev" title="Quick Start" href="quickstart.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
 
   </head><body>
   
@@ -90,6 +86,38 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 </div>
+<div class="section" id="http-cookie">
+<h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Permalink to this headline">¶</a></h2>
+<p>There is how to use <a class="reference internal" href="api.html#yhttp.Request.cookies" title="yhttp.Request.cookies"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code></a>:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/a&#39;</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;example.com&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Test:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">cookies</span>
+
+<span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Cookie&#39;</span><span class="p">:</span> <span class="s1">&#39;counter=1;&#39;</span><span class="p">}</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="s1">&#39;Set-cookie&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span>
+
+    <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookies</span><span class="o">.</span><span class="n">SimpleCookie</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Set-cookie&#39;</span><span class="p">])</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">counter</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span>
+    <span class="k">assert</span> <span class="n">counter</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;/a&#39;</span>
+    <span class="k">assert</span> <span class="n">counter</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;example.com&#39;</span>
+    <span class="k">assert</span> <span class="n">counter</span><span class="p">[</span><span class="s1">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -114,6 +142,7 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#query-string">Query String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-form">HTTP Form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
@@ -151,20 +180,10 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2020, Vahid Mardani.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/cookbook.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/yhttp/yhttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/yhttp/yhttp">Source</a>
+    </span>
 
-    
-
-    
   </body>
 </html>
