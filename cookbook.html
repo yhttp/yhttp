@@ -35,7 +35,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> will dispatch query string to the python’s <code class="docutils literal notranslate"><span class="pre">keywordonly</span></code> argument
 if defined in handler, see <code class="docutils literal notranslate"><span class="pre">foo</span></code> argument in the example below.</p>
 <p>of-course, all query string will available as a dictionary via
-<a class="reference internal" href="api.html#yhttp.Request.query" title="yhttp.Request.query"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code></a>.</p>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code>.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -57,7 +57,7 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 </div>
 <div class="section" id="http-form">
 <h2>HTTP Form<a class="headerlink" href="#http-form" title="Permalink to this headline">¶</a></h2>
-<p>Use <a class="reference internal" href="api.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary for access the submitted fields.</p>
+<p>Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code> as a dictionary for access the submitted fields.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -89,22 +89,22 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 <div class="section" id="http-status">
 <h2>HTTP Status<a class="headerlink" href="#http-status" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways for to set HTTP status code for response: raise an instance
-of <a class="reference internal" href="api.html#yhttp.HTTPStatus" title="yhttp.HTTPStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code></a> class or set
-<a class="reference internal" href="api.html#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code></a> directly.</p>
+of <code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code> class or set
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code> directly.</p>
 <p>There are some builtins HTTP status factory functions:</p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.badrequest" title="yhttp.statuses.badrequest"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.unauthorized" title="yhttp.statuses.unauthorized"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.forbidden" title="yhttp.statuses.forbidden"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.forbidden()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.notfound" title="yhttp.statuses.notfound"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notfound()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.methodnotallowed" title="yhttp.statuses.methodnotallowed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.methodnotallowed()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.conflict" title="yhttp.statuses.conflict"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.conflict()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.gone" title="yhttp.statuses.gone"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.gone()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.preconditionfailed" title="yhttp.statuses.preconditionfailed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.preconditionfailed()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.notmodified" title="yhttp.statuses.notmodified"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notmodified()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.internalservererror" title="yhttp.statuses.internalservererror"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.internalservererror()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.badgateway" title="yhttp.statuses.badgateway"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badgateway()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.movedpermanently" title="yhttp.statuses.movedpermanently"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></a></p>
-<p><a class="reference internal" href="api.html#yhttp.statuses.found" title="yhttp.statuses.found"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></a></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.forbidden()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notfound()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.methodnotallowed()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.conflict()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.gone()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.preconditionfailed()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notmodified()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.internalservererror()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badgateway()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></p>
 <p>See the example below for usage:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">statuses</span>
 
@@ -125,18 +125,18 @@ of <a class="reference internal" href="api.html#yhttp.HTTPStatus" title="yhttp.H
 <div class="section" id="http-redirect">
 <h3>HTTP Redirect<a class="headerlink" href="#http-redirect" title="Permalink to this headline">¶</a></h3>
 <p>To redirect the request to another location raise a
-<a class="reference internal" href="api.html#yhttp.statuses.movedpermanently" title="yhttp.statuses.movedpermanently"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></a> or <a class="reference internal" href="api.html#yhttp.statuses.found" title="yhttp.statuses.found"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></a></p>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">found</span><span class="p">(</span><span class="s1">&#39;http://example.com&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="custom-http-status">
 <h3>Custom HTTP Status<a class="headerlink" href="#custom-http-status" title="Permalink to this headline">¶</a></h3>
-<p>Use <a class="reference internal" href="api.html#yhttp.statuses.status" title="yhttp.statuses.status"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.status()</span></code></a> to raise your very own status code and text.</p>
+<p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.status()</span></code> to raise your very own status code and text.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="s1">&#39;Custom Status Text&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or set <a class="reference internal" href="api.html#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code></a> directly.</p>
+<p>Or set <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code> directly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="n">req</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;201 Created&#39;</span>
@@ -145,9 +145,29 @@ of <a class="reference internal" href="api.html#yhttp.HTTPStatus" title="yhttp.H
 </div>
 </div>
 </div>
+<div class="section" id="routing">
+<h2>Routing<a class="headerlink" href="#routing" title="Permalink to this headline">¶</a></h2>
+<p>the only way to register handler for http requests is
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.route()</span></code> decorator factory.</p>
+<p>Hanler function’s name will be used as HTTP verb. so, the <code class="docutils literal notranslate"><span class="pre">get</span></code> in these
+example stands for the HTTP <code class="docutils literal notranslate"><span class="pre">GET</span></code> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>                 <span class="c1"># Default route</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>           <span class="c1"># Not match with: /foo/bar</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/books/(\d+)&#39;</span><span class="p">)</span>   <span class="c1"># Match with: /books/1</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="http-cookie">
 <h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Permalink to this headline">¶</a></h2>
-<p>There is how to use <a class="reference internal" href="api.html#yhttp.Request.cookies" title="yhttp.Request.cookies"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code></a>:</p>
+<p>There is how to use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>
@@ -206,11 +226,11 @@ of <a class="reference internal" href="api.html#yhttp.HTTPStatus" title="yhttp.H
 <li class="toctree-l3"><a class="reference internal" href="#custom-http-status">Custom HTTP Status</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 
 <div class="relations">
