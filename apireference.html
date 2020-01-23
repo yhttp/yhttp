@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API Reference &#8212; yhttp 2.3.4 documentation</title>
+    <title>API Reference &#8212; yhttp 2.4.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -86,6 +86,34 @@ it like:</p>
 <dt id="yhttp.Application.staticdirectory">
 <code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="yhttp.Application.when">
+<code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.when" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Decorator to registers the <code class="docutils literal notranslate"><span class="pre">func</span></code> into
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.events</span></code> by its name.</p>
+<p>Currently these hooks are suuported:</p>
+<ul class="simple">
+<li><p>ready</p></li>
+<li><p>shutdown</p></li>
+<li><p>endresponse</p></li>
+</ul>
+<p>The hook name will be choosed by the func.__name__, so if you need to
+aware when <code class="docutils literal notranslate"><span class="pre">app.ready</span></code> is called write something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">endresponse</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 

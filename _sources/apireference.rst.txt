@@ -13,6 +13,7 @@ Application Class
    .. automethod:: route
    .. automethod:: staticfile
    .. automethod:: staticdirectory
+   .. automethod:: when
 
 
 Request Class
