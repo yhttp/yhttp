@@ -12,6 +12,10 @@ from .cli import Main
 
 
 class Application:
+    """Web Application representation, instance of this class can be used as 
+    WSGI application.
+
+    """
     builtinsettings = '''
     debug: true
     '''
@@ -207,7 +211,7 @@ class Application:
 
         .. code-block::
 
-            app.staticdirectory('/foo', 'physical/path/to/foo')
+            app.staticdirectory('/foo/', 'physical/path/to/foo')
 
         You you can do:
 
@@ -253,8 +257,33 @@ class Application:
         return Main(self).main(argv)
 
     def ready(self):
+        """Calls the ``ready`` :meth:`hook`
+
+        You need to call this method before using the instance as the WSGI
+        application.
+
+        Typical usage:
+
+        .. code-block::
+
+           from yhttp import Application, text
+
+
+           app = Application()
+
+           @app.route()
+           @text
+           def get(req):
+               return 'Hello World!'
+
+           if __name__ != '__main__':
+               app.ready()
+        """
+
         self.hook('ready', self)
 
     def shutdown(self):
+        """Calls the ``shutdown`` :meth:`hook`
+        """
         self.hook('shutdown', self)
 

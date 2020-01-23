@@ -17,8 +17,9 @@ Application Class
    .. automethod:: hook
    .. automethod:: staticfile
    .. automethod:: staticdirectory
+   .. automethod:: ready
+   .. automethod:: shutdown
    .. automethod:: __call__
-
 
 Request Class
 ^^^^^^^^^^^^^ 
