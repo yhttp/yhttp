@@ -7,11 +7,13 @@ branches:
   - ci
   - "/^(release\\/)?v([1-9]\\d*!)?(0|[1-9]\\d*)(\\.(0|[1-9]\\d*))*((a|b|rc)(0|[1-9]\\d*))?(\\.post(0|[1-9]\\d*))?(\\.dev(0|[1-9]\\d*))?$/"
 before_install:
+- openssl aes-256-cbc -K $encrypted_860b5b2beef7_key -iv $encrypted_860b5b2beef7_iv -in .githubdeploy-rsa.enc -out .githubdeploy-rsa -d
 - pip install -U pip setuptools wheel
 - pip install -r requirements-ci.txt
 install: pip install -e .
 script: py.test -v --cov=yhttp
 after_success: coveralls
+after_deploy: .travis-upload-doc.sh
 deploy:
   provider: pypi
   skip_cleanup: true
