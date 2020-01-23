@@ -37,6 +37,7 @@ livehtml:
         --ignore "*.ind" \
         --ignore "*.ilg" \
         --ignore "*.tex" \
+		--port 8080 \
 		$(BUILDDIR)/html 
 
 doctest:
