@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cookbook &#8212; yhttp 2.3.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials/index.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cookbook">
+<h1>Cookbook<a class="headerlink" href="#cookbook" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="query-string">
+<h2>Query String<a class="headerlink" href="#query-string" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> will dispatch query string to the python’s <code class="docutils literal notranslate"><span class="pre">keywordonly</span></code> argument
+if defined in handler, see <code class="docutils literal notranslate"><span class="pre">foo</span></code> argument in the example below.</p>
+<p>of-course, all query string will available as a dictionary via
+<a class="reference internal" href="api.html#yhttp.Request.query" title="yhttp.Request.query"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code></a>.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{foo}</span><span class="s1"> {req.query.get(&quot;bar&quot;)}&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A painless way to test our code is <a class="reference external" href="https://github.com/pylover/bddrest">bddrest</a>.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="s1">&#39;/?foo=foo&amp;bar=bar&#39;</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;foo bar&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;None bar&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-form">
+<h2>HTTP Form<a class="headerlink" href="#http-form" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="api.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary for access the submitted fields.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;{req.form.get(&quot;foo&quot;)}&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span>
+</pre></div>
+</div>
+<p>the <code class="docutils literal notranslate"><span class="pre">form=</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">Given</span></code> and <code class="docutils literal notranslate"><span class="pre">when</span></code> functions will send the
+given dictionary as a <code class="docutils literal notranslate"><span class="pre">urlencoded</span></code> HTTP form, but you can try <code class="docutils literal notranslate"><span class="pre">json</span></code> and
+<code class="docutils literal notranslate"><span class="pre">multipart</span></code> content types to ensure all API users will happy!</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">yhttp</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#query-string">Query String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-form">HTTP Form</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Quick Start</a></li>
+      <li>Next: <a href="tutorials/index.html" title="next chapter">Tutorials</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vahid Mardani.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cookbook.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

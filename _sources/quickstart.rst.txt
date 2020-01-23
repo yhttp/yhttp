@@ -1,7 +1,7 @@
-Hello World!
-============
+Quick Start
+===========
 
-There is how to server simple string using `yhttp`.
+There is how to serve a simple string using `yhttp`.
 
 
 Install ``yhttp`` if you are not installed it yet. it's highly recommended to 
@@ -26,13 +26,14 @@ Create a file named: ``hello.py``:
 
 .. testcode::
 
-   from yhttp import Application
+   from yhttp import Application, text
 
    app = Application()
 
    @app.route()
+   @text
    def get(req):
-       return b'Hello World!'
+       return 'Hello World!'
 
    app.ready()
 
@@ -114,15 +115,16 @@ Lets take a look at ``hello.py``.
    
    import sys
    
-   from yhttp import Application
+   from yhttp import Application, text
    
    
    app = Application()
    
    
    @app.route()
+   @text
    def get(req):
-       return b'Hello World!'
+       return 'Hello World!'
    
    
    if __name__ == '__main__':

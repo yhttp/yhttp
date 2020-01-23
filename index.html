@@ -14,7 +14,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorials" href="tutorials/index.html" />
+    <link rel="next" title="Quick Start" href="quickstart.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,6 +37,17 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install yhttp
 </pre></div>
 </div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;Hello World!&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -50,20 +61,28 @@ arguments for query strings (&gt;= 0.24.0).</p></li>
 <li><p>Easy to extend.</p></li>
 <li><p>Builtin extensible CLI.</p></li>
 </ul>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/helloworld.html">Hello World!</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/helloworld.html#command-line-interface">Command Line Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/helloworld.html#python-package">Python Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/helloworld.html#bash-autocompletion">Bash Autocompletion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#command-line-interface">Command Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#python-package">Python Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#bash-autocompletion">Bash Autocompletion</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#query-string">Query String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#http-form">HTTP Form</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#application-class">Application Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#request-class">Request Class</a></li>
 </ul>
 </li>
 </ul>
@@ -96,8 +115,9 @@ arguments for query strings (&gt;= 0.24.0).</p></li>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
@@ -106,7 +126,7 @@ arguments for query strings (&gt;= 0.24.0).</p></li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="tutorials/index.html" title="next chapter">Tutorials</a></li>
+      <li>Next: <a href="quickstart.html" title="next chapter">Quick Start</a></li>
   </ul></li>
 </ul>
 </div>
