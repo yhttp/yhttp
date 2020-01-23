@@ -9,5 +9,5 @@ from .response import Response
 from .statuses import HTTPStatus
 
 
-__version__ = '2.3.4'
+__version__ = '2.4.0'
 

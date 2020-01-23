@@ -12,8 +12,6 @@ from .cli import Main
 
 
 class Application:
-    __requestfactory__ = Request
-    __responsefactory__ = Response
     builtinsettings = '''
     debug: true
     '''
@@ -45,9 +43,12 @@ class Application:
         raise statuses.notfound()
 
     def __call__(self, environ, startresponse):
-        request = self.__requestfactory__(self, environ)
-        request.response = response = \
-            self.__responsefactory__(self, startresponse)
+        """The actual WSGI Application.
+
+        So, will be called on every request.
+        """
+        request = Request(self, environ)
+        request.response = response = Response(self, startresponse)
 
         try:
             handler, arguments, querystrings = self._findhandler(request)
@@ -117,10 +118,38 @@ class Application:
 
         return decorator
 
-    def when(self, f):
-        callbacks = self.events.setdefault(f.__name__, [])
-        if f not in callbacks:
-            callbacks.append(f)
+    def when(self, func):
+        """A Decorator to registers the ``func`` into
+        :attr:`.Application.events` by its name.
+
+        Currently these hooks are suuported:
+
+        * ready
+        * shutdown
+        * endresponse
+
+        The hook name will be choosed by the func.__name__, so if you need to
+        aware when ``app.ready`` is called write something like this:
+
+        .. code-block::
+
+           @app.when
+           def ready(app):
+               ...
+
+           @app.when
+           def shutdown(app):
+               ...
+
+           @app.when
+           def endresponse(response):
+               ...
+
+        """
+
+        callbacks = self.events.setdefault(func.__name__, [])
+        if func not in callbacks:
+            callbacks.append(func)
 
     def hook(self, name, *a, **kw):
         callbacks = self.events.get(name)

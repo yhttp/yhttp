@@ -48,7 +48,7 @@ class Response:
             self.status,
             list(self.headers.items()),
         )
-        self.application.hook('endresponse')
+        self.application.hook('endresponse', self)
         return body
 
     def startstream(self):
