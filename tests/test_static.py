@@ -24,7 +24,7 @@ def test_staticdirectory(app, Given, tmpdir):
     with open(indexfilename, 'w') as f:
         f.write('foo')
 
-    app.staticdirectory(tmpdir)
+    app.staticdirectory('/', tmpdir)
 
     with Given('/index.txt'):
         assert status == 200

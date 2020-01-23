@@ -6,6 +6,8 @@
 Welcome to yhttp's documentation!
 =================================
 
+A lightweight flask-like HTTP framework.
+
 Python >= 3.6
 
 .. code-block:: bash

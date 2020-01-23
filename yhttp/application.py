@@ -133,8 +133,8 @@ class Application:
     def staticfile(self, pattern, filename):
         return self.route(pattern)(static.file(filename))
 
-    def staticdirectory(self, directory):
-        return self.route(r'/(.*)')(static.directory(directory))
+    def staticdirectory(self, pattern, directory):
+        return self.route(f'{pattern}(.*)')(static.directory(directory))
 
     def climain(self, argv=None):
         """Provide a callable to call as the CLI entry point

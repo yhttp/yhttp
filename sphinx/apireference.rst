@@ -11,6 +11,9 @@ Application Class
 
    .. automethod:: climain
    .. automethod:: route
+   .. automethod:: staticfile
+   .. automethod:: staticdirectory
+
 
 Request Class
 ^^^^^^^^^^^^^ 
