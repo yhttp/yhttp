@@ -21,6 +21,14 @@ Request Class
    .. autoproperty:: cookies
 
 
+Response Class
+^^^^^^^^^^^^^^ 
+
+.. autoclass:: Response
+
+   .. autoattribute:: status
+
+ 
 HTTPStatus Class
 ^^^^^^^^^^^^^^^^
 
@@ -33,6 +41,7 @@ statuses Module
 
 .. automodule:: yhttp.statuses
    
+   .. autofunction:: status(code, text)
    .. autofunction:: badrequest()
    .. autofunction:: unauthorized()
    .. autofunction:: forbidden()
