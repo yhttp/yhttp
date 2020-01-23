@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello World! &#8212; yhttp 2.3.3 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../api.html" />
+    <link rel="prev" title="Tutorials" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="hello-world">
+<h1>Hello World!<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h1>
+<p>There is how to server simple string using <cite>yhttp</cite>.</p>
+<p>Install <code class="docutils literal notranslate"><span class="pre">yhttp</span></code> if you are not installed it yet. it’s highly recommended to
+use virtual environment before that. I use
+<a class="reference external" href="https://virtualenvwrapper.readthedocs.io/en/latest/">virtualenvwrapper</a>.</p>
+<p>Create a virtual environment to isolate your hello world application from the
+rest of the system python packages.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkvirtualenv hello
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>workon hello
+pip3 install yhttp
+</pre></div>
+</div>
+<p>Create a file named: <code class="docutils literal notranslate"><span class="pre">hello.py</span></code>:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;Hello World!&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Serve it by your favorite <code class="docutils literal notranslate"><span class="pre">WSGI</span></code> server, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install gunicorn
+gunicorn hello:app
+</pre></div>
+</div>
+<p>Use your favorite http clinet to check it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8000
+</pre></div>
+</div>
+<div class="section" id="command-line-interface">
+<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> has builtin command line interface with auto completion support.
+to use it, just call <a class="reference internal" href="../api.html#yhttp.Application.climain" title="yhttp.Application.climain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.climain()</span></code></a> as the entry point. We will
+learn how it works in the rest of this tutorial.</p>
+<p>Let’s edit <code class="docutils literal notranslate"><span class="pre">hello.py</span></code> to act as both command line interface and WSGI
+application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="o">...</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">climain</span><span class="p">())</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now, you can run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 hello.py --help
+</pre></div>
+</div>
+<p>You can set the execution bit of the <code class="docutils literal notranslate"><span class="pre">hello.py</span></code> and add a shebang at the
+first line to use it as a standalone executable.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod +x hello.py
+</pre></div>
+</div>
+<p>And insert it at the first line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/env python3</span>
+</pre></div>
+</div>
+<p>Lets take a look at <code class="docutils literal notranslate"><span class="pre">hello.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;Hello World!&#39;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">climain</span><span class="p">())</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Use it as an executable python script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py --help
+</pre></div>
+</div>
+<p>There is also a subcommand <code class="docutils literal notranslate"><span class="pre">serve</span></code> to serve the WSGI application by python’s
+builtin WSGI server.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py serve
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> anywhere to know command line options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py serve --help
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage: hello.py serve <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-b <span class="o">{</span>HOST:<span class="o">}</span>PORT<span class="o">]</span> <span class="o">[</span>-C DIRECTORY<span class="o">]</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+  -b <span class="o">{</span>HOST:<span class="o">}</span>PORT, --bind <span class="o">{</span>HOST:<span class="o">}</span>PORT
+                        Bind Address. default: <span class="m">8080</span>
+  -C DIRECTORY, --directory DIRECTORY
+                        Change to this path before starting, default is: <span class="sb">`</span>.<span class="sb">`</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-package">
+<h2>Python Package<a class="headerlink" href="#python-package" title="Permalink to this headline">¶</a></h2>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.1.0&#39;</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span>
+        <span class="s1">&#39;yhttp&#39;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">py_modules</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;hello&#39;</span><span class="p">],</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;console_scripts&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s1">&#39;hello = hello:app.climain&#39;</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>After this, you can install the module as a reqular python package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>workon hello
+pip install -e .
+</pre></div>
+</div>
+<p>So, use the <code class="docutils literal notranslate"><span class="pre">hello</span></code> command without specifying path and extension, thanks to
+setuptools <code class="docutils literal notranslate"><span class="pre">entry_points</span></code> feature.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hello --help
+
+hello serve --bind <span class="m">8088</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bash-autocompletion">
+<h2>Bash Autocompletion<a class="headerlink" href="#bash-autocompletion" title="Permalink to this headline">¶</a></h2>
+<p>Just run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py completion install
+</pre></div>
+</div>
+<p>Then deactivate and re-activate your virtual environment to apply changes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>deactivate <span class="o">&amp;&amp;</span> workon hello
+</pre></div>
+</div>
+<p>Write <code class="docutils literal notranslate"><span class="pre">hello</span></code> and hit the <code class="docutils literal notranslate"><span class="pre">TAB</span></code> key twice to see the avaiable options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hello TAB TAB
+</pre></div>
+</div>
+<p>Check out the other tutorials to discover the <code class="docutils literal notranslate"><span class="pre">yhttp</span></code> features.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">yhttp</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hello World!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-interface">Command Line Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-package">Python Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bash-autocompletion">Bash Autocompletion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorials</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Tutorials</a></li>
+      <li>Next: <a href="../api.html" title="next chapter">API</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vahid Mardani.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorials/helloworld.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
