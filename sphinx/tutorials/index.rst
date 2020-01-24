@@ -4,6 +4,8 @@ Tutorials
 .. toctree::
    :maxdepth: 2
 
+   quickstart
+
 
 ..
    add command line argument
