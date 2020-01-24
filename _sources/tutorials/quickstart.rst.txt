@@ -245,7 +245,8 @@ Check out the other tutorials to discover the ``yhttp`` features.
 Custom Command Like insterface
 ==============================
 
-Let's add a ``version`` subcommand to show the application's version:
+Let's add a ``version`` :class:`easycli.SubCommand` to show the application's 
+version:
 
 .. code-block:: 
 
