@@ -409,6 +409,12 @@ servers default behavior.</p>
 <dd><p>Response content type incuding charset</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="yhttp.Response.headers">
+<code class="sig-name descname">headers</code><em class="property"> = None</em><a class="headerlink" href="#yhttp.Response.headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of <a class="reference internal" href="#yhttp.HeaderSet" title="yhttp.HeaderSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderSet</span></code></a> class.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="yhttp.Response.conclude">
 <code class="sig-name descname">conclude</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response.conclude" title="Permalink to this definition">¶</a></dt>
@@ -438,12 +444,41 @@ response is ready to transfered to user.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="headerset-class">
+<h2>HeaderSet Class<a class="headerlink" href="#headerset-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yhttp.HeaderSet">
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HeaderSet</code><span class="sig-paren">(</span><em class="sig-param">items=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeaderSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mutable case-insensitive ordered dictionary to keep HTTP headers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;x-foo&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;x-bar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;x-baz: qux&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
 <div class="section" id="httpstatus-class">
 <h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="yhttp.HTTPStatus">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HTTPStatus</code><span class="sig-paren">(</span><em class="sig-param">code</em>, <em class="sig-param">text</em>, <em class="sig-param">keepheaders=False</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Base class for all HTTP Exceptions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code</strong> – HTTP status code.</p></li>
+<li><p><strong>text</strong> – HTTP status text.</p></li>
+<li><p><strong>keepheaders</strong> – If set, appliation keeps the <a class="reference internal" href="#yhttp.Response.headers" title="yhttp.Response.headers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.headers</span></code></a>
+when exception is occured.</p></li>
+<li><p><strong>headers</strong> – Some extra HTTP headers to be added to the
+<a class="reference internal" href="#yhttp.Response.headers" title="yhttp.Response.headers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.headers</span></code></a> when exception is raised.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="contenttype-decorators">
@@ -650,6 +685,7 @@ and encode the returned value by handler to json byte-string format.</p>
 <li class="toctree-l2"><a class="reference internal" href="#request-class">Request Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#headersmask-class">HeadersMask Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#response-class">Response Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#headerset-class">HeaderSet Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#httpstatus-class">HTTPStatus Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contenttype-decorators">contenttype decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-yhttp.statuses">statuses Module</a></li>
