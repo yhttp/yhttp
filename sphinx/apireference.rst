@@ -56,10 +56,17 @@ Response Class
    .. autoattribute:: length
    .. autoattribute:: type
    .. autoattribute:: contenttype
+   .. autoattribute:: headers
 
    .. automethod:: conclude
    .. automethod:: startstream
    .. automethod:: start
+
+
+HeaderSet Class
+^^^^^^^^^^^^^^^
+
+.. autoclass:: HeaderSet
 
 
 HTTPStatus Class

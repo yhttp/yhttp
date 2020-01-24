@@ -19,6 +19,9 @@ class Response:
     #: Response body
     body = None
 
+    #: An instance of :class:`HeaderSet` class.
+    headers = None
+
     #: Response content type without charset.
     type = None
 

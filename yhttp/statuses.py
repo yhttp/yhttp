@@ -3,6 +3,15 @@ from functools import partial
 
 
 class HTTPStatus(Exception):
+    """Base class for all HTTP Exceptions.
+
+    :param code: HTTP status code.
+    :param text: HTTP status text.
+    :param keepheaders: If set, appliation keeps the :attr:`.Response.headers`
+                        when exception is occured.
+    :param headers: Some extra HTTP headers to be added to the
+                    :attr:`.Response.headers` when exception is raised.
+    """
 
     def __init__(self, code, text, keepheaders=False, headers=None):
         self.keepheaders = keepheaders

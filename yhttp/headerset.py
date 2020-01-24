@@ -2,7 +2,17 @@ from collections import OrderedDict
 
 
 class HeaderSet(OrderedDict):
+    """A mutable case-insensitive ordered dictionary to keep HTTP headers.
 
+    .. code-block::
+
+       @app.route()
+       def get(req):
+           req.response.headers.add('x-foo', 'a', 'b')
+           req.response.headers['x-bar'] = 'bar'
+           req.response.headers += ['x-baz: qux']
+
+    """
     def __init__(self, items=None):
         super().__init__()
         for i in items or []:
