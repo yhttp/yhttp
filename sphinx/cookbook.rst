@@ -268,6 +268,8 @@ Test:
        assert counter['max-age'] == '1'
 
 
+.. _cookbook-validation:
+
 Request Valiation
 -----------------
 

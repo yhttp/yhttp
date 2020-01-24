@@ -84,6 +84,10 @@ contenttype decorators
 .. autofunction:: text
 
 
+validate decorator
+^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: validate
 
 statuses Module
 ^^^^^^^^^^^^^^^

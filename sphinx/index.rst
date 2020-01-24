@@ -42,14 +42,14 @@ Features
 
 - Very simple, less-code & fast.
 - Regex route.
-- Url-Encoded, Multipart and JSON form parsing.
+- UrlEncoded, Multipart and JSON form parsing.
 - A very flexible configuration system: 
   `pymlconf <https://github.com/pylover/pymlconf>`_
 - Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ 
-  arguments for query strings (>= 0.24.0).
+  arguments for query strings.
 - Easy to extend.
 - Builtin extensible CLI.
-
+- Request Validation
 
 Contents
 ********

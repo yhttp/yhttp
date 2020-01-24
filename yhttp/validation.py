@@ -251,5 +251,5 @@ class RequestValidator:
 
         return wrapper
 
-
+#: see :ref:`cookbook-validation`
 validate = RequestValidator

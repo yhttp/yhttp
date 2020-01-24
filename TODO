@@ -2,10 +2,4 @@
 - documentation:
 	Code comments
     mention about route definition order
-	authentication
-	authorize decorataor
-	climain
-
-Next release:
-- template ssr
 
