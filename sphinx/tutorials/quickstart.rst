@@ -239,3 +239,139 @@ Write ``hello`` and hit the ``TAB`` key twice to see the avaiable options:
    hello TAB TAB
 
 Check out the other tutorials to discover the ``yhttp`` features.
+
+
+==============================
+Custom Command Like insterface
+==============================
+
+Let's add a ``version`` subcommand to show the application's version:
+
+.. code-block:: 
+
+   from easycli import SubCommand
+
+
+   __version__ = '0.1.0'
+
+   class Version(SubCommand):
+       __command__ = 'version'
+       __aliases__ = ['v', 'ver']
+       
+       def __call__(self, args):
+           print(__version__)
+
+   ...
+
+
+   app.cliarguments.append(Version)
+
+
+   if __name__ == '__main__':
+       sys.exit(app.climain())
+   
+   
+   app.ready()
+
+Now you can do:
+
+.. code-block:: bash
+
+   hello version
+   hello ver
+   hello v
+
+
+It's ok to modify the ``setup.py`` script to read version from ``__version__``
+attribute.
+
+here is the complete version of the ``setup.py`` and ``hello.py``.
+
+setup.py
+^^^^^^^^
+
+.. code-block:: python
+
+   import re
+   from os.path import join, dirname
+   
+   from setuptools import setup
+   
+   
+   # reading package's version (same way sqlalchemy does)
+   with open(join(dirname(__file__), 'hello.py')) as f:
+       version = re.match(r".*__version__ = '(.*?)'", f.read(), re.S).group(1)
+   
+   
+   setup(
+       name='hello',
+       version=version,
+       install_requires=[
+           'yhttp',
+       ],
+       py_modules=['hello'],
+       entry_points={
+           'console_scripts': [
+               'hello = hello:app.climain'
+           ]
+       },
+   )
+
+
+hello.py
+^^^^^^^^
+
+.. code-block:: python
+
+   import sys
+   
+   from yhttp import Application
+   from easycli import SubCommand
+   
+   
+   __version__ = '0.1.1'
+   
+   
+   class Version(SubCommand):
+       __command__ = 'version'
+       __aliases__ = ['v', 'ver']
+   
+       def __call__(self, args):
+           print(__version__)
+   
+   
+   app = Application()
+   app.cliarguments.append(Version)
+   
+   
+   @app.route()
+   def get(req):
+       return b'Hello World!'
+   
+   
+   if __name__ == '__main__':
+       sys.exit(app.climain())
+   
+   
+   app.ready()
+
+
+Install the version ``0.1.1`` using:
+
+.. code-block:: bash
+
+   pip3 install -e .
+
+
+Then test it by:
+
+.. code-block:: bash
+
+   hello version
+   hello ver
+   hello v
+   hello serve
+
+
+Checkout the :ref:`cookbook` to discover more features.
+

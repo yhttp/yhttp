@@ -75,6 +75,7 @@ html_static_path = ['_static']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
     'pymlconf': ('http://pymlconf.dobisel.com', None),
+    'easycli': ('http://easycli.dobisel.com', None),
 #    'sqlalchemy': ('http://docs.sqlalchemy.org/en/latest/', None)
 
 }

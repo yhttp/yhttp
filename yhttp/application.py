@@ -23,6 +23,9 @@ class Application:
     #: Instance of :class:`pymlconf.Root` as the global configuration instance.
     settings = None
 
+    #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
+    cliarguments = None
+
     def __init__(self):
         self.cliarguments = []
         self.routes = {}
