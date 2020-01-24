@@ -20,6 +20,24 @@ def contenttype(contenttype=None, charset=None, dump=None):
     There are ready to use contenttype decorators which can importes from
     ``yhttp`` package, like: :func:`.json`.
 
+    You may create your very own content type decorator by calling this
+    function with desired arguments, for example:
+
+    .. code-block::
+
+       invoice = contenttype('application/pdf', None, dump=makeinvoicepdf)
+
+       @app.route('/invoices/(\d+)')
+       @invoice
+       def get(req, id):
+           ...
+
+    The :func:`.json` decorator is created with something like:
+
+    .. code-block::
+
+       json = contenttype('application/json', 'utf8', dump=json.dumps)
+
     .. seealso::
 
        :func:`.binary`
