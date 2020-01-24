@@ -87,6 +87,45 @@ given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and
    with Given(app, verb='POST', multipart={'foo': 'bar'}):
        assert response.text == 'bar'
 
+Configuration
+-------------
+
+Use :attr:`app.settings <.Application.settings>` attribute to update global
+settings instance for the application. this is an instance of 
+:class:`pymlconf.Root`.
+
+To update configuration just use the :meth:`pymlconf.Mergable.merge` or 
+:meth:`pymlconf.Root.loadfile` methods of the :attr:`.Application.settings` 
+
+Just remember configration format is yaml.
+
+.. code-block::
+
+   app.settings.merge('''
+   db:
+     url: postgres://user:pass@host/db
+   ''')
+
+   app.settings.loadfile('path/to/conf.yml')
+
+
+Then use your configration keys like:
+
+.. code-block::
+
+   url = app.settings.db.url
+
+
+.. Note::
+
+   Do not update the :attr:`app.settings <.Application.settings>` instance
+   after the :meth:`.Application.ready` is called.
+
+.. seealso::
+
+   `pymlconf <http://pymlconf.dobisel.com>`_
+
+
 HTTP Status
 -----------
 

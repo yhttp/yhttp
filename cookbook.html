@@ -86,6 +86,36 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 </div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="apireference.html#yhttp.Application.settings" title="yhttp.Application.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">app.settings</span></code></a> attribute to update global
+settings instance for the application. this is an instance of
+<a class="reference external" href="http://pymlconf.dobisel.com/pymlconf.html#pymlconf.Root" title="(in pymlconf v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymlconf.Root</span></code></a>.</p>
+<p>To update configuration just use the <a class="reference external" href="http://pymlconf.dobisel.com/pymlconf.html#pymlconf.Mergable.merge" title="(in pymlconf v2.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymlconf.Mergable.merge()</span></code></a> or
+<a class="reference external" href="http://pymlconf.dobisel.com/pymlconf.html#pymlconf.Root.loadfile" title="(in pymlconf v2.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymlconf.Root.loadfile()</span></code></a> methods of the <a class="reference internal" href="apireference.html#yhttp.Application.settings" title="yhttp.Application.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.settings</span></code></a></p>
+<p>Just remember configration format is yaml.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">db:</span>
+<span class="s1">  url: postgres://user:pass@host/db</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">loadfile</span><span class="p">(</span><span class="s1">&#39;path/to/conf.yml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then use your configration keys like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">url</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not update the <a class="reference internal" href="apireference.html#yhttp.Application.settings" title="yhttp.Application.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">app.settings</span></code></a> instance
+after the <a class="reference internal" href="apireference.html#yhttp.Application.ready" title="yhttp.Application.ready"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.ready()</span></code></a> is called.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://pymlconf.dobisel.com">pymlconf</a></p>
+</div>
+</div>
 <div class="section" id="http-status">
 <h2>HTTP Status<a class="headerlink" href="#http-status" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways for to set HTTP status code for response: raise an instance
@@ -462,6 +492,7 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#query-string">Query String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-form">HTTP Form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-status">HTTP Status</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#http-redirect">HTTP Redirect</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#custom-http-status">Custom HTTP Status</a></li>
