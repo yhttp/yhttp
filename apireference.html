@@ -499,6 +499,20 @@ when exception is occured.</p></li>
 </div>
 <p>There are ready to use contenttype decorators which can importes from
 <code class="docutils literal notranslate"><span class="pre">yhttp</span></code> package, like: <a class="reference internal" href="#yhttp.json" title="yhttp.json"><code class="xref py py-func docutils literal notranslate"><span class="pre">json()</span></code></a>.</p>
+<p>You may create your very own content type decorator by calling this
+function with desired arguments, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">invoice</span> <span class="o">=</span> <span class="n">contenttype</span><span class="p">(</span><span class="s1">&#39;application/pdf&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dump</span><span class="o">=</span><span class="n">makeinvoicepdf</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/invoices/(\d+)&#39;</span><span class="p">)</span>
+<span class="nd">@invoice</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#yhttp.json" title="yhttp.json"><code class="xref py py-func docutils literal notranslate"><span class="pre">json()</span></code></a> decorator is created with something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">json</span> <span class="o">=</span> <span class="n">contenttype</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="n">dump</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#yhttp.binary" title="yhttp.binary"><code class="xref py py-func docutils literal notranslate"><span class="pre">binary()</span></code></a>
