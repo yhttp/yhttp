@@ -14,8 +14,8 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorials" href="tutorials/index.html" />
-    <link rel="prev" title="Quick Start" href="quickstart.html" />
+    <link rel="next" title="API Reference" href="apireference.html" />
+    <link rel="prev" title="Quick Start" href="tutorials/quickstart.html" />
     <link href="_static/style.css" rel="stylesheet" type="text/css">
 
   </head><body>
@@ -55,8 +55,8 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 </pre></div>
 </div>
 </div>
-<div class="section" id="http-form">
-<h2>HTTP Form<a class="headerlink" href="#http-form" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="form">
+<span id="cookbook-form"></span><h2>Form<a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h2>
 <p>Use <a class="reference internal" href="apireference.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary for access the submitted fields.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
@@ -86,8 +86,8 @@ given dictionary as a <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 </div>
-<div class="section" id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="settings">
+<span id="cookbook-settings"></span><h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
 <p>Use <a class="reference internal" href="apireference.html#yhttp.Application.settings" title="yhttp.Application.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">app.settings</span></code></a> attribute to update global
 settings instance for the application. this is an instance of
 <a class="reference external" href="http://pymlconf.dobisel.com/pymlconf.html#pymlconf.Root" title="(in pymlconf v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymlconf.Root</span></code></a>.</p>
@@ -488,34 +488,18 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#query-string">Query String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#http-form">HTTP Form</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#http-status">HTTP Status</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#http-redirect">HTTP Redirect</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#custom-http-status">Custom HTTP Status</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#form">Form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-status">HTTP Status</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#static-contents">Static Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#request-valiation">Request Valiation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#required">required</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notnone">notnone</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nobody">nobody</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#readonly">readonly</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pattern">pattern</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#type">type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#minimum-maximum">minimum/maximum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#minlength-maxlength">minlength/maxlength</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#custom">custom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-valiation">Request Valiation</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apireference.html">API Reference</a></li>
 </ul>
 
@@ -523,8 +507,8 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="quickstart.html" title="previous chapter">Quick Start</a></li>
-      <li>Next: <a href="tutorials/index.html" title="next chapter">Tutorials</a></li>
+      <li>Previous: <a href="tutorials/quickstart.html" title="previous chapter">Quick Start</a></li>
+      <li>Next: <a href="apireference.html" title="next chapter">API Reference</a></li>
   </ul></li>
 </ul>
 </div>

@@ -44,8 +44,10 @@ A painless way to test our code is `bddrest
        assert response.text == 'None bar'
 
 
-HTTP Form
----------
+.. _cookbook-form:
+
+Form
+----
 
 Use :attr:`req.form <yhttp.Request.form>` as a dictionary for access the submitted fields.
 
@@ -87,8 +89,11 @@ given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and
    with Given(app, verb='POST', multipart={'foo': 'bar'}):
        assert response.text == 'bar'
 
-Configuration
--------------
+
+.. _cookbook-settings:
+
+Settings
+--------
 
 Use :attr:`app.settings <.Application.settings>` attribute to update global
 settings instance for the application. this is an instance of 

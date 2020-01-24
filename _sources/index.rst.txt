@@ -6,6 +6,15 @@
 Welcome to yhttp's documentation!
 =================================
 
+.. image:: http://img.shields.io/pypi/v/yhttp.svg
+     :target: https://pypi.python.org/pypi/yhttp
+ 
+.. image:: https://travis-ci.org/yhttp/yhttp.svg?branch=master
+   :target: https://travis-ci.org/yhttp/yhttp
+
+.. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
+   :target: https://coveralls.io/github/yhttp/yhttp?branch=master
+
 A lightweight flask-like HTTP framework.
 
 Python >= 3.6
@@ -41,25 +50,23 @@ Features
 ********
 
 - Very simple, less-code & fast.
-- Regex route.
-- UrlEncoded, Multipart and JSON form parsing.
-- A very flexible configuration system: 
-  `pymlconf <https://github.com/pylover/pymlconf>`_
+- Regex :ref:`route <cookbook-routing>`.
+- UrlEncoded, Multipart and JSON :ref:`form parsing <cookbook-form>`.
+- A very flexible :ref:`configuration <cookbook-settings>` system.
 - Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ 
   arguments for query strings.
 - Easy to extend.
 - Builtin extensible CLI.
-- Request Validation
+- Request :ref:`Validation <cookbook-validation>`
 
 Contents
 ********
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
-   quickstart
-   cookbook
    tutorials/index
+   cookbook
    apireference
 
 
