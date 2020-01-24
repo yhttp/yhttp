@@ -20,6 +20,9 @@ class Application:
     debug: true
     '''
 
+    #: Instance of :class:`pymlconf.Root` as the global configuration instance.
+    settings = None
+
     def __init__(self):
         self.cliarguments = []
         self.routes = {}

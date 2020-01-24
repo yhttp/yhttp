@@ -9,6 +9,8 @@ Application Class
 
 .. autoclass:: Application
 
+   .. autoattribute:: settings
+
    .. automethod:: route
    .. automethod:: climain
    .. automethod:: staticfile
