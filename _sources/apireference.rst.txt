@@ -4,6 +4,7 @@ API Reference
 .. module:: yhttp
 .. currentmodule:: yhttp
 
+
 Application Class
 ^^^^^^^^^^^^^^^^^ 
 
@@ -22,6 +23,7 @@ Application Class
    .. automethod:: ready
    .. automethod:: shutdown
    .. automethod:: __call__
+
 
 Request Class
 ^^^^^^^^^^^^^ 
@@ -90,6 +92,7 @@ validate decorator
 ^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: validate
+
 
 statuses Module
 ^^^^^^^^^^^^^^^
