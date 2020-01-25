@@ -110,7 +110,7 @@ class Application:
                ...
 
         Regular expression groups will be capture and dispatched as the
-        positional arguments of the handler afet ``req``:
+        positional arguments of the handler after ``req``:
 
         .. code-block::
 
@@ -123,7 +123,7 @@ class Application:
 
         .. code-block::
 
-           books = app.route(s'/books/(.*)')
+           books = app.route(r'/books/(.*)')
 
            @books
            def get(req, id):
