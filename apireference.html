@@ -59,7 +59,7 @@ if <code class="docutils literal notranslate"><span class="pre">verb</span></cod
 </pre></div>
 </div>
 <p>Regular expression groups will be capture and dispatched as the
-positional arguments of the handler afet <code class="docutils literal notranslate"><span class="pre">req</span></code>:</p>
+positional arguments of the handler after <code class="docutils literal notranslate"><span class="pre">req</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/(\d+)/(\w*)&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="o">...</span>
@@ -67,7 +67,7 @@ positional arguments of the handler afet <code class="docutils literal notransla
 </div>
 <p>This method returns a decorator for handler fucntions. So, you can use
 it like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">books</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">s</span><span class="s1">&#39;/books/(.*)&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">books</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/books/(.*)&#39;</span><span class="p">)</span>
 
 <span class="nd">@books</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
