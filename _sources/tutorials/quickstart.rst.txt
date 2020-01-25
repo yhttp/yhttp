@@ -223,7 +223,7 @@ Just run:
 
 .. code-block:: bash
 
-   ./hello.py completion install
+   hello.py completion install
 
 Then deactivate and re-activate your virtual environment to apply changes:
 
