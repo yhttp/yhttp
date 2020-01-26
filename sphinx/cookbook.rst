@@ -29,7 +29,7 @@ of-course, all query string will available as a dictionary via
     
    app.ready()
 
-.. `*  due the vim editor bug
+.. `*  due to Vim editor bug
 
 
 A painless way to test our code is `bddrest
@@ -51,7 +51,7 @@ A painless way to test our code is `bddrest
 Form
 ----
 
-Use :attr:`req.form <yhttp.Request.form>` as a dictionary for access the submitted fields.
+Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitted fields.
 
 
 .. testsetup:: cookbook/form
@@ -81,7 +81,7 @@ Use :attr:`req.form <yhttp.Request.form>` as a dictionary for access the submitt
 
 the ``form=`` parameter of the ``Given`` and ``when`` functions will send the
 given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and 
-``multipart`` content types to ensure all API users will happy!
+``multipart`` content types to ensure all API users will be happy!
 
 .. testcode:: cookbook/form
 
@@ -136,11 +136,11 @@ Then use your configration keys like:
 HTTP Status
 -----------
 
-There are two ways for to set HTTP status code for response: raise an instance
+There are two ways to set HTTP status code for response: raise an instance
 of :class:`.HTTPStatus` class or set 
 :attr:`req.response.status <yhttp.Response.status>` directly.
 
-There are some builtins HTTP status factory functions: 
+These are some builtin HTTP status factory functions: 
 
 :func:`.statuses.badrequest`
 
@@ -233,7 +233,7 @@ Routing
 the only way to register handler for http requests is
 :meth:`.Application.route` decorator factory.
 
-Hanler function's name will be used as HTTP verb. so, the ``get`` in these 
+Handler function's name will be used as HTTP verb. so, the ``get`` in these 
 example stands for the HTTP ``GET`` method.
 
 
@@ -274,7 +274,7 @@ and :meth:`.Application.staticdirectory` to complete this mission!
 HTTP Cookie
 -----------
 
-There is how to use :attr:`req.cookies <yhttp.Request.cookies>`:
+This is how to use :attr:`req.cookies <yhttp.Request.cookies>`:
 
 .. testsetup:: cookbook/cookie
 
@@ -570,7 +570,7 @@ minlength/maxlength
 custom
 ^^^^^^
 
-Use can use your very own callable as the request validator:
+You can use your very own callable as the request validator:
 
 .. testsetup:: cookbook/validation/custom
 
