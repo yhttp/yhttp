@@ -1,10 +1,10 @@
 Quick Start
 ===========
 
-There is how to serve a simple string using `yhttp`.
+This is how to serve a simple string using `yhttp`.
 
 
-Install ``yhttp`` if you are not installed it yet. it's highly recommended to 
+Install ``yhttp`` if you've not installed it yet. it's highly recommended to 
 use virtual environment before that. I use
 `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/>`_.
 
