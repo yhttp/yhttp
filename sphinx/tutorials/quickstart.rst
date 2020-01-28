@@ -19,7 +19,7 @@ rest of the system python packages.
 .. code-block:: bash
 
    workon hello
-   pip3 install yhttp
+   pip install yhttp
 
 
 Create a file named: ``hello.py``:
@@ -28,12 +28,15 @@ Create a file named: ``hello.py``:
 
    from yhttp import Application, text
 
+
    app = Application()
+
 
    @app.route()
    @text
    def get(req):
        return 'Hello World!'
+
 
    app.ready()
 
@@ -41,6 +44,7 @@ Create a file named: ``hello.py``:
    :hide:
 
    from bddrest import Given, status, response
+
 
    with Given(app):
        assert status == 200
@@ -84,7 +88,8 @@ application:
 
    if __name__ == '__main__':
        sys.exit(app.climain())
-    
+   
+
    app.ready()
 
 
@@ -114,7 +119,6 @@ Lets take a look at ``hello.py``.
 .. code-block:: python
 
    #! /usr/bin/env python3
-   
    import sys
    
    from yhttp import Application, text
@@ -150,6 +154,13 @@ builtin WSGI server.
 .. code-block:: bash
 
    ./hello.py serve
+
+Or
+
+.. code-block:: bash
+
+   ./hello.py s
+
 
 
 Use ``--help`` anywhere to know command line options:
@@ -223,7 +234,7 @@ Just run:
 
 .. code-block:: bash
 
-   hello.py completion install
+   hello completion install
 
 Then deactivate and re-activate your virtual environment to apply changes:
 
@@ -242,11 +253,13 @@ Check out the other tutorials to discover the ``yhttp`` features.
 
 
 ==============================
-Custom Command Like insterface
+Custom Command Line insterface
 ==============================
 
 Let's add a ``version`` :class:`easycli.SubCommand` to show the application's 
 version:
+
+``hello.py``
 
 .. code-block:: 
 
@@ -254,6 +267,7 @@ version:
 
 
    __version__ = '0.1.0'
+
 
    class Version(SubCommand):
        __command__ = 'version'
@@ -361,7 +375,7 @@ Install the version ``0.1.1`` using:
 
 .. code-block:: bash
 
-   pip3 install -e .
+   pip install -e .
 
 
 Then test it by:
@@ -374,5 +388,7 @@ Then test it by:
    hello serve
 
 
-Checkout the :ref:`cookbook` to discover more features.
+Checkout the other :ref:`tutorials` and or :ref:`cookbook` to discover more 
+features.
+
 

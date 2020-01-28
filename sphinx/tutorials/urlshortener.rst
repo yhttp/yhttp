@@ -285,7 +285,7 @@ Or redirect to the original url:
 That's it. your url shortener is ready to use with the other ``WSGI`` servers
 using this script:
 
-```wsgi.py``
+``wsgi.py``
 
 .. code-block::
 
@@ -302,5 +302,7 @@ Then use your favorite wsgi server to serve it:
    gunicorn wsgi:app
 
 Checkout the 
-`complete project <https://github.com/yhttp/urlshortener-example>`_ on github.
+`complete project <https://github.com/yhttp/urlshortener-example>`_ on github, 
+other :ref:`tutorials` and or :ref:`cookbook` to discover more 
+features.
 
