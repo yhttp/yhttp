@@ -7,8 +7,8 @@ storage and ``yhttp``.
 It's highly recommended to use virtual environment before that. I use
 `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/>`_.
 
-Create a virtual environment to isolate your hello world application from the 
-rest of the system python packages.
+Create a virtual environment to isolate your application from the rest of the 
+system python packages.
 
 .. code-block:: bash
 
@@ -16,7 +16,7 @@ rest of the system python packages.
 
 
 Rrequirements
-^^^^^^^^^^^^^
+-------------
 
 Activate your virtual environment if you're not activated it yet.
 
@@ -53,8 +53,21 @@ Then install them by:
    pip install -r requirements-dev.txt
 
 
+Project Structure
+-----------------
+
+.. code-block::
+
+   shortener/
+   ├── requirements-dev.txt
+   ├── setup.py
+   ├── shortener.py
+   ├── tests.py
+   └── wsgi.py
+
+
 setup.py
-^^^^^^^^
+--------
 
 Create a file named ``setup.py`` to use our project as a reqular python
 package.
@@ -92,7 +105,7 @@ Install the project with pip's `-e/--editable` flag:
 
 
 Behavioral Test
-^^^^^^^^^^^^^^^
+---------------
 
 Let's write some tests to clear what we need. create a file named ``tests.py``
 inside the ``shortener`` directory.
@@ -156,7 +169,7 @@ inside the ``shortener`` directory.
 
 
 Implement Shortener API
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 ``shortener.py``
 
@@ -199,7 +212,7 @@ Test your API:
 
 
 Redirector API
-^^^^^^^^^^^^^^
+--------------
 
 Append this test case to ``tests.py``:
 
