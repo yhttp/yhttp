@@ -133,6 +133,24 @@ Then use your configration keys like:
    `pymlconf <http://pymlconf.dobisel.com>`_
 
 
+Debug Flag
+^^^^^^^^^^
+
+You can do:
+
+.. code-block::
+
+   app.settings.debug = False
+
+Or:
+
+.. code-block::
+
+   app.settings.merge('debug: false')  # YAML syntax
+
+
+To prevent write stacktrace on error responses.
+
 HTTP Status
 -----------
 
