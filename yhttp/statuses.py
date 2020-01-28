@@ -13,16 +13,18 @@ class HTTPStatus(Exception):
                     :attr:`.Response.headers` when exception is raised.
     """
 
-    def __init__(self, code, text, keepheaders=False, headers=None):
+    def __init__(self, code, text, keepheaders=False, headers=None,
+                 nobody=False):
         self.keepheaders = keepheaders
         self.headers = headers or []
         self.status = f'{code} {text}'
+        self.nobody = nobody
         super().__init__(self.status)
 
     def setupresponse(self, response, stacktrace=False):
         response.status = self.status
         body = [self.status]
-        if stacktrace:
+        if stacktrace and not self.nobody:
             body.append(traceback.format_exc())
 
         response.body = '\r\n'.join(body)
@@ -73,7 +75,7 @@ badgateway = partial(status, 502, 'Bad Gateway')
 
 
 def redirect(code, text, location):
-    return status(code, text, headers=[('Location', location)])
+    return status(code, text, headers=[('Location', location)], nobody=True)
 
 #: HTTP 301 Moved Permanently exception factory
 movedpermanently = partial(redirect, 301, 'Moved Permanently')
