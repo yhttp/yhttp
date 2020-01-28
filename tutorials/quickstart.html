@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Quick Start &#8212; yhttp 2.5.4 documentation</title>
+    <title>Quick Start &#8212; yhttp 2.5.5 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -40,18 +40,21 @@ rest of the system python packages.</p>
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>workon hello
-pip3 install yhttp
+pip install yhttp
 </pre></div>
 </div>
 <p>Create a file named: <code class="docutils literal notranslate"><span class="pre">hello.py</span></code>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span>
 
+
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">&#39;Hello World!&#39;</span>
+
 
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
@@ -79,6 +82,7 @@ application:</p>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">climain</span><span class="p">())</span>
 
+
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -97,7 +101,6 @@ first line to use it as a standalone executable.</p>
 </div>
 <p>Lets take a look at <code class="docutils literal notranslate"><span class="pre">hello.py</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/env python3</span>
-
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span>
@@ -126,6 +129,10 @@ first line to use it as a standalone executable.</p>
 <p>There is also a subcommand <code class="docutils literal notranslate"><span class="pre">serve</span></code> to serve the WSGI application by python’s
 builtin WSGI server.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py serve
+</pre></div>
+</div>
+<p>Or</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hello.py s
 </pre></div>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> anywhere to know command line options:</p>
@@ -180,7 +187,7 @@ hello serve --bind <span class="m">8088</span>
 <div class="section" id="bash-autocompletion">
 <h2>Bash Autocompletion<a class="headerlink" href="#bash-autocompletion" title="Permalink to this headline">¶</a></h2>
 <p>Just run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hello.py completion install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hello completion install
 </pre></div>
 </div>
 <p>Then deactivate and re-activate your virtual environment to apply changes:</p>
@@ -193,14 +200,16 @@ hello serve --bind <span class="m">8088</span>
 </div>
 <p>Check out the other tutorials to discover the <code class="docutils literal notranslate"><span class="pre">yhttp</span></code> features.</p>
 </div>
-<div class="section" id="custom-command-like-insterface">
-<h2>Custom Command Like insterface<a class="headerlink" href="#custom-command-like-insterface" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="custom-command-line-insterface">
+<h2>Custom Command Line insterface<a class="headerlink" href="#custom-command-line-insterface" title="Permalink to this headline">¶</a></h2>
 <p>Let’s add a <code class="docutils literal notranslate"><span class="pre">version</span></code> <a class="reference external" href="http://easycli.dobisel.com/apireference.html#easycli.SubCommand" title="(in easycli)"><code class="xref py py-class docutils literal notranslate"><span class="pre">easycli.SubCommand</span></code></a> to show the application’s
 version:</p>
+<p><code class="docutils literal notranslate"><span class="pre">hello.py</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">easycli</span> <span class="kn">import</span> <span class="n">SubCommand</span>
 
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span>
+
 
 <span class="k">class</span> <span class="nc">Version</span><span class="p">(</span><span class="n">SubCommand</span><span class="p">):</span>
     <span class="n">__command__</span> <span class="o">=</span> <span class="s1">&#39;version&#39;</span>
@@ -296,7 +305,7 @@ attribute.</p>
 </pre></div>
 </div>
 <p>Install the version <code class="docutils literal notranslate"><span class="pre">0.1.1</span></code> using:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -e .
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .
 </pre></div>
 </div>
 <p>Then test it by:</p>
@@ -306,7 +315,8 @@ hello v
 hello serve
 </pre></div>
 </div>
-<p>Checkout the <a class="reference internal" href="../cookbook.html#cookbook"><span class="std std-ref">Cookbook</span></a> to discover more features.</p>
+<p>Checkout the other <a class="reference internal" href="index.html#tutorials"><span class="std std-ref">Tutorials</span></a> and or <a class="reference internal" href="../cookbook.html#cookbook"><span class="std std-ref">Cookbook</span></a> to discover more
+features.</p>
 </div>
 </div>
 </div>

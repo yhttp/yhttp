@@ -617,8 +617,8 @@ minlength/maxlength
        assert status == '400 Maximum allowed length for field bar is 5'
 
 
-custom
-^^^^^^
+Custom Callback
+^^^^^^^^^^^^^^^
 
 You can use your very own callable as the request validator:
 
