@@ -6,9 +6,8 @@ from .contenttypes import contenttype, binary, utf8, json, text
 from .lazyattribute import lazyattribute
 from .request import Request, HeadersMask
 from .response import Response
-from .statuses import HTTPStatus
+from .statuses import HTTPStatus, statuscode
 from .headerset import HeaderSet
-
 
 __version__ = '2.4.0'
 

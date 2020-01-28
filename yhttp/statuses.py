@@ -1,5 +1,5 @@
 import traceback
-from functools import partial
+from functools import partial, wraps
 
 
 class HTTPStatus(Exception):
@@ -80,4 +80,32 @@ movedpermanently = partial(redirect, 301, 'Moved Permanently')
 
 #: HTTP 302 Found exception factory
 found = partial(redirect, 302, 'Found')
+
+
+def statuscode(code):
+    """Set the :attr:`.Response.status` to ``code``.
+
+    .. code-block::
+
+       @app.route()
+       @statuscode('201 Created')
+       def post(req):
+           ...
+
+       with Given(app, verb='POST'):
+           assert status == '201 Created'
+
+    .. versionadded:: 2.5
+
+    """
+    def decorator(handler):
+        @wraps(handler)
+        def wrapper(req, *a, **k):
+            result = handler(req, *a, **k)
+            req.response.status = code
+            return result
+
+        return wrapper
+
+    return decorator
 
