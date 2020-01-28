@@ -16,7 +16,8 @@ class Application:
     WSGI application.
 
     """
-    builtinsettings = '''
+
+    _builtinsettings = '''
     debug: true
     '''
 
@@ -30,7 +31,7 @@ class Application:
         self.cliarguments = []
         self.routes = {}
         self.events = {}
-        self.settings = pymlconf.Root(self.builtinsettings)
+        self.settings = pymlconf.Root(self._builtinsettings)
 
     def _findhandler(self, request):
         patterns = self.routes.get(request.verb)
