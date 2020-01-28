@@ -196,10 +196,9 @@ class MaximumValidator(Criterion):
 class PatternValidator(Criterion):
 
     def __init__(self, pattern):
-        if isinstance(pattern, str):
-            pattern = re.compile(pattern)
-
         super().__init__(pattern)
+        if isinstance(self.expression, str):
+            self.expression = re.compile(self.expression)
 
     def _validate(self, value, container, field):
         if self.expression.match(value) is None:

@@ -145,6 +145,7 @@ def test_regexpattern(app, Given):
     @app.route()
     @validate(fields=dict(
         bar=dict(pattern=r'^\d+$'),
+        baz=dict(pattern=(r'\d+$', '400 Only Integer'))
     ))
     def post(req):
         pass
@@ -157,6 +158,9 @@ def test_regexpattern(app, Given):
 
         when(form=given | dict(bar='a'))
         assert status == '400 Invalid format: bar'
+
+        when(form=given + dict(baz='alphabet'))
+        assert status == '400 Only Integer'
 
 
 def test_customvalildator(app, Given):
