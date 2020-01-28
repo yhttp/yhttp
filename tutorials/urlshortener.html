@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Url Shortener &#8212; yhttp 2.5.1 documentation</title>
+    <title>Test Driven Url Shortener &#8212; yhttp 2.5.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,8 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cookbook" href="../cookbook.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" />
     <link href="../_static/style.css" rel="stylesheet" type="text/css">
 
   </head><body>
@@ -26,10 +28,247 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="url-shortener">
-<h1>Url Shortener<a class="headerlink" href="#url-shortener" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="test-driven-url-shortener">
+<h1>Test Driven Url Shortener<a class="headerlink" href="#test-driven-url-shortener" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial we’ll develop a simple URL shorotener using <code class="docutils literal notranslate"><span class="pre">redis</span></code>
 storage and <code class="docutils literal notranslate"><span class="pre">yhttp</span></code>.</p>
+<p>It’s highly recommended to use virtual environment before that. I use
+<a class="reference external" href="https://virtualenvwrapper.readthedocs.io/en/latest/">virtualenvwrapper</a>.</p>
+<p>Create a virtual environment to isolate your hello world application from the
+rest of the system python packages.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkvirtualenv shortener
+</pre></div>
+</div>
+<div class="section" id="rrequirements">
+<h2>Rrequirements<a class="headerlink" href="#rrequirements" title="Permalink to this headline">¶</a></h2>
+<p>Activate your virtual environment if you’re not activated it yet.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>workon shortener
+</pre></div>
+</div>
+<p>I use <a class="reference external" href="https://github.com/pylover/bddrest">bddrest</a> to test python <code class="docutils literal notranslate"><span class="pre">WSGI</span></code>
+applications.</p>
+<p>Create a directory named: <code class="docutils literal notranslate"><span class="pre">shortener</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir shortener
+<span class="nb">cd</span> shortener
+</pre></div>
+</div>
+<p>And place the file <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> inside it. this is a way to
+separate developement dependencies from runtime requirements.</p>
+<p><code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bddrest
+pytest-cov
+</pre></div>
+</div>
+<p>Then install them by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements-dev.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-py">
+<h2>setup.py<a class="headerlink" href="#setup-py" title="Permalink to this headline">¶</a></h2>
+<p>Create a file named <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to use our project as a reqular python
+package.</p>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+
+<span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;yhttp &gt;= 2.5, &lt; 3&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redis&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;shortener&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.1&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Url shortener web application&#39;</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="n">dependencies</span><span class="p">,</span>
+    <span class="n">py_modules</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;shortener&#39;</span><span class="p">],</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">console_scripts</span><span class="o">=</span><span class="s1">&#39;shortener=shortener:app.climain&#39;</span><span class="p">),</span>
+    <span class="n">license</span><span class="o">=</span><span class="s1">&#39;MIT&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Install the project with pip’s <cite>-e/–editable</cite> flag:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .
+</pre></div>
+</div>
+</div>
+<div class="section" id="behavioral-test">
+<h2>Behavioral Test<a class="headerlink" href="#behavioral-test" title="Permalink to this headline">¶</a></h2>
+<p>Let’s write some tests to clear what we need. create a file named <code class="docutils literal notranslate"><span class="pre">tests.py</span></code>
+inside the <code class="docutils literal notranslate"><span class="pre">shortener</span></code> directory.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tests.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">given</span>
+
+<span class="kn">from</span> <span class="nn">shortener</span> <span class="kn">import</span> <span class="n">app</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">randommock</span><span class="p">():</span>
+    <span class="n">backup</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">randint</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mh">0xF00</span>
+    <span class="k">yield</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">randint</span> <span class="o">=</span> <span class="n">backup</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">redismock</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">shortener</span>
+
+    <span class="k">class</span> <span class="nc">RedisMock</span><span class="p">:</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maindict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">maindict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maindict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">backup</span> <span class="o">=</span> <span class="n">shortener</span><span class="o">.</span><span class="n">redis</span>
+    <span class="n">shortener</span><span class="o">.</span><span class="n">redis</span> <span class="o">=</span> <span class="n">RedisMock</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">shortener</span><span class="o">.</span><span class="n">redis</span>
+    <span class="n">shortener</span><span class="o">.</span><span class="n">redis</span> <span class="o">=</span> <span class="n">backup</span>
+
+
+<span class="k">def</span> <span class="nf">test_shortener</span><span class="p">(</span><span class="n">randommock</span><span class="p">,</span> <span class="n">redismock</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">Given</span><span class="p">(</span>
+        <span class="n">app</span><span class="p">,</span>
+        <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+        <span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://example.com&#39;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">201</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;f00&#39;</span>
+
+        <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;invalidurl&#39;</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">400</span>
+
+        <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;url&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Field missing: url&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="implement-shortener-api">
+<h2>Implement Shortener API<a class="headerlink" href="#implement-shortener-api" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">shortener.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">statuses</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">statuscode</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">redis</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">freshid</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mh">0x0001</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">))[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">redis</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">freshid</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">freshid</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">required</span><span class="o">=</span><span class="s1">&#39;400 Field missing: url&#39;</span><span class="p">,</span>
+        <span class="n">pattern</span><span class="o">=</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^http://.*&#39;</span><span class="p">,</span> <span class="s1">&#39;400 Invalid URL&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">))</span>
+<span class="nd">@text</span>
+<span class="nd">@statuscode</span><span class="p">(</span><span class="s1">&#39;201 Created&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">store</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Test your API:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest --cov<span class="o">=</span>shortener tests.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirector-api">
+<h2>Redirector API<a class="headerlink" href="#redirector-api" title="Permalink to this headline">¶</a></h2>
+<p>Append this test case to <code class="docutils literal notranslate"><span class="pre">tests.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_redirector</span><span class="p">(</span><span class="n">redismock</span><span class="p">):</span>
+    <span class="n">redismock</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Given</span><span class="p">(</span>
+        <span class="n">app</span><span class="p">,</span>
+        <span class="n">url</span><span class="o">=</span><span class="s1">&#39;/foo&#39;</span>
+    <span class="p">):</span>
+        <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">302</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;LOCATION&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;https://example.com&#39;</span>
+
+        <span class="n">when</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;/notexists&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">404</span>
+</pre></div>
+</div>
+<p>And add this handler to the <code class="docutils literal notranslate"><span class="pre">shortener.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/(.*)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="n">longurl</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">longurl</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">notfound</span><span class="p">()</span>
+
+    <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">found</span><span class="p">(</span><span class="n">longurl</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Test redirector API:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest --cov<span class="o">=</span>shortener tests.py
+</pre></div>
+</div>
+<p>Seems everything is fine. run the development server and use <code class="docutils literal notranslate"><span class="pre">curl</span></code> to play
+with your api:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shortener s -b <span class="m">8000</span>
+</pre></div>
+</div>
+<p>Open another terminal and try to shor a url:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8000 -XPOST -F<span class="s1">&#39;url=http://example.com&#39;</span>
+</pre></div>
+</div>
+<p>It will returns something like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bf2
+</pre></div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">POST</span></code> response to get the original URL:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -i localhost:8000/bf2
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">302</span> <span class="n">Found</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Tue</span><span class="p">,</span> <span class="mi">28</span> <span class="n">Jan</span> <span class="mi">2020</span> <span class="mi">18</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">04</span> <span class="n">GMT</span>
+<span class="n">Server</span><span class="p">:</span> <span class="n">WSGIServer</span><span class="o">/</span><span class="mf">0.2</span> <span class="n">CPython</span><span class="o">/</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">location</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="n">content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">plain</span><span class="p">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+<span class="n">content</span><span class="o">-</span><span class="n">length</span><span class="p">:</span> <span class="mi">9</span>
+
+<span class="mi">302</span> <span class="n">Found</span>
+</pre></div>
+</div>
+<p>Or redirect to the original url:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -L localhost:8000/bf2
+</pre></div>
+</div>
+<p>That’s it. your url shortener is ready to use with the other <code class="docutils literal notranslate"><span class="pre">WSGI</span></code> servers
+using this script:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`wsgi.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shortener</span> <span class="kn">import</span> <span class="n">app</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then use your favorite wsgi server to serve it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install gunicorn
+gunicorn wsgi:app
+</pre></div>
+</div>
+<p>Checkout the
+<a class="reference external" href="https://github.com/yhttp/urlshortener-example">complete project</a> on github.</p>
+</div>
 </div>
 
 
@@ -49,8 +288,12 @@ storage and <code class="docutils literal notranslate"><span class="pre">yhttp</
 
 
 <h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Tutorials</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Test Driven Url Shortener</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../apireference.html">API Reference</a></li>
 </ul>
@@ -59,6 +302,10 @@ storage and <code class="docutils literal notranslate"><span class="pre">yhttp</
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorials</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Quick Start</a></li>
+      <li>Next: <a href="../cookbook.html" title="next chapter">Cookbook</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
