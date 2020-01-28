@@ -28,6 +28,7 @@ livehtml:
 		--ignore='_build' \
         --ignore "*.sw*" \
         --ignore "4913" \
+        --ignore "tutorials/4913" \
         --ignore "*.pdf" \
         --ignore "*.log" \
         --ignore "*.out" \

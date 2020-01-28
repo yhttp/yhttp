@@ -5,6 +5,7 @@ Tutorials
    :maxdepth: 2
 
    quickstart
+   urlshortener
 
 ..
    add command line argument
