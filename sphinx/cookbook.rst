@@ -201,6 +201,12 @@ See the example below for usage:
 This is how to use :func:`.statuscode` decorator to specify response status 
 code for all requests.
 
+.. testsetup:: cookbook/statuscode
+
+   from yhttp import Application, statuscode
+   app = Application()
+
+
 .. testcode:: cookbook/statuscode
 
    from yhttp import statuscode

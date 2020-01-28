@@ -9,5 +9,5 @@ from .response import Response
 from .statuses import HTTPStatus, statuscode
 from .headerset import HeaderSet
 
-__version__ = '2.4.0'
+__version__ = '2.5.0'
 
