@@ -31,7 +31,7 @@ class Serve(SubCommand):
         test_builtincli.py.
         """
         host, port = args.bind.split(':')\
-            if ':' in args.bind else ('', args.bind)
+            if ':' in args.bind else ('localhost', args.bind)
 
         args.application.ready()
         httpd = make_server(host, int(port), args.application)
