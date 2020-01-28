@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Test Driven Url Shortener &#8212; yhttp 2.5.5 documentation</title>
+    <title>Test Driven Url Shortener &#8212; yhttp 2.5.6 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -34,8 +34,8 @@
 storage and <code class="docutils literal notranslate"><span class="pre">yhttp</span></code>.</p>
 <p>It’s highly recommended to use virtual environment before that. I use
 <a class="reference external" href="https://virtualenvwrapper.readthedocs.io/en/latest/">virtualenvwrapper</a>.</p>
-<p>Create a virtual environment to isolate your hello world application from the
-rest of the system python packages.</p>
+<p>Create a virtual environment to isolate your application from the rest of the
+system python packages.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkvirtualenv shortener
 </pre></div>
 </div>
@@ -61,6 +61,17 @@ pytest-cov
 </div>
 <p>Then install them by:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements-dev.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>shortener/
+├── requirements-dev.txt
+├── setup.py
+├── shortener.py
+├── tests.py
+└── wsgi.py
 </pre></div>
 </div>
 </div>
