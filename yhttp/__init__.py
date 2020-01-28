@@ -11,5 +11,5 @@ from .statuses import HTTPStatus, statuscode
 from .headerset import HeaderSet
 
 
-__version__ = '2.5.4'
+__version__ = '2.5.5'
 
