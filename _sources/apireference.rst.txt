@@ -113,4 +113,5 @@ statuses Module
    .. autofunction:: badgateway()
    .. autofunction:: movedpermanently(url)
    .. autofunction:: found(url)
+   .. autofunction:: statuscode
 

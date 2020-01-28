@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API Reference &#8212; yhttp 2.4.0 documentation</title>
+    <title>API Reference &#8212; yhttp 2.5.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -683,6 +683,24 @@ and encode the returned value by handler to json byte-string format.</p>
 <dt id="yhttp.statuses.found">
 <code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">found</code><span class="sig-paren">(</span><em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.found" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP 302 Found exception factory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.statuses.statuscode">
+<code class="sig-prename descclassname">yhttp.statuses.</code><code class="sig-name descname">statuscode</code><span class="sig-paren">(</span><em class="sig-param">code</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.statuses.statuscode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.status</span></code></a> to <code class="docutils literal notranslate"><span class="pre">code</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@statuscode</span><span class="p">(</span><span class="s1">&#39;201 Created&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;201 Created&#39;</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
 </dd></dl>
 
 </div>

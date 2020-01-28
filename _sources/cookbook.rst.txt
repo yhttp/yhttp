@@ -136,9 +136,11 @@ Then use your configration keys like:
 HTTP Status
 -----------
 
-There are two ways to set HTTP status code for response: raise an instance
-of :class:`.HTTPStatus` class or set 
-:attr:`req.response.status <yhttp.Response.status>` directly.
+There are tree ways to set HTTP status code for response: 
+
+* use :func:`.statuscode` decorator.
+* raise an instance of :class:`.HTTPStatus` class
+* set :attr:`req.response.status <yhttp.Response.status>` directly.
 
 These are some builtin HTTP status factory functions: 
 
@@ -185,15 +187,45 @@ See the example below for usage:
        raise statuses.notfound()
     
    app.ready()
-   
 
 .. testcode:: cookbook/status
+   :hide:
 
-   from bddrest import Given, when, given, status
+   from bddrest import Given, status
 
    with Given(app):
        assert status == 404
        assert status == '404 Not Found'
+
+
+This is how to use :func:`.statuscode` decorator to specify response status 
+code for all requests.
+
+.. testsetup:: cookbook/statuscode
+
+   from yhttp import Application, statuscode
+   app = Application()
+
+
+.. testcode:: cookbook/statuscode
+
+   from yhttp import statuscode
+
+   @app.route()
+   @statuscode('201 Created')
+   def get(req):
+       return b'Hello'
+    
+   app.ready()
+
+.. testcode:: cookbook/statuscode
+   :hide:
+
+   from bddrest import Given, status
+
+   with Given(app):
+       assert status == 201
+
 
 HTTP Redirect
 ^^^^^^^^^^^^^

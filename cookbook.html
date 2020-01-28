@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Cookbook &#8212; yhttp 2.4.0 documentation</title>
+    <title>Cookbook &#8212; yhttp 2.5.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -118,9 +118,12 @@ after the <a class="reference internal" href="apireference.html#yhttp.Applicatio
 </div>
 <div class="section" id="http-status">
 <h2>HTTP Status<a class="headerlink" href="#http-status" title="Permalink to this headline">¶</a></h2>
-<p>There are two ways to set HTTP status code for response: raise an instance
-of <a class="reference internal" href="apireference.html#yhttp.HTTPStatus" title="yhttp.HTTPStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code></a> class or set
-<a class="reference internal" href="apireference.html#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code></a> directly.</p>
+<p>There are tree ways to set HTTP status code for response:</p>
+<ul class="simple">
+<li><p>use <a class="reference internal" href="apireference.html#yhttp.statuses.statuscode" title="yhttp.statuses.statuscode"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuscode()</span></code></a> decorator.</p></li>
+<li><p>raise an instance of <a class="reference internal" href="apireference.html#yhttp.HTTPStatus" title="yhttp.HTTPStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code></a> class</p></li>
+<li><p>set <a class="reference internal" href="apireference.html#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code></a> directly.</p></li>
+</ul>
 <p>These are some builtin HTTP status factory functions:</p>
 <p><a class="reference internal" href="apireference.html#yhttp.statuses.badrequest" title="yhttp.statuses.badrequest"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></a></p>
 <p><a class="reference internal" href="apireference.html#yhttp.statuses.unauthorized" title="yhttp.statuses.unauthorized"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></a></p>
@@ -145,11 +148,16 @@ of <a class="reference internal" href="apireference.html#yhttp.HTTPStatus" title
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
+<p>This is how to use <a class="reference internal" href="apireference.html#yhttp.statuses.statuscode" title="yhttp.statuses.statuscode"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuscode()</span></code></a> decorator to specify response status
+code for all requests.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">statuscode</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">404</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;404 Not Found&#39;</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@statuscode</span><span class="p">(</span><span class="s1">&#39;201 Created&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;Hello&#39;</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="http-redirect">
