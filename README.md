@@ -25,7 +25,7 @@ pytest
 #### Coverage
 
 ```bash
-pytest --cov=yhtml
+pytest --cov=yhttp
 ```
 
 #### Documentation
