@@ -195,11 +195,14 @@ class MaximumValidator(Criterion):
 
 class PatternValidator(Criterion):
 
+    def __init__(self, pattern):
+        if isinstance(pattern, str):
+            pattern = re.compile(pattern)
+
+        super().__init__(pattern)
+
     def _validate(self, value, container, field):
-        pattern = re.compile(self.expression) \
-            if isinstance(self.expression, str) \
-            else self.expression
-        if pattern.match(value) is None:
+        if self.expression.match(value) is None:
             raise self.create_exception(f'Invalid format: {field.title}')
 
         return value
