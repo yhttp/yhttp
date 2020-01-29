@@ -51,7 +51,7 @@ A lightweight flask-like HTTP framework.
 Features
 ********
 
-- Very simple, less-code & fast.
+- Very simple, easy to learn, less-code & fast.
 - Regex :ref:`route <cookbook-routing>`.
 - UrlEncoded, Multipart and JSON :ref:`form parsing <cookbook-form>`.
 - A very flexible :ref:`configuration <cookbook-settings>` system.
