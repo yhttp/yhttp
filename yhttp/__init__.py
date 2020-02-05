@@ -7,9 +7,13 @@ from .contenttypes import contenttype, binary, utf8, json, text
 from .lazyattribute import lazyattribute
 from .request import Request, HeadersMask
 from .response import Response
-from .statuses import HTTPStatus, statuscode
 from .headerset import HeaderSet
+from .statuses import HTTPStatus, statuscode, status, badrequest, \
+    unauthorized, forbidden, notfound, methodnotallowed, conflict, gone, \
+    preconditionfailed, notmodified, internalservererror, badgateway, \
+    movedpermanently, found
 
 
-__version__ = '2.6.0'
+__version__ = '2.7.0'
+
 
