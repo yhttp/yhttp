@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Cookbook &#8212; yhttp 2.5.6 documentation</title>
+    <title>Cookbook &#8212; yhttp 2.6.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -58,21 +58,38 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 <div class="section" id="form">
 <span id="cookbook-form"></span><h2>Form<a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h2>
 <p>Use <a class="reference internal" href="apireference.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary to access the submitted fields.</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6: </span>An easy way to get form values is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The above expression is the same as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">statuses</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;{req.form.get(&quot;foo&quot;)}&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{req[&quot;foo&quot;]}</span><span class="s1">&#39;</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">badrequest</span><span class="p">()</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
 
 <span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
 
     <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">400</span>
 </pre></div>
 </div>
 <p>the <code class="docutils literal notranslate"><span class="pre">form=</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">Given</span></code> and <code class="docutils literal notranslate"><span class="pre">when</span></code> functions will send the

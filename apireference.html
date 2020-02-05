@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API Reference &#8212; yhttp 2.5.6 documentation</title>
+    <title>API Reference &#8212; yhttp 2.6.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -321,6 +321,16 @@ this class on each call.</p>
 <em class="property">property </em><code class="sig-name descname">form</code><a class="headerlink" href="#yhttp.Request.form" title="Permalink to this definition">¶</a></dt>
 <dd><p>A dictionary representing the submitted json, urlencoded and or
 multipart form.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.6: </span>An easy way to get form values is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The above expression is the same as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 </dd></dl>
 
 <dl class="method">
