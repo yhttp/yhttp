@@ -9,7 +9,7 @@ def test_querystringform(app, Given):
 
     @app.route()
     def get(req):
-        assert req.form['foo'] == 'bar'
+        assert req['foo'] == 'bar'
 
     with Given(query=dict(foo='bar')):
         assert status == 200

@@ -9,6 +9,7 @@ from .lazyattribute import lazyattribute
 class Request:
     """Represent an HTTP request, :meth:`.Application.__call__` instantiates
     this class on each call.
+
     """
 
     application = None
@@ -75,6 +76,22 @@ class Request:
     def form(self):
         """A dictionary representing the submitted json, urlencoded and or
         multipart form.
+
+        .. versionadded:: 2.6
+
+           An easy way to get form values is:
+
+           .. code-block::
+
+              req['field-name']
+
+           The above expression is the same as:
+
+           .. code-block::
+
+              req.form['field-name']
+
+
         """
 
         return parseanyform(
@@ -105,6 +122,9 @@ class Request:
 
         """
         return HeadersMask(self.environ)
+
+    def __getitem__(self, field):
+        return self.form[field]
 
 
 class HeadersMask:

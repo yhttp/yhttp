@@ -53,31 +53,48 @@ Form
 
 Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitted fields.
 
+.. versionadded:: 2.6
 
-.. testsetup:: cookbook/form
+   An easy way to get form values is:
 
-   from yhttp import Application, text
-   app = Application()
+   .. code-block::
+
+      req['field-name']
+
+   The above expression is the same as:
+
+   .. code-block::
+
+      req.form['field-name']
+
 
 .. testcode:: cookbook/form
+
+   from yhttp import Application, text, statuses
+   app = Application()
+
 
    @app.route()
    @text
    def post(req):
-       return f'{req.form.get("foo")}'
+       try:
+           return f'{req["foo"]}'
+       except KeyError:
+           raise statuses.badrequest()
     
    app.ready()
    
 
 .. testcode:: cookbook/form
 
-   from bddrest import Given, response, when, given
+   from bddrest import Given, response, when, given, status
 
    with Given(app, verb='POST', form={'foo': 'bar'}):
        assert response.text == 'bar'
 
        when(form=given - 'foo')
-       assert response.text == 'None'
+       assert status == 400
+
 
 the ``form=`` parameter of the ``Given`` and ``when`` functions will send the
 given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and 
