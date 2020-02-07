@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API Reference &#8212; yhttp 2.7.1 documentation</title>
+    <title>API Reference &#8212; yhttp 2.8.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -586,13 +586,35 @@ and encode the returned value by handler to json byte-string format.</p>
 <dl class="function">
 <dt id="yhttp.text">
 <code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">text</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">text/plain;charset=utf-8</span></code>.</p>
+<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">text/text;</span> <span class="pre">charset=utf-8</span></code>.</p>
 <p>Handlers must return <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> when this decorator is used.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.8.</span></p>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">text</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Unicode String&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="yhttp.html">
+<code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">html</code><span class="sig-paren">(</span><em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <a class="reference internal" href="#yhttp.Response.contenttype" title="yhttp.Response.contenttype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Response.contenttype</span></code></a> to <code class="docutils literal notranslate"><span class="pre">text/html;</span> <span class="pre">charset=utf-8</span></code>.</p>
+<p>Handlers must return <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> when this decorator is used.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.8.</span></p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">html</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@html</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">&#39;Unicode String&#39;</span>
 </pre></div>

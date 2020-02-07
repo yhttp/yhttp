@@ -86,6 +86,7 @@ contenttype decorators
 .. autofunction:: binary
 .. autofunction:: json
 .. autofunction:: text
+.. autofunction:: html
 
 
 validate decorator
