@@ -111,9 +111,11 @@ Handlers must return :class:`dict` when this decorator is used.
 
 text = utf8('text/plain')
 """
-Sets the :attr:`.Response.contenttype` to ``text/plain;charset=utf-8``.
+Sets the :attr:`.Response.contenttype` to ``text/text; charset=utf-8``.
 
 Handlers must return :class:`str` when this decorator is used.
+
+.. versionadded:: 2.8
 
 .. code-block::
 
@@ -122,6 +124,27 @@ Handlers must return :class:`str` when this decorator is used.
 
    @app.route()
    @text
+   def get(req):
+       return 'Unicode String'
+
+"""
+
+
+html = utf8('text/html')
+"""
+Sets the :attr:`.Response.contenttype` to ``text/html; charset=utf-8``.
+
+Handlers must return :class:`str` when this decorator is used.
+
+.. versionadded:: 2.8
+
+.. code-block::
+
+   from yhttp import html
+
+
+   @app.route()
+   @html
    def get(req):
        return 'Unicode String'
 
