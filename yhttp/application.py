@@ -92,7 +92,7 @@ class Application:
 
         return response.start()
 
-    def route(self, pattern='/', verb=None):
+    def route(self, pattern='/', verb=None, insert=None):
         """Decorator factory to register a handler for given regex pattern.
         if ``verb`` is ``None`` then the function name will used instead.
 
@@ -138,7 +138,18 @@ class Application:
 
            :ref:`cookbook-routing`
 
+
         :param pattern: Regular expression to match the requests.
+        :param verb: If not given then ``handler.__name__`` will be used to
+                     match HTYP verb
+        :param insert: If not given, route will be appended to the end of the
+                       :attr:`Application.routes`. Otherwise it must be an
+                       integer indicating the place to insert the new route
+                       into :attr:`Application.routes` attribute.
+
+        .. versionadded:: 2.9
+
+           ``insert``
         """
 
         def decorator(f):
@@ -149,7 +160,11 @@ class Application:
                     if v.kind == inspect.Parameter.KEYWORD_ONLY
                 }
             )
-            routes.append((re.compile(f'^{pattern}$'), f, info))
+            route = (re.compile(f'^{pattern}$'), f, info)
+            if insert is not None:
+                routes.insert(insert, route)
+            else:
+                routes.append(route)
 
         return decorator
 

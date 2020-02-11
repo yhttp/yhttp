@@ -1,3 +1,4 @@
+from yhttp import notfound
 from bddrest import status, response, when
 
 
@@ -29,8 +30,8 @@ def test_routing_basic(app, Given):
 def test_routing_argument(app, Given):
 
     @app.route(r'/(\d+)')
-    def get(req, id):
-        return id
+    def get(req, id_):
+        return id_
 
     with Given('/12'):
         assert status == 200
@@ -47,8 +48,8 @@ def test_routing_argument(app, Given):
 
 
     @app.route(r'/(\d+)/?(\w+)?')
-    def post(req, id, title='Empty'):
-        return f'{id} {title}'
+    def post(req, id_, title='Empty'):
+        return f'{id_} {title}'
 
     with Given('/12/foo', 'post'):
         assert status == 200
@@ -57,5 +58,20 @@ def test_routing_argument(app, Given):
         when('/12')
         assert status == 200
         assert response == '12 Empty'
+
+
+def test_routing_insert(app, Given):
+
+    @app.route(r'/(.*)')
+    def get(req, id_):
+        raise notfound
+
+    @app.route(r'/foo', insert=0)
+    def get(req):
+        return b'foo'
+
+    with Given('/foo'):
+        assert status == 200
+        assert response == 'foo'
 
 
