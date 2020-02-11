@@ -221,7 +221,7 @@ class Application:
         for c in callbacks:
             c(*a, **kw)
 
-    def staticfile(self, pattern, filename):
+    def staticfile(self, pattern, filename, **kw):
         """Register a filename with a regular expression pattern to be served.
 
         .. code-block::
@@ -233,9 +233,9 @@ class Application:
            :ref:`cookbook-static`
 
         """
-        return self.route(pattern)(static.file(filename))
+        return self.route(pattern, **kw)(static.file(filename))
 
-    def staticdirectory(self, pattern, directory):
+    def staticdirectory(self, pattern, directory, **kw):
         """Register a directory with a regular expression pattern, So the
         files inside the directory are accessible by their names:
 
@@ -255,7 +255,7 @@ class Application:
 
         """
 
-        return self.route(f'{pattern}(.*)')(static.directory(directory))
+        return self.route(f'{pattern}(.*)', **kw)(static.directory(directory))
 
     def climain(self, argv=None):
         """Provide a callable to call as the CLI entry point
