@@ -4,14 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>API Reference &#8212; yhttp 2.8.0 documentation</title>
+    <title>API Reference &#8212; yhttp 2.9.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Cookbook" href="cookbook.html" />
@@ -44,7 +44,7 @@ WSGI application.</p>
 
 <dl class="method">
 <dt id="yhttp.Application.route">
-<code class="sig-name descname">route</code><span class="sig-paren">(</span><em class="sig-param">pattern='/'</em>, <em class="sig-param">verb=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.route" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">route</code><span class="sig-paren">(</span><em class="sig-param">pattern='/'</em>, <em class="sig-param">verb=None</em>, <em class="sig-param">insert=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.route" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator factory to register a handler for given regex pattern.
 if <code class="docutils literal notranslate"><span class="pre">verb</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> then the function name will used instead.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/.*&#39;</span><span class="p">)</span>
@@ -84,9 +84,20 @@ it like:</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pattern</strong> – Regular expression to match the requests.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern</strong> – Regular expression to match the requests.</p></li>
+<li><p><strong>verb</strong> – If not given then <code class="docutils literal notranslate"><span class="pre">handler.__name__</span></code> will be used to
+match HTYP verb</p></li>
+<li><p><strong>insert</strong> – If not given, route will be appended to the end of the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.routes</span></code>. Otherwise it must be an
+integer indicating the place to insert the new route
+into <code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.routes</span></code> attribute.</p></li>
+</ul>
 </dd>
 </dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.9: </span><code class="docutils literal notranslate"><span class="pre">insert</span></code></p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -125,7 +136,7 @@ it like:</p>
 
 <dl class="method">
 <dt id="yhttp.Application.staticfile">
-<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a filename with a regular expression pattern to be served.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
 </pre></div>
@@ -138,7 +149,7 @@ it like:</p>
 
 <dl class="method">
 <dt id="yhttp.Application.staticdirectory">
-<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a directory with a regular expression pattern, So the
 files inside the directory are accessible by their names:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
@@ -196,7 +207,7 @@ by the name</p>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">filename</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span></dt>
 <dd><p>Register a filename with a regular expression pattern to be served.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
 </pre></div>
@@ -209,7 +220,7 @@ by the name</p>
 
 <dl class="method">
 <dt>
-<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em><span class="sig-paren">)</span></dt>
+<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param">pattern</em>, <em class="sig-param">directory</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span></dt>
 <dd><p>Register a directory with a regular expression pattern, So the
 files inside the directory are accessible by their names:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
@@ -372,7 +383,7 @@ out how it works.</p>
 <dl class="class">
 <dt id="yhttp.HeadersMask">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">HeadersMask</code><span class="sig-paren">(</span><em class="sig-param">environ</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeadersMask" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simple proxy over <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code> to get headers by their
+<dd><p>A simple proxy over <a class="reference internal" href="#yhttp.Request.environ" title="yhttp.Request.environ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code></a> to get headers by their
 original name without the <code class="docutils literal notranslate"><span class="pre">HTTP_</span></code> prefix, which is the python’s WSGI
 servers default behavior.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
@@ -394,7 +405,7 @@ servers default behavior.</p>
 <dt id="yhttp.Response">
 <em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">startresponse</em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent the HTTP response which accessible by
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code> inside the handler</p>
+<a class="reference internal" href="#yhttp.Request.response" title="yhttp.Request.response"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code></a> inside the handler</p>
 <dl class="attribute">
 <dt id="yhttp.Response.status">
 <code class="sig-name descname">status</code><em class="property"> = '200 Ok'</em><a class="headerlink" href="#yhttp.Response.status" title="Permalink to this definition">¶</a></dt>
@@ -789,7 +800,7 @@ and encode the returned value by handler to json byte-string format.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
