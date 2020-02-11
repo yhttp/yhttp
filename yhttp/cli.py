@@ -33,6 +33,9 @@ class Serve(SubCommand):
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('localhost', args.bind)
 
+        if args.directory != '.':
+            os.chdir(args.directory)
+
         args.application.ready()
         httpd = make_server(host, int(port), args.application)
         print(f'Demo server started http://{host}:{port}')
