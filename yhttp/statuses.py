@@ -40,6 +40,14 @@ class HTTPStatus(Exception):
 #: Alias for :class:`.HTTPStatus`
 status = HTTPStatus
 
+ok = partial(status, keepheaders=True)
+
+#: HTTP 201 Created exception factory
+nocontent = partial(ok, 201, 'Created')
+
+#: HTTP 204 No Content exception factory
+nocontent = partial(ok, 204, 'No Content')
+
 #: HTTP 400 Bad Request exception factory
 badrequest = partial(status, 400, 'Bad Request')
 
