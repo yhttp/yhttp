@@ -1,6 +1,7 @@
-from bddrest import status, when
+from bddrest import status, when, response
 
 from yhttp import statuscode
+from yhttp.statuses import nocontent
 
 
 def test_status(app, Given):
@@ -15,8 +16,17 @@ def test_status(app, Given):
     def put(req):
         return b''
 
+    @app.route()
+    @statuscode(nocontent)  # 204 No Content
+    def delete(req):
+        return b''
+
     with Given(verb='POST'):
         assert status == '201 Created'
 
         when(verb='PUT')
         assert status == 205
+
+        when(verb='DELETE')
+        assert status == 204
+        assert response == ''

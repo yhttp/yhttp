@@ -46,7 +46,7 @@ ok = partial(status, keepheaders=True)
 nocontent = partial(ok, 201, 'Created')
 
 #: HTTP 204 No Content exception factory
-nocontent = partial(ok, 204, 'No Content')
+nocontent = partial(ok, 204, 'No Content', nobody=True)
 
 #: HTTP 400 Bad Request exception factory
 badrequest = partial(status, 400, 'Bad Request')
@@ -112,7 +112,9 @@ def statuscode(code):
         @wraps(handler)
         def wrapper(req, *a, **k):
             result = handler(req, *a, **k)
-            req.response.status = code
+            req.response.status = code if isinstance(code, str) else \
+                code().status
+
             return result
 
         return wrapper
