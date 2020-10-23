@@ -14,8 +14,6 @@ Application Class
 
    .. automethod:: route
    .. automethod:: climain
-   .. automethod:: staticfile
-   .. automethod:: staticdirectory
    .. automethod:: when
    .. automethod:: hook
    .. automethod:: staticfile

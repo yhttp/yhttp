@@ -56,6 +56,11 @@ class Main(Root):
     ]
 
     def __init__(self, application):
+        if application.version:
+            self.__arguments__.append(
+                Argument('--version', action='store_true')
+            )
+
         self.application = application
         self.__help__ = f'{sys.argv[0]} command line interface.'
         self.__arguments__.extend(self.application.cliarguments)
@@ -68,3 +73,9 @@ class Main(Root):
 
         super()._execute_subcommand(args)
 
+    def __call__(self, args):
+        if self.application.version and args.version:
+            print(self.application.version)
+            return
+
+        self._parser.print_help()

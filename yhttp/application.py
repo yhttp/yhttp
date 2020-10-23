@@ -27,7 +27,8 @@ class Application:
     #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
     cliarguments = None
 
-    def __init__(self):
+    def __init__(self, version=None):
+        self.version = version
         self.cliarguments = []
         self.routes = {}
         self.events = {}
@@ -106,7 +107,7 @@ class Application:
 
         .. code-block::
 
-           @app.route('/', verb='get')
+           @app.route(r'/', verb='get')
            def somethingelse(req):
                ...
 
@@ -115,7 +116,7 @@ class Application:
 
         .. code-block::
 
-           @app.route(r'/(\d+)/(\w*)')
+           @app.route(r'/(\\d+)/(\\w*)')
            def get(req, id, name):
                ...
 
