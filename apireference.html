@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Reference &#8212; yhttp 2.10.2 documentation</title>
+    <title>API Reference &#8212; yhttp 2.11.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -34,7 +34,7 @@
 <h2>Application Class<a class="headerlink" href="#application-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="yhttp.Application">
-<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Application</code><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">yhttp.</code><code class="sig-name descname">Application</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
 <dd><p>Web Application representation, instance of this class can be used as
 WSGI application.</p>
 <dl class="py attribute">
@@ -54,7 +54,7 @@ if <code class="docutils literal notranslate"><span class="pre">verb</span></cod
 </pre></div>
 </div>
 <p>You can bypass this behavior by passing <code class="docutils literal notranslate"><span class="pre">verb</span></code> keyword argument:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;get&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;get&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">somethingelse</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="o">...</span>
 </pre></div>
@@ -136,37 +136,6 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 </dd></dl>
 
 <dl class="py method">
-<dt id="yhttp.Application.staticfile">
-<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a filename with a regular expression pattern to be served.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="cookbook.html#cookbook-static"><span class="std std-ref">Static Contents</span></a></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt id="yhttp.Application.staticdirectory">
-<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a directory with a regular expression pattern, So the
-files inside the directory are accessible by their names:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>You you can do:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:8080/foo/a.txt
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="cookbook.html#cookbook-static"><span class="std std-ref">Static Contents</span></a></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
 <dt id="yhttp.Application.when">
 <code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.when" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Decorator to registers the <code class="docutils literal notranslate"><span class="pre">func</span></code> into
@@ -207,8 +176,8 @@ by the name</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id0">
-<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dt id="yhttp.Application.staticfile">
+<code class="sig-name descname">staticfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a filename with a regular expression pattern to be served.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
 </pre></div>
@@ -220,8 +189,8 @@ by the name</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id1">
-<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dt id="yhttp.Application.staticdirectory">
+<code class="sig-name descname">staticdirectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a directory with a regular expression pattern, So the
 files inside the directory are accessible by their names:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
