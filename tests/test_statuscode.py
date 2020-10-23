@@ -30,3 +30,4 @@ def test_status(app, Given):
         when(verb='DELETE')
         assert status == 204
         assert response == ''
+

@@ -38,6 +38,17 @@ def test_redirect(app, Given):
     with Given():
         assert status == 302
         assert response.headers['location'] == 'http://example.com'
-        assert response.text == '302 Found'
+        assert response.text == ''
 
+
+def test_nocontent(app, Given):
+
+    @app.route()
+    def remove(req):
+        raise statuses.nocontent()
+
+
+    with Given(verb='REMOVE'):
+        assert status == 204
+        assert response == ''
 

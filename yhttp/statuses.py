@@ -23,11 +23,12 @@ class HTTPStatus(Exception):
 
     def setupresponse(self, response, stacktrace=False):
         response.status = self.status
-        body = [self.status]
-        if stacktrace and not self.nobody:
-            body.append(traceback.format_exc())
+        if not self.nobody:
+            body = [self.status]
+            if stacktrace:
+                body.append(traceback.format_exc())
 
-        response.body = '\r\n'.join(body)
+            response.body = '\r\n'.join(body)
 
         if not self.keepheaders:
             response.headers.clear()
