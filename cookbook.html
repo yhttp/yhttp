@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Cookbook &#8212; yhttp 2.9.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookbook &#8212; yhttp 2.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +40,7 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{foo}</span><span class="s1"> {req.query.get(&quot;bar&quot;)}&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">foo</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">req</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
@@ -76,7 +77,7 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{req[&quot;foo&quot;]}</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">req</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">badrequest</span><span class="p">()</span>
 
@@ -234,8 +235,8 @@ example stands for the HTTP <code class="docutils literal notranslate"><span cla
 </div>
 <div class="section" id="static-contents">
 <span id="cookbook-static"></span><h2>Static Contents<a class="headerlink" href="#static-contents" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="apireference.html#yhttp.Application" title="yhttp.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class has two methods: <a class="reference internal" href="apireference.html#yhttp.Application.staticfile" title="yhttp.Application.staticfile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticfile()</span></code></a>
-and <a class="reference internal" href="apireference.html#yhttp.Application.staticdirectory" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a> to complete this mission!</p>
+<p><a class="reference internal" href="apireference.html#yhttp.Application" title="yhttp.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class has two methods: <a class="reference internal" href="apireference.html#id0" title="yhttp.Application.staticfile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticfile()</span></code></a>
+and <a class="reference internal" href="apireference.html#id1" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a> to complete this mission!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/a\.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/a.txt&#39;</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/foo/directory&#39;</span><span class="p">)</span>
 </pre></div>
@@ -243,7 +244,7 @@ and <a class="reference internal" href="apireference.html#yhttp.Application.stat
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Do not use any regular expression group inside
-<a class="reference internal" href="apireference.html#yhttp.Application.staticdirectory" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">pattern</span></code> parameter.</p>
+<a class="reference internal" href="apireference.html#id1" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">pattern</span></code> parameter.</p>
 </div>
 </div>
 <div class="section" id="http-cookie">
