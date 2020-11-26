@@ -147,7 +147,7 @@ Then use your configration keys like:
 
 .. seealso::
 
-   `pymlconf <http://pymlconf.dobisel.com>`_
+   `pymlconf <https://pylover.github.io/pymlconf>`_
 
 
 Debug Flag

@@ -74,8 +74,8 @@ html_static_path = ['_static']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
-    'pymlconf': ('http://pymlconf.dobisel.com', None),
-    'easycli': ('http://easycli.dobisel.com', None),
+    'pymlconf': ('https://pylover.github.io/pymlconf/', None),
+    'easycli': ('https://pylover.github.io/easycli/', None),
 #    'sqlalchemy': ('http://docs.sqlalchemy.org/en/latest/', None)
 
 }
