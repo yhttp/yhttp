@@ -34,4 +34,3 @@ def test_applicationcli_default():
             when(f'--configuration-file {f.name} foo')
             assert status == 0
             assert stdout == 'bar\n'
-

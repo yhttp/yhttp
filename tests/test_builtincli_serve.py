@@ -1,12 +1,13 @@
 import time
 
 import requests
-from bddcli import Application as CLIApplication, Given, stderr, stdout
+from bddcli import Application as CLIApplication, Given
 
 from yhttp import Application, text
 
 
 app = Application()
+
 
 @app.route('/')
 @text
@@ -27,4 +28,3 @@ def test_servercli(freetcpport):
 
 if __name__ == '__main__':
     app.climain(['serve'])
-

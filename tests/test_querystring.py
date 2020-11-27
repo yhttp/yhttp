@@ -5,8 +5,6 @@ def test_querystring(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-#        assert req.query['foo'] == 'bar'
-#        assert baz == 'qux'
         return f'{req.query.get("foo")} {baz}'
 
     with Given('/?foo=bar&baz=qux'):

@@ -17,4 +17,3 @@ def test_lazyattribute():
 
     assert callable(Foo.bar)
     assert Foo.bar.__name__ == 'bar'
-

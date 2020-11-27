@@ -23,7 +23,5 @@ def test_versioncli():
         assert stderr == ''
 
 
-
 if __name__ == '__main__':
     app.climain(['--version'])
-

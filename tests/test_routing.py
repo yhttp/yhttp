@@ -46,7 +46,6 @@ def test_routing_argument(app, Given):
         when('/1/2')
         assert status == 404
 
-
     @app.route(r'/(\d+)/?(\w+)?')
     def post(req, id_, title='Empty'):
         return f'{id_} {title}'
@@ -67,11 +66,9 @@ def test_routing_insert(app, Given):
         raise notfound
 
     @app.route(r'/foo', insert=0)
-    def get(req):
+    def get(req):  # noqa: W0404
         return b'foo'
 
     with Given('/foo'):
         assert status == 200
         assert response == 'foo'
-
-

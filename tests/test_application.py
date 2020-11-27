@@ -5,6 +5,7 @@ import yhttp
 
 def test_pipeline(app, Given):
     endresponseiscalled = 0
+
     @app.when
     def endresponse(resp):
         nonlocal endresponseiscalled
@@ -17,7 +18,7 @@ def test_pipeline(app, Given):
         return 'foo1, foo2, foo3'
 
     @app.route()
-    def get(req):
+    def get(req):  # noqa: W0404
         req.response.headers.add('x-foo', 'a', 'b')
         return 'index'
 
@@ -59,7 +60,7 @@ def test_stream(app, Given):
         yield 'baz'
 
     @app.route('/binary')
-    def get(req):
+    def get(req):  # noqa: W0404
         req.response.length = 9
         yield b'foo'
         yield b'bar'
@@ -75,4 +76,3 @@ def test_stream(app, Given):
         assert response.text == 'foobarbaz'
         assert response.headers['content-length'] == '9'
         assert endresponseiscalled == 2
-

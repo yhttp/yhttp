@@ -25,4 +25,3 @@ def freetcpport():
         return s.getsockname()[1]
     finally:
         s.close()
-

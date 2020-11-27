@@ -25,4 +25,3 @@ def test_cookie(app, Given):
         assert counter['path'] == '/a'
         assert counter['domain'] == 'example.com'
         assert counter['max-age'] == '1'
-

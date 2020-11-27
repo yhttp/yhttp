@@ -47,8 +47,6 @@ def test_nocontent(app, Given):
     def remove(req):
         raise statuses.nocontent()
 
-
     with Given(verb='REMOVE'):
         assert status == 204
         assert response == ''
-

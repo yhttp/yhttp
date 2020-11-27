@@ -8,7 +8,7 @@ def test_querystringform(app, Given):
         assert req.form == {}
 
     @app.route()
-    def get(req):
+    def get(req):  # noqa: W0404
         assert req['foo'] == 'bar'
 
     with Given(query=dict(foo='bar')):
@@ -51,7 +51,7 @@ def test_urlencodedform_duplicatedfield(app, Given):
             verb='post',
             body='foo=bar&foo=baz',
             content_type='application/x-www-form-urlencoded'
-        ):
+    ):
         assert status == 200
 
 
@@ -91,5 +91,3 @@ def test_multipartform(app, Given):
         when(body='', content_type='multipart/form-data; boundary=')
         assert status == 400
         assert response == '400 Cannot parse the request'
-
-

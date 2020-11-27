@@ -2,8 +2,6 @@ from os import path
 
 from bddrest import status, response, when
 
-from yhttp import static
-
 
 def test_staticfile(app, Given, tmpdir):
     indexfilename = path.join(tmpdir, 'index.txt')
@@ -40,4 +38,3 @@ def test_staticdirectory(app, Given, tmpdir):
 
         when('/invalid/file.html')
         assert status == 404
-
