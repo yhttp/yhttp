@@ -16,5 +16,3 @@ def test_jsonencoding(app, Given):
         assert response.content_type == 'application/json'
         assert response.headers['Content-Type'] == \
             'application/json; charset=utf-8'
-
-

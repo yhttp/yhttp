@@ -11,4 +11,3 @@ def test_responseheader(app, Given):
     with Given():
         assert status == 200
         assert response.headers['x-foo'] == 'a; b'
-

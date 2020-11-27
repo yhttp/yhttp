@@ -1,4 +1,4 @@
-from bddrest import status, when
+from bddrest import status
 
 
 def test_request(app, Given):
@@ -10,5 +10,3 @@ def test_request(app, Given):
 
     with Given('/foo?bar=baz', headers=dict(foo='bar')):
         assert status == 200
-
-

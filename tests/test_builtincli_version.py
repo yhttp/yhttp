@@ -1,10 +1,7 @@
-import time
-
-import requests
 from bddcli import Application as CLIApplication, Given, stderr, stdout, \
     status, when
 
-from yhttp import Application, text, __version__
+from yhttp import Application, __version__
 
 
 app = Application(version=__version__)
@@ -13,7 +10,7 @@ app = Application(version=__version__)
 def test_versioncli():
     cliapp = CLIApplication('foo', 'tests.test_builtincli_version:app.climain')
 
-    with Given(cliapp, f'--version'):
+    with Given(cliapp, '--version'):
         assert status == 0
         assert stdout.strip() == __version__
         assert stderr == ''

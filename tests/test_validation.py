@@ -1,4 +1,4 @@
-from bddrest import status, response, given, when
+from bddrest import status, given, when
 
 from yhttp import validate, statuses
 
@@ -191,7 +191,7 @@ def test_customvalildator(app, Given):
     @validate(fields=dict(
         bar=customvalidator
     ))
-    def post(req):
+    def post(req):  # noqa: W0404
         pass
 
     with Given(verb='post', form=dict(bar='a')):
@@ -202,5 +202,3 @@ def test_customvalildator(app, Given):
 
         when(form=given | dict(bar='c'))
         assert status == '400 Value must be either a or b'
-
-

@@ -1,6 +1,3 @@
-from bddrest import status
-
-
 def fooextension(app):
     @app.when
     def ready(app):
@@ -19,4 +16,3 @@ def test_extension(app):
 
     app.shutdown()
     assert app.fooshutdown
-

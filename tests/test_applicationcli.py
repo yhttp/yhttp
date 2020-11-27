@@ -1,9 +1,9 @@
 import tempfile
 
-from yhttp import Application
+from bddcli import Application as CLIApplication, Given, stdout, status, when
 from easycli import SubCommand
-from bddcli import Application as CLIApplication, Given, stdout, \
-    status, stderr, when
+
+from yhttp import Application
 
 
 class Foo(SubCommand):
