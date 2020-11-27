@@ -9,8 +9,8 @@ Welcome to yhttp's documentation!
 .. image:: http://img.shields.io/pypi/v/yhttp.svg
      :target: https://pypi.python.org/pypi/yhttp
  
-.. image:: https://travis-ci.org/yhttp/yhttp.svg?branch=master
-   :target: https://travis-ci.org/yhttp/yhttp
+.. image:: https://github.com/yhttp/yhttp/workflows/Build/badge.svg?branch=master
+   :target: https://github.com/yhttp/yhttp/actions
 
 .. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
    :target: https://coveralls.io/github/yhttp/yhttp?branch=master
