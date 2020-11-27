@@ -1,23 +1,27 @@
 class lazyattribute:
-    """ ``lazy`` decorator is intended to promote a
-        function call to object attribute. This means the
-        function is called once and replaced with
-        returned value.
+    """``lazy`` decorator is intended to promote a function call to object \
+        attribute.
 
-        >>> class A:
-        ...     def __init__(self):
-        ...         self.counter = 0
-        ...
-        ...     @lazyattribute
-        ...     def count(self):
-        ...         self.counter += 1
-        ...         return self.counter
+    This means the function is called once and replaced with returned value.
+
+    .. code-block::
+
+       class A:
+           def __init__(self):
+               self.counter = 0
+
+           @lazyattribute
+           def count(self):
+               self.counter += 1
+               return self.counter
+
         >>> a = A()
         >>> a.count
         1
         >>> a.count
         1
     """
+
     __slots__ = ('f', )
 
     def __init__(self, f):
@@ -33,4 +37,3 @@ class lazyattribute:
         val = f(obj)
         setattr(obj, f.__name__, val)
         return val
-

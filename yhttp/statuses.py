@@ -86,8 +86,10 @@ badgateway = partial(status, 502, 'Bad Gateway')
 def redirect(code, text, location):
     return status(code, text, headers=[('Location', location)], nobody=True)
 
+
 #: HTTP 301 Moved Permanently exception factory
 movedpermanently = partial(redirect, 301, 'Moved Permanently')
+
 
 #: HTTP 302 Found exception factory
 found = partial(redirect, 302, 'Found')
@@ -121,4 +123,3 @@ def statuscode(code):
         return wrapper
 
     return decorator
-

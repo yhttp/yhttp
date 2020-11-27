@@ -7,14 +7,13 @@ import pymlconf
 from . import statuses, static
 from .request import Request
 from .response import Response
-from .lazyattribute import lazyattribute
 from .cli import Main
 
 
 class Application:
-    """Web Application representation, instance of this class can be used as
-    WSGI application.
+    """WSGI Web Application.
 
+    Instance of this class can be used as a WSGI application.
     """
 
     _builtinsettings = '''
@@ -55,7 +54,7 @@ class Application:
         raise statuses.notfound()
 
     def __call__(self, environ, startresponse):
-        """The actual WSGI Application.
+        """Actual WSGI Application.
 
         So, will be called on every request.
 
@@ -94,7 +93,8 @@ class Application:
         return response.start()
 
     def route(self, pattern='/', verb=None, insert=None):
-        """Decorator factory to register a handler for given regex pattern.
+        r"""Return a decorator to register a handler for given regex pattern.
+
         if ``verb`` is ``None`` then the function name will used instead.
 
         .. code-block::
@@ -170,8 +170,8 @@ class Application:
         return decorator
 
     def when(self, func):
-        """A Decorator to registers the ``func`` into
-        :attr:`.Application.events` by its name.
+        """Return decorator to registers the ``func`` into \
+            :attr:`.Application.events` by its name.
 
         Currently these hooks are suuported:
 
@@ -197,14 +197,14 @@ class Application:
                ...
 
         """
-
         callbacks = self.events.setdefault(func.__name__, [])
         if func not in callbacks:
             callbacks.append(func)
 
     def hook(self, name, *a, **kw):
-        """The only way to fire registered hooks with :meth:`.Application.when`
-        by the name
+        """Only way to fire registered hooks.
+
+        Hooks can registered by :meth:`.Application.when` with the name.
 
         .. code-block::
 
@@ -214,7 +214,6 @@ class Application:
 
         Normally, users no need to call this method.
         """
-
         callbacks = self.events.get(name)
         if not callbacks:
             return
@@ -237,8 +236,9 @@ class Application:
         return self.route(pattern, **kw)(static.file(filename))
 
     def staticdirectory(self, pattern, directory, **kw):
-        """Register a directory with a regular expression pattern, So the
-        files inside the directory are accessible by their names:
+        """Register a directory with a regular expression pattern.
+
+        So the files inside the directory are accessible by their names:
 
         .. code-block::
 
@@ -255,11 +255,10 @@ class Application:
            :ref:`cookbook-static`
 
         """
-
         return self.route(f'{pattern}(.*)', **kw)(static.directory(directory))
 
     def climain(self, argv=None):
-        """Provide a callable to call as the CLI entry point
+        """Provide a callable to call as the CLI entry point.
 
         .. code-block::
 
@@ -270,7 +269,8 @@ class Application:
                sys.exit(app.climain(sys.argv))
 
         You can use this method as the setuptools entry point for
-        `Automatic Script Creation <https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation>`_
+        `Automatic Script Creation <https://setuptools.readthedocs.io/en/la\
+        test/setuptools.html#automatic-script-creation>`_
 
         ``setup.py``
 
@@ -297,7 +297,7 @@ class Application:
         return Main(self).main(argv)
 
     def ready(self):
-        """Calls the ``ready`` :meth:`hook`
+        """Call the ``ready`` :meth:`hook`.
 
         You need to call this method before using the instance as the WSGI
         application.
@@ -319,13 +319,8 @@ class Application:
            if __name__ != '__main__':
                app.ready()
         """
-
         self.hook('ready', self)
 
     def shutdown(self):
-        """Calls the ``shutdown`` :meth:`hook`
-        """
+        """Call the ``shutdown`` :meth:`hook`."""
         self.hook('shutdown', self)
-
-
-

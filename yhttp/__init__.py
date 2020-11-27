@@ -1,3 +1,4 @@
+"""yhttp micro http framework."""
 __path__ = __import__('pkgutil').extend_path(__path__, __name__)
 
 
@@ -15,5 +16,3 @@ from .statuses import HTTPStatus, statuscode, status, badrequest, \
 
 
 __version__ = '2.11.0'
-
-
