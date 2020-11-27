@@ -8,8 +8,10 @@ from . import statuses
 def getcgifieldvalue(field):
     return field.value \
         if isinstance(field, cgi.MiniFieldStorage) \
-            or (isinstance(field, cgi.FieldStorage) \
-                and not field._binary_file) \
+        or (
+            isinstance(field, cgi.FieldStorage)
+            and not field._binary_file
+        ) \
         else field
 
 
@@ -51,5 +53,3 @@ def parseanyform(environ, contentlength=None, contenttype=None):
             result[k] = getcgifieldvalue(v)
 
     return result
-
-

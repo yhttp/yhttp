@@ -80,7 +80,8 @@ class Criterion:
 
     def _validate(self, value, container: dict, field: Field
                   ):  # pragma: no cover
-        """
+        """Validate request.
+
         It must be overridden in the child class.
 
         This method should raise exception if the criterion is not met. there
@@ -143,7 +144,7 @@ class MinLengthValidator(Criterion):
     def _validate(self, value, container, field):
         if len(value) < self.expression:
             raise self.create_exception(
-                f'Minimum allowed length for field {field.title} is ' \
+                f'Minimum allowed length for field {field.title} is '
                 f'{self.expression}'
             )
 
@@ -155,10 +156,9 @@ class MaxLengthValidator(Criterion):
     def _validate(self, value, container, field):
         if len(value) > self.expression:
             raise self.create_exception(
-                f'Maximum allowed length for field {field.title} is ' \
+                f'Maximum allowed length for field {field.title} is '
                 f'{self.expression}'
             )
-
 
         return value
 
@@ -171,7 +171,7 @@ class MinimumValidator(Criterion):
                 raise self.create_exception()
         except TypeError:
             raise self.create_exception(
-                f'Minimum allowed value for field {field.title} is ' \
+                f'Minimum allowed value for field {field.title} is '
                 f'{self.expression}'
             )
 
@@ -186,7 +186,7 @@ class MaximumValidator(Criterion):
                 raise self.create_exception()
         except TypeError:
             raise self.create_exception(
-                f'Maximum allowed value for field {field.title} is ' \
+                f'Maximum allowed value for field {field.title} is '
                 f'{self.expression}'
             )
 
@@ -252,6 +252,7 @@ class RequestValidator:
             return handler(request, *a, **kw)
 
         return wrapper
+
 
 #: see :ref:`cookbook-validation`
 validate = RequestValidator

@@ -7,9 +7,9 @@ from .lazyattribute import lazyattribute
 
 
 class Request:
-    """Represent an HTTP request, :meth:`.Application.__call__` instantiates
-    this class on each call.
+    """Represent an HTTP request.
 
+    :meth:`.Application.__call__` instantiates this class on each call.
     """
 
     application = None
@@ -27,33 +27,28 @@ class Request:
 
     @lazyattribute
     def verb(self):
-        """HTTP method.
-        """
+        """HTTP method."""
         return self.environ['REQUEST_METHOD'].lower()
 
     @lazyattribute
     def path(self):
-        """Request URL without query string and ``scheme://domain.ext``.
-        """
+        """Request URL without query string and ``scheme://domain.ext``."""
         return self.environ['PATH_INFO']
 
     @lazyattribute
     def fullpath(self):
-        """Request full URI including query string.
-        """
+        """Request full URI including query string."""
         return wsgiutil.request_uri(self.environ, include_query=True)
 
     @lazyattribute
     def contentlength(self):
-        """HTTP Request ``Content-Length`` header value.
-        """
+        """HTTP Request ``Content-Length`` header value."""
         v = self.environ.get('CONTENT_LENGTH')
         return None if not v or not v.strip() else int(v)
 
     @lazyattribute
     def contenttype(self):
-        """HTTP Request ``Content-Type`` header value without encoding.
-        """
+        """HTTP Request ``Content-Type`` header value without encoding."""
         contenttype = self.environ.get('CONTENT_TYPE')
         if contenttype:
             return contenttype.split(';')[0]
@@ -61,8 +56,7 @@ class Request:
 
     @lazyattribute
     def query(self):
-        """A dictionary representing the submitted query string
-        """
+        """Return A dictionary representing the submitted query string."""
         if 'QUERY_STRING' not in self.environ:
             return {}
 
@@ -74,8 +68,9 @@ class Request:
 
     @lazyattribute
     def form(self):
-        """A dictionary representing the submitted json, urlencoded and or
-        multipart form.
+        """Return dictionary representing the submitted from.
+
+        Currently, json, urlencoded and multipart form are supported.
 
         .. versionadded:: 2.6
 
@@ -93,7 +88,6 @@ class Request:
 
 
         """
-
         return parseanyform(
             self.environ,
             contentlength=self.contentlength,
@@ -102,8 +96,7 @@ class Request:
 
     @lazyattribute
     def cookies(self):
-        """A dictionary representing the HTTP cookie data.
-        """
+        """Return a dictionary representing the HTTP cookie data."""
         result = cookies.SimpleCookie()
         if 'COOKIE' in self.headers:
             result.load(self.headers['COOKIE'])
@@ -111,15 +104,14 @@ class Request:
 
     @lazyattribute
     def scheme(self):
-        """HTTP Request Scheme (http|https)
-        """
+        """Return HTTP Request Scheme (http|https)."""
         return wsgiutil.guess_scheme(self.environ)
 
     @lazyattribute
     def headers(self):
-        """HTTP Request headers set. see :class:`.HeadersMask` class to figure
-        out how it works.
+        """HTTP Request headers set.
 
+        see :class:`.HeadersMask` class to figure out how it works.
         """
         return HeadersMask(self.environ)
 
@@ -128,9 +120,10 @@ class Request:
 
 
 class HeadersMask:
-    """A simple proxy over :attr:`.Request.environ` to get headers by their
-    original name without the ``HTTP_`` prefix, which is the python's WSGI
-    servers default behavior.
+    """A simple proxy over :attr:`.Request.environ`.
+
+    Useful to get headers by their original name without the ``HTTP_`` prefix,
+    which is the python's WSGI servers default behavior.
 
     .. code-block::
 
@@ -160,4 +153,3 @@ class HeadersMask:
 
     def __contains__(self, key):
         return self.getkey(key) in self.environ
-

@@ -4,7 +4,7 @@ import ujson
 
 
 def contenttype(contenttype=None, charset=None, dump=None):
-    """Yields a decorator to set response content type and encoding.
+    r"""Yield a decorator to set response content type and encoding.
 
     .. code-block::
 
@@ -149,5 +149,3 @@ Handlers must return :class:`str` when this decorator is used.
        return 'Unicode String'
 
 """
-
-

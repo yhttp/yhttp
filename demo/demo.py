@@ -13,19 +13,19 @@ app.staticfile('/demo', 'demo/demo.py')
 
 @app.route('/json')
 @json
-def get(req):
+def get(req):  # noqa: W0404
     return {'foo': 'bar'}
 
 
 @app.route('/json')
 @json
-def post(req):
+def post(req):  # noqa: W0404
     return req.form
 
 
 @app.route(r'/(.*)')
 @text
-def get(req, resource):
+def get(req, resource):  # noqa: W0404
     i = 0
     while True:
         yield f'{req.path} {i:04}\r\n'.encode()

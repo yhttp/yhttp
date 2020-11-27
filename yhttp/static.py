@@ -10,6 +10,7 @@ CHUNKSIZE = 1024 * 10
 def file(filename):
     length = path.getsize(filename)
     type_ = guess_type(path.split(filename)[1])[0]
+
     def get(request):
         response = request.response
         response.length = length
@@ -44,4 +45,3 @@ def directory(rootpath):
                 yield chunk
 
     return get
-
