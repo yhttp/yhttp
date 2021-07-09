@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test Driven Url Shortener &#8212; yhttp 2.12.2 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Test Driven Url Shortener &#8212; yhttp 2.13.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Cookbook" href="../cookbook.html" />
@@ -29,7 +29,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="test-driven-url-shortener">
+  <section id="test-driven-url-shortener">
 <h1>Test Driven Url Shortener<a class="headerlink" href="#test-driven-url-shortener" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial we’ll develop a simple URL shorotener using <code class="docutils literal notranslate"><span class="pre">redis</span></code>
 storage and <code class="docutils literal notranslate"><span class="pre">yhttp</span></code>.</p>
@@ -40,7 +40,7 @@ system python packages.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkvirtualenv shortener
 </pre></div>
 </div>
-<div class="section" id="rrequirements">
+<section id="rrequirements">
 <h2>Rrequirements<a class="headerlink" href="#rrequirements" title="Permalink to this headline">¶</a></h2>
 <p>Activate your virtual environment if you’re not activated it yet.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>workon shortener
@@ -64,8 +64,8 @@ pytest-cov
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements-dev.txt
 </pre></div>
 </div>
-</div>
-<div class="section" id="project-structure">
+</section>
+<section id="project-structure">
 <h2>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>shortener/
 ├── requirements-dev.txt
@@ -75,8 +75,8 @@ pytest-cov
 └── wsgi.py
 </pre></div>
 </div>
-</div>
-<div class="section" id="setup-py">
+</section>
+<section id="setup-py">
 <h2>setup.py<a class="headerlink" href="#setup-py" title="Permalink to this headline">¶</a></h2>
 <p>Create a file named <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to use our project as a reqular python
 package.</p>
@@ -105,8 +105,8 @@ package.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .
 </pre></div>
 </div>
-</div>
-<div class="section" id="behavioral-test">
+</section>
+<section id="behavioral-test">
 <h2>Behavioral Test<a class="headerlink" href="#behavioral-test" title="Permalink to this headline">¶</a></h2>
 <p>Let’s write some tests to clear what we need. create a file named <code class="docutils literal notranslate"><span class="pre">tests.py</span></code>
 inside the <code class="docutils literal notranslate"><span class="pre">shortener</span></code> directory.</p>
@@ -165,8 +165,8 @@ inside the <code class="docutils literal notranslate"><span class="pre">shortene
         <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Field missing: url&#39;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="implement-shortener-api">
+</section>
+<section id="implement-shortener-api">
 <h2>Implement Shortener API<a class="headerlink" href="#implement-shortener-api" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">shortener.py</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
@@ -202,8 +202,8 @@ inside the <code class="docutils literal notranslate"><span class="pre">shortene
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest --cov<span class="o">=</span>shortener tests.py
 </pre></div>
 </div>
-</div>
-<div class="section" id="redirector-api">
+</section>
+<section id="redirector-api">
 <h2>Redirector API<a class="headerlink" href="#redirector-api" title="Permalink to this headline">¶</a></h2>
 <p>Append this test case to <code class="docutils literal notranslate"><span class="pre">tests.py</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_redirector</span><span class="p">(</span><span class="n">redismock</span><span class="p">):</span>
@@ -252,7 +252,7 @@ with your api:</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">302</span> <span class="n">Found</span>
 <span class="n">Date</span><span class="p">:</span> <span class="n">Tue</span><span class="p">,</span> <span class="mi">28</span> <span class="n">Jan</span> <span class="mi">2020</span> <span class="mi">18</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">04</span> <span class="n">GMT</span>
-<span class="n">Server</span><span class="p">:</span> <span class="n">WSGIServer</span><span class="o">/</span><span class="mf">0.2</span> <span class="n">CPython</span><span class="o">/</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">Server</span><span class="p">:</span> <span class="n">WSGIServer</span><span class="o">/</span><span class="mf">0.2</span> <span class="n">CPython</span><span class="o">/</span><span class="mf">3.6.9</span>
 <span class="n">location</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
 <span class="n">content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">plain</span><span class="p">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
 <span class="n">content</span><span class="o">-</span><span class="n">length</span><span class="p">:</span> <span class="mi">9</span>
@@ -282,8 +282,8 @@ gunicorn wsgi:app
 <a class="reference external" href="https://github.com/yhttp/urlshortener-example">complete project</a> on github,
 other <a class="reference internal" href="index.html#tutorials"><span class="std std-ref">Tutorials</span></a> and or <a class="reference internal" href="../cookbook.html#cookbook"><span class="std std-ref">Cookbook</span></a> to discover more
 features.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
