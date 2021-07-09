@@ -20,6 +20,7 @@ class Application:
     debug: true
     staticdir:
         default: index.html
+        fallback: index.html
     '''
 
     #: Instance of :class:`pymlconf.Root` as the global configuration instance.
@@ -237,7 +238,8 @@ class Application:
         """
         return self.route(pattern, **kw)(static.file(filename))
 
-    def staticdirectory(self, pattern, directory, default=None, **kw):
+    def staticdirectory(self, pattern, directory, default=None, fallback=None,
+                        **kw):
         """Register a directory with a regular expression pattern.
 
         So the files inside the directory are accessible by their names:
@@ -261,14 +263,21 @@ class Application:
         :param default: if None, the ``app.settings.staticdir.default``
                         (which default is ``index.html``) will be used as the
                         default document.
-
+        :param fallback: if ``True``, the ``app.settings.staticdir.fallback``
+                        (which default is ``index.html``) will be used as the
+                        fallback document if the requested resource was not found.
+                        if ``str`` the value will be used instead of
+                        ``app.settings.staticdir.fallback``.
+    
         .. versionadded:: 2.13
+    
+           The *default* and *fallback* keyword arguments.
 
-           ``default``
         """
         return self.route(f'{pattern}(.*)', **kw)(static.directory(
             directory,
-            default
+            default, 
+            fallback
         ))
 
     def climain(self, argv=None):

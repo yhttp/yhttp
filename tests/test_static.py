@@ -22,13 +22,48 @@ def test_staticdirectory(app, Given, tmpdir):
     with open(indextxtfilename, 'w') as f:
         f.write('foo')
 
+    app.staticdirectory('/', tmpdir)
+
+    with Given(''):
+        assert status == 403
+
+        when('/')
+        assert status == 403
+
+        when('/index.txt')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'foo'
+
+        when('/invalidfile')
+        assert status == 404
+
+        when('/invalid/file')
+        assert status == 404
+
+        when('/invalid/file.html')
+        assert status == 404
+
+
+def test_staticdirectory_default_true(app, Given, tmpdir):
+    indextxtfilename = path.join(tmpdir, 'index.txt')
+    with open(indextxtfilename, 'w') as f:
+        f.write('foo')
+
     indexhtmlfilename = path.join(tmpdir, 'index.html')
     with open(indexhtmlfilename, 'w') as f:
         f.write('foo bar')
 
-    app.staticdirectory('/', tmpdir)
+    app.staticdirectory('/', tmpdir, default=True)
 
     with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/')
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
         assert response.headers['content-length'] == '7'
@@ -47,4 +82,110 @@ def test_staticdirectory(app, Given, tmpdir):
         assert status == 404
 
         when('/invalid/file.html')
+        assert status == 404
+
+
+def test_staticdirectory_default_filename(app, Given, tmpdir):
+    indextxtfilename = path.join(tmpdir, 'index.txt')
+    with open(indextxtfilename, 'w') as f:
+        f.write('foo')
+
+    indexhtmlfilename = path.join(tmpdir, 'index.html')
+    with open(indexhtmlfilename, 'w') as f:
+        f.write('foo bar')
+
+    app.staticdirectory('/', tmpdir, default='index.txt')
+
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'foo'
+
+        when('/')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'foo'
+
+        when('/index.txt')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'foo'
+
+        when('/index.html')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/invalidfile')
+        assert status == 404
+
+        when('/invalid/file')
+        assert status == 404
+
+        when('/invalid/file.html')
+        assert status == 404
+
+
+def test_staticdirectory_fallback_true(app, Given, tmpdir):
+    indexhtmlfilename = path.join(tmpdir, 'index.html')
+    with open(indexhtmlfilename, 'w') as f:
+        f.write('foo bar')
+
+    app.staticdirectory('/', tmpdir, default=True, fallback=True)
+
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/notexists.html')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+
+def test_staticdirectory_fallback_file(app, Given, tmpdir):
+    indexhtmlfilename = path.join(tmpdir, 'index.html')
+    with open(indexhtmlfilename, 'w') as f:
+        f.write('foo bar')
+
+    fallbackhtmlfilename = path.join(tmpdir, 'fallback.html')
+    with open(fallbackhtmlfilename, 'w') as f:
+        f.write('baz')
+
+    app.staticdirectory('/', tmpdir, default=True, fallback='fallback.html')
+
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/notexists.html')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '3'
+        assert response == 'baz'
+
+
+def test_staticdirectory_fallback_notexistancefile(app, Given, tmpdir):
+    indexhtmlfilename = path.join(tmpdir, 'index.html')
+    with open(indexhtmlfilename, 'w') as f:
+        f.write('foo bar')
+
+    app.staticdirectory('/', tmpdir, default=True, fallback='notexists.html')
+
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/notexists.html')
         assert status == 404
