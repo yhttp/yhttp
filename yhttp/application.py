@@ -265,18 +265,18 @@ class Application:
                         default document.
         :param fallback: if ``True``, the ``app.settings.staticdir.fallback``
                         (which default is ``index.html``) will be used as the
-                        fallback document if the requested resource was not found.
-                        if ``str`` the value will be used instead of
+                        fallback document if the requested resource was not
+                        found. if ``str``, the value will be used instead of
                         ``app.settings.staticdir.fallback``.
-    
+
         .. versionadded:: 2.13
-    
+
            The *default* and *fallback* keyword arguments.
 
         """
         return self.route(f'{pattern}(.*)', **kw)(static.directory(
             directory,
-            default, 
+            default,
             fallback
         ))
 
