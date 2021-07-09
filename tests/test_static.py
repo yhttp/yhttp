@@ -18,13 +18,23 @@ def test_staticfile(app, Given, tmpdir):
 
 
 def test_staticdirectory(app, Given, tmpdir):
-    indexfilename = path.join(tmpdir, 'index.txt')
-    with open(indexfilename, 'w') as f:
+    indextxtfilename = path.join(tmpdir, 'index.txt')
+    with open(indextxtfilename, 'w') as f:
         f.write('foo')
+
+    indexhtmlfilename = path.join(tmpdir, 'index.html')
+    with open(indexhtmlfilename, 'w') as f:
+        f.write('foo bar')
 
     app.staticdirectory('/', tmpdir)
 
-    with Given('/index.txt'):
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '7'
+        assert response == 'foo bar'
+
+        when('/index.txt')
         assert status == 200
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'

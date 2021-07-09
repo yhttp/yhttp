@@ -331,6 +331,7 @@ and :meth:`.Application.staticdirectory` to complete this mission!
 
    app.staticfile(r'/a\.txt', 'path/to/a.txt')
    app.staticdirectory(r'/foo/', 'path/to/foo/directory')
+   app.staticdirectory(r'/foo/', 'path/to/foo/directory', default='index.txt')
 
 .. note::
 

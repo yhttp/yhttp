@@ -18,6 +18,8 @@ class Application:
 
     _builtinsettings = '''
     debug: true
+    staticdir:
+        default: index.html
     '''
 
     #: Instance of :class:`pymlconf.Root` as the global configuration instance.
@@ -235,7 +237,7 @@ class Application:
         """
         return self.route(pattern, **kw)(static.file(filename))
 
-    def staticdirectory(self, pattern, directory, **kw):
+    def staticdirectory(self, pattern, directory, default=None, **kw):
         """Register a directory with a regular expression pattern.
 
         So the files inside the directory are accessible by their names:
@@ -254,8 +256,20 @@ class Application:
 
            :ref:`cookbook-static`
 
+        :param pattern: Regular expression to match the requests.
+        :param directory: Static files are here.
+        :param default: if None, the ``app.settings.staticdir.default``
+                        (which default is ``index.html``) will be used as the
+                        default document.
+
+        .. versionadded:: 2.13
+
+           ``default``
         """
-        return self.route(f'{pattern}(.*)', **kw)(static.directory(directory))
+        return self.route(f'{pattern}(.*)', **kw)(static.directory(
+            directory,
+            default
+        ))
 
     def climain(self, argv=None):
         """Provide a callable to call as the CLI entry point.

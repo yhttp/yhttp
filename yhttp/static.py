@@ -26,11 +26,49 @@ def file(filename):
     return get
 
 
-def directory(rootpath):
+def directory(rootpath, default=None):
+    """Create a static directory handler.
+
+    So the files inside the directory are accessible by their names:
+
+    .. code-block::
+
+        app.route(r'/public/(.*)', directory('public'))
+
+    Or simply:
+
+    .. code-block::
+
+        app.staticdirectory('/foo/', 'physical/path/to/foo')
+
+    You you can do:
+
+    .. code-block:: bash
+
+       curl localhost:8080/public/foo.html
+
+    .. seealso::
+
+       :ref:`cookbook-static`
+
+    :param directory: Static files are here.
+    :param default: if None, the ``app.settings.staticdir.default``
+                    (which default is ``index.html``) will be used as the
+                    default document.
+
+    .. versionadded:: 2.13
+
+       ``default``
+    """
+
     def get(request, location):
         response = request.response
-        filename = path.join(rootpath, location)
 
+        if not location:
+            location = default or \
+                request.application.settings.staticdir.default
+
+        filename = path.join(rootpath, location)
         if not path.exists(filename):
             raise statuses.notfound()
 
