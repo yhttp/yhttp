@@ -17,12 +17,15 @@ def test_staticfile(app, Given, tmpdir):
         assert response == 'foo'
 
 
-def test_staticdirectory(app, Given, tmpdir):
-    indextxtfilename = path.join(tmpdir, 'index.txt')
-    with open(indextxtfilename, 'w') as f:
-        f.write('foo')
+def test_staticdirectory(app, Given, tempstruct):
+    temproot = tempstruct(**{
+        'bar': {
+            'index.txt': 'bar',
+        },
+        'index.txt': 'foo',
+    })
 
-    app.staticdirectory('/', tmpdir)
+    app.staticdirectory('/', temproot)
 
     with Given(''):
         assert status == 403
@@ -35,6 +38,15 @@ def test_staticdirectory(app, Given, tmpdir):
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
         assert response == 'foo'
+
+        when('/bar')
+        assert status == 403
+
+        when('/bar/index.txt')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'bar'
 
         when('/invalidfile')
         assert status == 404
@@ -46,16 +58,24 @@ def test_staticdirectory(app, Given, tmpdir):
         assert status == 404
 
 
-def test_staticdirectory_default_true(app, Given, tmpdir):
-    indextxtfilename = path.join(tmpdir, 'index.txt')
-    with open(indextxtfilename, 'w') as f:
-        f.write('foo')
+def test_staticdirectory_default_true(app, Given, tempstruct):
+    temproot = tempstruct(**{
+        'bar': {
+            'index.html': 'bar',
+        },
+        'index.txt': 'foo',
+        'index.html': 'foo bar',
+    })
 
-    indexhtmlfilename = path.join(tmpdir, 'index.html')
-    with open(indexhtmlfilename, 'w') as f:
-        f.write('foo bar')
+    # indextxtfilename = path.join(tmpdir, 'index.txt')
+    # with open(indextxtfilename, 'w') as f:
+    #     f.write('foo')
 
-    app.staticdirectory('/', tmpdir, default=True)
+    # indexhtmlfilename = path.join(tmpdir, 'index.html')
+    # with open(indexhtmlfilename, 'w') as f:
+    #     f.write('foo bar')
+
+    app.staticdirectory('/', temproot, default=True)
 
     with Given(''):
         assert status == 200
@@ -74,6 +94,18 @@ def test_staticdirectory_default_true(app, Given, tmpdir):
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
         assert response == 'foo'
+
+        when('/bar')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '3'
+        assert response == 'bar'
+
+        when('/bar/')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '3'
+        assert response == 'bar'
 
         when('/invalidfile')
         assert status == 404

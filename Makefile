@@ -1,8 +1,13 @@
 PRJ = yhttp
+PIP = pip3
 
+.PHONY: env
+env:
+	$(PIP) install -r requirements-dev.txt
+	$(PIP) install -e .
 
-.PHONY: coverage
-coverage:
+.PHONY: cover
+cover:
 	pytest --cov=$(PRJ) tests
 
 

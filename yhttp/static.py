@@ -70,37 +70,37 @@ def directory(rootpath, default=False, fallback=False):
     """
 
     def get(request, location):
-        nonlocal fallback
+        nonlocal fallback, default
 
         app = request.application
         response = request.response
+        target = path.join(rootpath, location)
 
-        # Default document
-        if not location:
+        if default is True:
+            default = app.settings.staticdir.default
+
+        if path.isdir(target):
             if not default:
                 raise statuses.forbidden()
 
-            if isinstance(default, str):
-                location = default
-            else:
-                location = app.settings.staticdir.default
+            # Default document
+            target = path.join(target, default)
 
         # Fallback
-        filename = path.join(rootpath, location)
-        if not path.exists(filename):
+        if not path.exists(target):
             if fallback is None:
                 raise statuses.notfound()
 
             if not isinstance(fallback, str):
                 fallback = app.settings.staticdir.fallback
 
-            filename = path.join(rootpath, fallback)
-            if not path.exists(filename):
+            target = path.join(rootpath, fallback)
+            if not path.exists(target):
                 raise statuses.notfound()
 
-        response.length = path.getsize(filename)
-        response.type = guess_type(path.split(filename)[1])[0]
-        with open(filename, 'rb') as f:
+        response.length = path.getsize(target)
+        response.type = guess_type(path.split(target)[1])[0]
+        with open(target, 'rb') as f:
             while True:
                 chunk = f.read(CHUNKSIZE)
                 if not chunk:

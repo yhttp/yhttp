@@ -12,8 +12,7 @@
 
 ```bash
 cd path/to/yhttp
-pip install -e .
-pip install -r requirements-dev.txt
+make env
 ```
 
 #### Running tests
@@ -25,7 +24,7 @@ pytest
 #### Coverage
 
 ```bash
-pytest --cov=yhttp
+make cover
 ```
 
 #### Documentation
