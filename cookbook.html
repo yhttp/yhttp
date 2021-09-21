@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Cookbook &#8212; yhttp 2.13.2 documentation</title>
+    <title>Cookbook &#8212; yhttp 2.13.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> will dispatch query string to the python’s <code class="docutils literal notranslate"><span class="pre">keywordonly</span></code> argument
 if defined in handler, see <code class="docutils literal notranslate"><span class="pre">foo</span></code> argument in the example below.</p>
 <p>of-course, all query string will available as a dictionary via
-<a class="reference internal" href="apireference.html#yhttp.Request.query" title="yhttp.Request.query"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code></a>.</p>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code>.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -58,7 +58,7 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 </section>
 <section id="form">
 <span id="cookbook-form"></span><h2>Form<a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h2>
-<p>Use <a class="reference internal" href="apireference.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary to access the submitted fields.</p>
+<p>Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code> as a dictionary to access the submitted fields.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.6: </span>An easy way to get form values is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
@@ -250,7 +250,7 @@ and <a class="reference internal" href="apireference.html#yhttp.Application.stat
 </section>
 <section id="http-cookie">
 <h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Permalink to this headline">¶</a></h2>
-<p>This is how to use <a class="reference internal" href="apireference.html#yhttp.Request.cookies" title="yhttp.Request.cookies"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code></a>:</p>
+<p>This is how to use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API Reference &#8212; yhttp 2.13.2 documentation</title>
+    <title>API Reference &#8212; yhttp 2.13.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -279,90 +279,6 @@ for more info.</p>
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent an HTTP request.</p>
 <p><a class="reference internal" href="#yhttp.Application.__call__" title="yhttp.Application.__call__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.__call__()</span></code></a> instantiates this class on each call.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.verb">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">verb</span></span><a class="headerlink" href="#yhttp.Request.verb" title="Permalink to this definition">¶</a></dt>
-<dd><p>HTTP method.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.path">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#yhttp.Request.path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Request URL without query string and <code class="docutils literal notranslate"><span class="pre">scheme://domain.ext</span></code>.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.fullpath">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fullpath</span></span><a class="headerlink" href="#yhttp.Request.fullpath" title="Permalink to this definition">¶</a></dt>
-<dd><p>Request full URI including query string.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.contentlength">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">contentlength</span></span><a class="headerlink" href="#yhttp.Request.contentlength" title="Permalink to this definition">¶</a></dt>
-<dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> header value.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.contenttype">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">contenttype</span></span><a class="headerlink" href="#yhttp.Request.contenttype" title="Permalink to this definition">¶</a></dt>
-<dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code> header value without encoding.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.query">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">query</span></span><a class="headerlink" href="#yhttp.Request.query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return A dictionary representing the submitted query string.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.form">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#yhttp.Request.form" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return dictionary representing the submitted from.</p>
-<p>Currently, json, urlencoded and multipart form are supported.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 2.6: </span>An easy way to get form values is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The above expression is the same as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.cookies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cookies</span></span><a class="headerlink" href="#yhttp.Request.cookies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a dictionary representing the HTTP cookie data.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.scheme">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scheme</span></span><a class="headerlink" href="#yhttp.Request.scheme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return HTTP Request Scheme (http|https).</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.headers">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">headers</span></span><a class="headerlink" href="#yhttp.Request.headers" title="Permalink to this definition">¶</a></dt>
-<dd><p>HTTP Request headers set.</p>
-<p>see <a class="reference internal" href="#yhttp.HeadersMask" title="yhttp.HeadersMask"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeadersMask</span></code></a> class to figure out how it works.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.response">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">response</span></span><a class="headerlink" href="#yhttp.Request.response" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="#yhttp.Response" title="yhttp.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code></a> instance associated to this request.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="yhttp.Request.environ">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">environ</span></span><a class="headerlink" href="#yhttp.Request.environ" title="Permalink to this definition">¶</a></dt>
-<dd><p>WSIG environ dictionary</p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -371,7 +287,7 @@ for more info.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.HeadersMask">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HeadersMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeadersMask" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simple proxy over <a class="reference internal" href="#yhttp.Request.environ" title="yhttp.Request.environ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code></a>.</p>
+<dd><p>A simple proxy over <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code>.</p>
 <p>Useful to get headers by their original name without the <code class="docutils literal notranslate"><span class="pre">HTTP_</span></code> prefix,
 which is the python’s WSGI servers default behavior.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
@@ -393,7 +309,7 @@ which is the python’s WSGI servers default behavior.</p>
 <dt class="sig sig-object py" id="yhttp.Response">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent the HTTP response.</p>
-<p>Which accessible by <a class="reference internal" href="#yhttp.Request.response" title="yhttp.Request.response"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code></a> inside handlers.</p>
+<p>Which accessible by <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code> inside handlers.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.status">
 <span class="sig-name descname"><span class="pre">status</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'200</span> <span class="pre">Ok'</span></em><a class="headerlink" href="#yhttp.Response.status" title="Permalink to this definition">¶</a></dt>
