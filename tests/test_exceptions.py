@@ -41,6 +41,17 @@ def test_redirect(app, Given):
         assert response.text == ''
 
 
+def test_modified(app, Given):
+
+    @app.route()
+    def get(req):
+        raise statuses.notmodified()
+
+    with Given():
+        assert status == 304
+        assert response.text == ''
+
+
 def test_nocontent(app, Given):
 
     @app.route()
