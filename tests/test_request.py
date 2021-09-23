@@ -6,7 +6,7 @@ def test_request(app, Given):
     def get(req):
         assert req.fullpath == 'http://bddrest-interceptor/foo?bar=baz'
         assert req.scheme == 'http'
-        assert req.headers.get('foo') == 'bar'
+        assert req.headers.get('foo-bar') == 'baz'
 
-    with Given('/foo?bar=baz', headers=dict(foo='bar')):
+    with Given('/foo?bar=baz', headers={'Foo-Bar': 'baz'}):
         assert status == 200

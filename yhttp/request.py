@@ -147,7 +147,7 @@ class HeadersMask:
 
     @staticmethod
     def getkey(k):
-        return f'HTTP_{k.upper()}'
+        return f'HTTP_{k.replace("-", "_").upper()}'
 
     def __getitem__(self, key):
         return self.environ[self.getkey(key)]

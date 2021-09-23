@@ -74,7 +74,7 @@ gone = partial(status, 410, 'Gone')
 preconditionfailed = partial(status, 412, 'Precondition Failed')
 
 #: HTTP 304 Not Modified exception factory
-notmodified = partial(status, 304, 'Not Modified')
+notmodified = partial(status, 304, 'Not Modified', nobody=True)
 
 #: HTTP 500 Internal Server Error exception factory
 internalservererror = partial(status, 500, 'Internal Server Error')
