@@ -9,11 +9,11 @@ Welcome to yhttp's documentation!
 .. image:: http://img.shields.io/pypi/v/yhttp.svg
      :target: https://pypi.python.org/pypi/yhttp
  
-.. image:: https://github.com/dobisel/yhttp/workflows/Build/badge.svg?branch=master
-   :target: https://github.com/dobisel/yhttp/actions
+.. image:: https://github.com/yhttp/yhttp/workflows/Build/badge.svg?branch=master
+   :target: https://github.com/yhttp/yhttp/actions
 
-.. image:: https://coveralls.io/repos/github/dobisel/yhttp/badge.svg?branch=master
-   :target: https://coveralls.io/github/dobisel/yhttp?branch=master
+.. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
+   :target: https://coveralls.io/github/yhttp/yhttp?branch=master
 
 .. image:: https://img.shields.io/badge/Python-%3E%3D3.6-blue
    :target: https://python.org
