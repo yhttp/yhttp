@@ -12,6 +12,10 @@ class Foo(SubCommand):
     def __call__(self, args):
         assert args.application is app
         print(app.settings.title)
+        if app.settings.title == 'bar':
+            return 73  # The best number ever, as Sheldon says.
+
+        return 0
 
 
 app = Application()
@@ -32,5 +36,5 @@ def test_applicationcli_default():
             f.write(b'title: bar')
             f.flush()
             when(f'--configuration-file {f.name} foo')
-            assert status == 0
+            assert status == 73
             assert stdout == 'bar\n'

@@ -71,7 +71,7 @@ class Main(Root):
         if args.configurationfile:
             self.application.settings.loadfile(args.configurationfile)
 
-        super()._execute_subcommand(args)
+        return super()._execute_subcommand(args)
 
     def __call__(self, args):
         if self.application.version and args.version:
