@@ -15,4 +15,4 @@ from .statuses import HTTPStatus, statuscode, status, badrequest, \
     movedpermanently, found
 
 
-__version__ = '3.0.2'
+__version__ = '3.0.3'
