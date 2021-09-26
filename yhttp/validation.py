@@ -232,7 +232,7 @@ class RequestValidator:
             self.fields[name] = Field(name, **kw)
 
     def validate(self, request):
-        if self.nobody and request.form:
+        if self.nobody and request.contentlength:
             raise statuses.status(400, 'Body Not Allowed')
 
         for name, field in self.fields.items():

@@ -16,6 +16,23 @@ def test_nobody(app, Given):
         when(form=dict(bar='baz'))
         assert status == '400 Body Not Allowed'
 
+        when(query=dict(bar='baz'))
+        assert status == 200
+
+
+def test_nobody_get(app, Given):
+
+    @app.route()
+    @validate(nobody=True)
+    def get(req, *, bar=None):
+        assert req.form.get('bar') == bar
+
+    with Given():
+        assert status == 200
+
+        when(query=dict(bar='baz'))
+        assert status == 200
+
 
 def test_required(app, Given):
 
