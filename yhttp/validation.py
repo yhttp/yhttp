@@ -232,7 +232,6 @@ class RequestValidator:
             self.fields[name] = Field(name, **kw)
 
     def validate(self, request):
-
         if self.nobody and request.form:
             raise statuses.status(400, 'Body Not Allowed')
 
@@ -247,9 +246,13 @@ class RequestValidator:
     def __call__(self, handler):
 
         @functools.wraps(handler)
-        def wrapper(request, *a, **kw):
+        def wrapper(request, *arguments, **query):
             self.validate(request)
-            return handler(request, *a, **kw)
+            query = {
+                k: v for k, v in request.query.items()
+                if k in query
+            }
+            return handler(request, *arguments, **query)
 
         return wrapper
 

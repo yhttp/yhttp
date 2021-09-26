@@ -87,13 +87,30 @@ def test_type(app, Given):
         bar=dict(type_=int),
     ))
     def post(req):
-        pass
+        if 'bar' in req.form:
+            assert isinstance(req.form['bar'], int)
 
     with Given(verb='post'):
         assert status == 200
 
         when(json=dict(bar='bar'))
         assert status == '400 Invalid type: bar'
+
+        when(json=dict(bar='2'))
+        assert status == 200
+
+
+def test_type_querystring(app, Given):
+    @app.route()
+    @validate(fields=dict(
+        bar=dict(type_=int),
+    ))
+    def get(req, *, bar=None):
+        assert isinstance(req.query['bar'], int)
+        assert isinstance(bar, int)
+
+    with Given(query=dict(bar='2')):
+        assert status == 200
 
 
 def test_minimummaximum(app, Given):
