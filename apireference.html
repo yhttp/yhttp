@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API Reference &#8212; yhttp 3.0.3 documentation</title>
+    <title>API Reference &#8212; yhttp 3.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -59,6 +59,12 @@
     <span class="o">...</span>
 </pre></div>
 </div>
+<p>To catch any verb by the handler use <code class="docutils literal notranslate"><span class="pre">*</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
 <p>Regular expression groups will be capture and dispatched as the
 positional arguments of the handler after <code class="docutils literal notranslate"><span class="pre">req</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/(</span><span class="se">\\</span><span class="s1">d+)/(</span><span class="se">\\</span><span class="s1">w*)&#39;</span><span class="p">)</span>
@@ -88,7 +94,7 @@ it like:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pattern</strong> – Regular expression to match the requests.</p></li>
 <li><p><strong>verb</strong> – If not given then <code class="docutils literal notranslate"><span class="pre">handler.__name__</span></code> will be used to
-match HTYP verb</p></li>
+match HTYP verb, Use <code class="docutils literal notranslate"><span class="pre">*</span></code> to catch all verbs.</p></li>
 <li><p><strong>insert</strong> – If not given, route will be appended to the end of the
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.routes</span></code>. Otherwise it must be an
 integer indicating the place to insert the new route

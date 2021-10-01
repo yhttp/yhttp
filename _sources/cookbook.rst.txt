@@ -300,9 +300,6 @@ Routing
 the only way to register handler for http requests is
 :meth:`.Application.route` decorator factory.
 
-Handler function's name will be used as HTTP verb. so, the ``get`` in these 
-example stands for the HTTP ``GET`` method.
-
 
 .. code-block::
 
@@ -317,6 +314,28 @@ example stands for the HTTP ``GET`` method.
    @app.route('/books/(\d+)')   # Match with: /books/1
    def get(req, id): 
        ...
+
+Handler function's name will be used as HTTP verb. so, the ``get`` in the 
+example above stands for the HTTP ``GET`` method. 
+
+
+.. _cookbook-anyverb:
+
+Any Verb
+^^^^^^^^
+
+Another approach is to us a single star ``*`` to catch any verb.
+
+
+.. code-block::
+
+   @app.route(verb='*')          # Match any HTTP verb
+   def any(req): 
+       ...
+
+
+.. versionadded:: 3.1
+
 
 .. _cookbook-static:
 
