@@ -36,11 +36,7 @@ class Application:
         self.events = {}
         self.settings = pymlconf.Root(self._builtinsettings)
 
-    def _findhandler(self, request):
-        patterns = self.routes.get(request.verb)
-        if not patterns:
-            raise statuses.methodnotallowed()
-
+    def _matchrequest(self, patterns, request):
         for pattern, func, info in patterns:
             match = pattern.match(request.path)
             if not match:
@@ -54,7 +50,26 @@ class Application:
 
             return func, arguments, querystrings
 
-        raise statuses.notfound()
+        return None, None, None
+
+    def _findhandler(self, request):
+        # All verbs
+        patterns = self.routes.get('*', [])
+        if patterns:
+            func, args, query = self._matchrequest(patterns, request)
+            if func is not None:
+                return func, args, query
+
+        # Specific verb
+        patterns = self.routes.get(request.verb)
+        if not patterns:
+            raise statuses.methodnotallowed()
+
+        func, args, query = self._matchrequest(patterns, request)
+        if func is None:
+            raise statuses.notfound()
+
+        return func, args, query
 
     def __call__(self, environ, startresponse):
         """Actual WSGI Application.
@@ -100,6 +115,7 @@ class Application:
 
         if ``verb`` is ``None`` then the function name will used instead.
 
+
         .. code-block::
 
            @app.route(r'/.*')
@@ -112,6 +128,14 @@ class Application:
 
            @app.route(r'/', verb='get')
            def somethingelse(req):
+               ...
+
+        To catch any verb by the handler use ``*``.
+
+        .. code-block::
+
+           @app.route(r'/', verb='*')
+           def any(req):
                ...
 
         Regular expression groups will be capture and dispatched as the
@@ -145,7 +169,7 @@ class Application:
 
         :param pattern: Regular expression to match the requests.
         :param verb: If not given then ``handler.__name__`` will be used to
-                     match HTYP verb
+                     match HTYP verb, Use ``*`` to catch all verbs.
         :param insert: If not given, route will be appended to the end of the
                        :attr:`Application.routes`. Otherwise it must be an
                        integer indicating the place to insert the new route
@@ -157,18 +181,26 @@ class Application:
         """
 
         def decorator(f):
-            routes = self.routes.setdefault(verb or f.__name__, [])
-            info = dict(
-                kwonly={
-                    k for k, v in inspect.signature(f).parameters.items()
-                    if v.kind == inspect.Parameter.KEYWORD_ONLY
-                }
-            )
-            route = (re.compile(f'^{pattern}$'), f, info)
-            if insert is not None:
-                routes.insert(insert, route)
-            else:
-                routes.append(route)
+            nonlocal verb
+
+            verb = verb or f.__name__
+
+            if isinstance(verb, str):
+                verb = [verb]
+
+            for verb_ in verb:
+                routes = self.routes.setdefault(verb_, [])
+                info = dict(
+                    kwonly={
+                        k for k, v in inspect.signature(f).parameters.items()
+                        if v.kind == inspect.Parameter.KEYWORD_ONLY
+                    }
+                )
+                route = (re.compile(f'^{pattern}$'), f, info)
+                if insert is not None:
+                    routes.insert(insert, route)
+                else:
+                    routes.append(route)
 
         return decorator
 
