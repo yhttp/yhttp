@@ -16,4 +16,4 @@ from .statuses import HTTPStatus, statuscode, status, badrequest, \
 from .rewrite import Rewrite
 
 
-__version__ = '3.2.0'
+__version__ = '3.3.0'

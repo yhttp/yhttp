@@ -11,8 +11,21 @@ from .cli import Main
 
 
 class BaseApplication:
-    def __init__(self):
+    _builtinsettings = '''
+    debug: true
+    '''
+
+    #: Instance of :class:`pymlconf.Root` as the global configuration instance.
+    settings = None
+
+    #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
+    cliarguments = None
+
+    def __init__(self, version=None):
+        self.version = version
         self.events = {}
+        self.cliarguments = []
+        self.settings = pymlconf.Root(self._builtinsettings)
 
     def when(self, func):
         """Return decorator to registers the ``func`` into \
@@ -95,6 +108,45 @@ class BaseApplication:
         """Call the ``shutdown`` :meth:`hook`."""
         self.hook('shutdown', self)
 
+    def climain(self, argv=None):
+        """Provide a callable to call as the CLI entry point.
+
+        .. code-block::
+
+           import sys
+
+
+           if __name__ == '__main__':
+               sys.exit(app.climain(sys.argv))
+
+        You can use this method as the setuptools entry point for
+        `Automatic Script Creation <https://setuptools.readthedocs.io/en/la\
+        test/setuptools.html#automatic-script-creation>`_
+
+        ``setup.py``
+
+        .. code-block::
+
+           from setuptools import setup
+
+
+           setup(
+               name='foo',
+               ...
+               entry_points={
+                   'console_scripts': [
+                       'foo = foo:app.climain'
+                   ]
+               }
+           )
+
+        .. seealso::
+
+           :ref:`quickstart-commandlineinterface`
+
+        """
+        return Main(self).main(argv)
+
 
 class Application(BaseApplication):
     """WSGI Web Application.
@@ -109,18 +161,9 @@ class Application(BaseApplication):
         fallback: index.html
     '''
 
-    #: Instance of :class:`pymlconf.Root` as the global configuration instance.
-    settings = None
-
-    #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
-    cliarguments = None
-
     def __init__(self, version=None):
-        self.version = version
-        self.cliarguments = []
         self.routes = {}
-        self.settings = pymlconf.Root(self._builtinsettings)
-        super().__init__()
+        super().__init__(version=version)
 
     def _matchrequest(self, patterns, request):
         for pattern, handler, info in patterns:
@@ -345,42 +388,3 @@ class Application(BaseApplication):
             default,
             fallback
         ))
-
-    def climain(self, argv=None):
-        """Provide a callable to call as the CLI entry point.
-
-        .. code-block::
-
-           import sys
-
-
-           if __name__ == '__main__':
-               sys.exit(app.climain(sys.argv))
-
-        You can use this method as the setuptools entry point for
-        `Automatic Script Creation <https://setuptools.readthedocs.io/en/la\
-        test/setuptools.html#automatic-script-creation>`_
-
-        ``setup.py``
-
-        .. code-block::
-
-           from setuptools import setup
-
-
-           setup(
-               name='foo',
-               ...
-               entry_points={
-                   'console_scripts': [
-                       'foo = foo:app.climain'
-                   ]
-               }
-           )
-
-        .. seealso::
-
-           :ref:`quickstart-commandlineinterface`
-
-        """
-        return Main(self).main(argv)

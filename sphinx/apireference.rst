@@ -5,22 +5,25 @@ API Reference
 .. currentmodule:: yhttp
 
 
-Application Class
-^^^^^^^^^^^^^^^^^ 
+Base Application Class
+^^^^^^^^^^^^^^^^^^^^^^ 
 
 .. autoclass:: BaseApplication
 
+   .. autoattribute:: settings
    .. automethod:: when
    .. automethod:: hook
    .. automethod:: ready
    .. automethod:: shutdown
+   .. automethod:: climain
+
+Application Class
+^^^^^^^^^^^^^^^^^ 
 
 .. autoclass:: Application
-
-   .. autoattribute:: settings
+   :show-inheritance:
 
    .. automethod:: route
-   .. automethod:: climain
    .. automethod:: staticfile
    .. automethod:: staticdirectory
    .. automethod:: __call__
@@ -29,6 +32,7 @@ Rewrite Class
 ^^^^^^^^^^^^^ 
 
 .. autoclass:: Rewrite
+   :show-inheritance:
 
    .. automethod:: route
    .. automethod:: __call__

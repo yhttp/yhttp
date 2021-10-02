@@ -36,8 +36,7 @@ class Rewrite(BaseApplication):
            return 'bar'
 
 
-    :param pattern: Regular expression to match the request.
-    :param app: Any WSGI application.
+    :param default: Fallback application.
     """
 
     def __init__(self, default=None):
@@ -46,6 +45,28 @@ class Rewrite(BaseApplication):
         super().__init__()
 
     def route(self, pattern, repl, handler):
+        r"""Register an application for specific url.
+
+        .. code-block::
+
+           import yhttp
+
+           root = yhttp.Application()
+           foo = yhttp.Application()
+           bar = yhttp.Application()
+
+           app = yhttp.Rewrite(default=root)
+           app.route(r'/foo/([a-z]+)/(\d+)', r'/books/\2/\1', foo)
+           # Add other applications
+           app.ready()
+
+        See :py:func:`re.sub` for more info about ``pattern`` and ``repl``
+        arguments.
+
+        :param pattern: A regex pattern to match the ``environ['PATH_INFO']``.
+        :param repl: URL Rewrite rule, See :py:func:`re.sub`
+        :param handler: An instance of :class:`yhttp.BaseApplication`.
+        """
         self.routes.append((
             re.compile(pattern),
             repl,
@@ -62,12 +83,17 @@ class Rewrite(BaseApplication):
 
         return None, None
 
-    def notfound(self, environ, startresponse):
+    def _notfound(self, environ, startresponse):
         response = Response(self, startresponse)
-        statuses.notfound().setupresponse(response)
+        statuses.notfound().setupresponse(
+            response,
+            stacktrace=self.settings.debug
+        )
         return response.start()
 
     def __call__(self, environ, startresponse):
+        """Find the registred apllication, rewrite and forward the request.
+        """
         pathinfo = environ['PATH_INFO']
         handler, newurl = self._findhandler(pathinfo)
 
@@ -78,7 +104,7 @@ class Rewrite(BaseApplication):
             handler = self.default
 
         else:
-            return self.notfound(environ, startresponse)
+            return self._notfound(environ, startresponse)
 
         return handler(environ, startresponse)
 
