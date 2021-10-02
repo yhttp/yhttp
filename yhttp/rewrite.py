@@ -14,9 +14,11 @@ class Rewrite(BaseApplication):
 
        import yhttp
 
+       root = yhttp.Application()
        foo = yhttp.Application()
        bar = yhttp.Application()
-       app = yhttp.Rewrite()
+
+       app = yhttp.Rewrite(default=root)
        app.route(r'/foo/?', r'/', foo)
        app.route(r'/bar/?(.*)', r'/b/\1', bar)
        app.ready()
