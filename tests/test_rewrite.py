@@ -1,0 +1,161 @@
+from bddrest import status, response, when, Given
+
+import yhttp
+
+
+def test_rewrite_nodefault():
+    log = []
+    foo = yhttp.Application()
+    bar = yhttp.Application()
+    app = yhttp.Rewrite()
+    app.route(r'/foo/?', r'/', foo)
+    app.route(r'/bar/?', r'/', bar)
+
+    @app.when
+    def endresponse(app):
+        log.append('app endresponse')
+
+    @foo.route()
+    @yhttp.statuscode('201 Created')
+    def get(req):
+        return 'foo'
+
+    @bar.route()
+    def get(req):
+        return 'bar'
+
+    with Given(app):
+        assert status == 404
+
+        when('/qux')
+        assert status == 404
+
+        when('/foo')
+        assert status == 201
+        assert response.text == 'foo'
+
+        when('/bar')
+        assert status == 200
+        assert response.text == 'bar'
+
+    assert log == [
+        'app endresponse',
+        'app endresponse',
+    ]
+
+
+def test_rewrite_default():
+    root = yhttp.Application()
+    foo = yhttp.Application()
+    app = yhttp.Rewrite(default=root)
+    app.route(r'/foo/?(.*)', r'/\1', foo)
+
+    @root.route()
+    def get(req):
+        return 'root'
+
+    @foo.route()
+    @yhttp.statuscode('201 Created')
+    def get(req):
+        resp = 'foo'
+        if req.query:
+            qs = ', '.join(f'{k}={v}' for k, v in req.query.items())
+            resp += f' qs: {qs}'
+
+        return resp
+
+    with Given(app):
+        assert status == 200
+        assert response.text == 'root'
+
+        when('/qux')
+        assert status == 404
+
+        when('/foo?bar=baz')
+        assert status == 201
+        assert response.text == 'foo qs: bar=baz'
+
+        when('/foo')
+        assert status == 201
+        assert response.text == 'foo'
+
+        when('/foo?bar=baz')
+        assert status == 201
+        assert response.text == 'foo qs: bar=baz'
+
+
+def test_rewrite_hooks():
+    log = []
+    root = yhttp.Application()
+    foo = yhttp.Application()
+    app = yhttp.Rewrite(default=root)
+    app.route(r'/foo/?(.*)', r'/\1', foo)
+
+    @app.when
+    def ready(app):
+        log.append('app ready')
+
+    @root.when
+    def ready(app):
+        log.append('root ready')
+
+    @foo.when
+    def ready(app):
+        log.append('foo ready')
+
+    @root.when
+    def endresponse(app):
+        log.append('root endresponse')
+
+    @foo.when
+    def endresponse(app):
+        log.append('foo endresponse')
+
+    @app.when
+    def shutdown(app):
+        log.append('app shutdown')
+
+    @root.when
+    def shutdown(app):
+        log.append('root shutdown')
+
+    @foo.when
+    def shutdown(app):
+        log.append('foo shutdown')
+
+    @root.route()
+    def get(req):
+        return 'root'
+
+    @foo.route()
+    @yhttp.statuscode('201 Created')
+    def get(req):
+        return 'foo'
+
+    app.ready()
+
+    with Given(app):
+        assert status == 200
+        assert response.text == 'root'
+
+        when('/foo')
+        assert status == 201
+        assert response.text == 'foo'
+
+        when('/bar')
+        assert status == 404
+
+    app.shutdown()
+    assert log == [
+        'foo ready',
+        'root ready',
+        'app ready',
+
+        'root endresponse',
+        'foo endresponse',
+        'root endresponse',
+
+        'foo shutdown',
+        'root shutdown',
+        'app shutdown',
+    ]

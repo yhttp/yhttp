@@ -10,7 +10,93 @@ from .response import Response
 from .cli import Main
 
 
-class Application:
+class BaseApplication:
+    def __init__(self):
+        self.events = {}
+
+    def when(self, func):
+        """Return decorator to registers the ``func`` into \
+            :attr:`.Application.events` by its name.
+
+        Currently these hooks are suuported:
+
+        * ready
+        * shutdown
+        * endresponse
+
+        The hook name will be choosed by the func.__name__, so if you need to
+        aware when ``app.ready`` is called write something like this:
+
+        .. code-block::
+
+           @app.when
+           def ready(app):
+               ...
+
+           @app.when
+           def shutdown(app):
+               ...
+
+           @app.when
+           def endresponse(response):
+               ...
+
+        """
+        callbacks = self.events.setdefault(func.__name__, [])
+        if func not in callbacks:
+            callbacks.append(func)
+
+    def hook(self, name, *a, **kw):
+        """Only way to fire registered hooks.
+
+        Hooks can registered by :meth:`.Application.when` with the name.
+
+        .. code-block::
+
+           app.hook('endresponse')
+
+        Extra parameters: ``*a, **kw`` will be passed to event handlers.
+
+        Normally, users no need to call this method.
+        """
+        callbacks = self.events.get(name)
+        if not callbacks:
+            return
+
+        for c in callbacks:
+            c(*a, **kw)
+
+    def ready(self):
+        """Call the ``ready`` :meth:`hook`.
+
+        You need to call this method before using the instance as the WSGI
+        application.
+
+        Typical usage:
+
+        .. code-block::
+
+           from yhttp import Application, text
+
+
+           app = Application()
+
+           @app.route()
+           @text
+           def get(req):
+               return 'Hello World!'
+
+           if __name__ != '__main__':
+               app.ready()
+        """
+        self.hook('ready', self)
+
+    def shutdown(self):
+        """Call the ``shutdown`` :meth:`hook`."""
+        self.hook('shutdown', self)
+
+
+class Application(BaseApplication):
     """WSGI Web Application.
 
     Instance of this class can be used as a WSGI application.
@@ -33,11 +119,11 @@ class Application:
         self.version = version
         self.cliarguments = []
         self.routes = {}
-        self.events = {}
         self.settings = pymlconf.Root(self._builtinsettings)
+        super().__init__()
 
     def _matchrequest(self, patterns, request):
-        for pattern, func, info in patterns:
+        for pattern, handler, info in patterns:
             match = pattern.match(request.path)
             if not match:
                 continue
@@ -48,7 +134,7 @@ class Application:
                 if k in info['kwonly']
             }
 
-            return func, arguments, querystrings
+            return handler, arguments, querystrings
 
         return None, None, None
 
@@ -56,20 +142,20 @@ class Application:
         # All verbs
         patterns = self.routes.get('*', [])
         if patterns:
-            func, args, query = self._matchrequest(patterns, request)
-            if func is not None:
-                return func, args, query
+            handler, args, query = self._matchrequest(patterns, request)
+            if handler is not None:
+                return handler, args, query
 
         # Specific verb
         patterns = self.routes.get(request.verb)
         if not patterns:
             raise statuses.methodnotallowed()
 
-        func, args, query = self._matchrequest(patterns, request)
-        if func is None:
+        handler, args, query = self._matchrequest(patterns, request)
+        if handler is None:
             raise statuses.notfound()
 
-        return func, args, query
+        return handler, args, query
 
     def __call__(self, environ, startresponse):
         """Actual WSGI Application.
@@ -167,7 +253,7 @@ class Application:
            :ref:`cookbook-routing`
 
 
-        :param pattern: Regular expression to match the requests.
+        :param pattern: Regular expression to match the request.
         :param verb: If not given then ``handler.__name__`` will be used to
                      match HTYP verb, Use ``*`` to catch all verbs.
         :param insert: If not given, route will be appended to the end of the
@@ -203,58 +289,6 @@ class Application:
                     routes.append(route)
 
         return decorator
-
-    def when(self, func):
-        """Return decorator to registers the ``func`` into \
-            :attr:`.Application.events` by its name.
-
-        Currently these hooks are suuported:
-
-        * ready
-        * shutdown
-        * endresponse
-
-        The hook name will be choosed by the func.__name__, so if you need to
-        aware when ``app.ready`` is called write something like this:
-
-        .. code-block::
-
-           @app.when
-           def ready(app):
-               ...
-
-           @app.when
-           def shutdown(app):
-               ...
-
-           @app.when
-           def endresponse(response):
-               ...
-
-        """
-        callbacks = self.events.setdefault(func.__name__, [])
-        if func not in callbacks:
-            callbacks.append(func)
-
-    def hook(self, name, *a, **kw):
-        """Only way to fire registered hooks.
-
-        Hooks can registered by :meth:`.Application.when` with the name.
-
-        .. code-block::
-
-           app.hook('endresponse')
-
-        Extra parameters: ``*a, **kw`` will be passed to event handlers.
-
-        Normally, users no need to call this method.
-        """
-        callbacks = self.events.get(name)
-        if not callbacks:
-            return
-
-        for c in callbacks:
-            c(*a, **kw)
 
     def staticfile(self, pattern, filename, **kw):
         """Register a filename with a regular expression pattern to be served.
@@ -350,32 +384,3 @@ class Application:
 
         """
         return Main(self).main(argv)
-
-    def ready(self):
-        """Call the ``ready`` :meth:`hook`.
-
-        You need to call this method before using the instance as the WSGI
-        application.
-
-        Typical usage:
-
-        .. code-block::
-
-           from yhttp import Application, text
-
-
-           app = Application()
-
-           @app.route()
-           @text
-           def get(req):
-               return 'Hello World!'
-
-           if __name__ != '__main__':
-               app.ready()
-        """
-        self.hook('ready', self)
-
-    def shutdown(self):
-        """Call the ``shutdown`` :meth:`hook`."""
-        self.hook('shutdown', self)
