@@ -310,15 +310,14 @@ class Application(BaseApplication):
         """
 
         def decorator(f):
-            nonlocal verb
 
-            verb = verb or f.__name__
+            methods = verb or f.__name__
 
-            if isinstance(verb, str):
-                verb = [verb]
+            if isinstance(methods, str):
+                methods = [methods]
 
-            for verb_ in verb:
-                routes = self.routes.setdefault(verb_, [])
+            for method in methods:
+                routes = self.routes.setdefault(method, [])
                 info = dict(
                     kwonly={
                         k for k, v in inspect.signature(f).parameters.items()
