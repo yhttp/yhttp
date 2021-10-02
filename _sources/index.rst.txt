@@ -60,6 +60,7 @@ Features
 - Easy to extend.
 - Builtin extensible CLI.
 - Request :ref:`Validation <cookbook-validation>`
+- Simple WSGI Rewrite: :py:class:`yhttp.Rewrite`
 
 Contents
 ********

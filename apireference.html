@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API Reference &#8212; yhttp 3.1.0 documentation</title>
+    <title>API Reference &#8212; yhttp 3.2.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -32,6 +32,79 @@
 <span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-yhttp" title="Permalink to this headline">¶</a></h1>
 <section id="application-class">
 <h2>Application Class<a class="headerlink" href="#application-class" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="yhttp.BaseApplication">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">BaseApplication</span></span><a class="headerlink" href="#yhttp.BaseApplication" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="yhttp.BaseApplication.when">
+<span class="sig-name descname"><span class="pre">when</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication.when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return decorator to registers the <code class="docutils literal notranslate"><span class="pre">func</span></code> into             <code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.events</span></code> by its name.</p>
+<p>Currently these hooks are suuported:</p>
+<ul class="simple">
+<li><p>ready</p></li>
+<li><p>shutdown</p></li>
+<li><p>endresponse</p></li>
+</ul>
+<p>The hook name will be choosed by the func.__name__, so if you need to
+aware when <code class="docutils literal notranslate"><span class="pre">app.ready</span></code> is called write something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
+<span class="k">def</span> <span class="nf">endresponse</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.BaseApplication.hook">
+<span class="sig-name descname"><span class="pre">hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication.hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only way to fire registered hooks.</p>
+<p>Hooks can registered by <code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.when()</span></code> with the name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="s1">&#39;endresponse&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Extra parameters: <code class="docutils literal notranslate"><span class="pre">*a,</span> <span class="pre">**kw</span></code> will be passed to event handlers.</p>
+<p>Normally, users no need to call this method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.BaseApplication.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication.ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <code class="docutils literal notranslate"><span class="pre">ready</span></code> <a class="reference internal" href="#yhttp.BaseApplication.hook" title="yhttp.BaseApplication.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a>.</p>
+<p>You need to call this method before using the instance as the WSGI
+application.</p>
+<p>Typical usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@text</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello World!&#39;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.BaseApplication.shutdown">
+<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <code class="docutils literal notranslate"><span class="pre">shutdown</span></code> <a class="reference internal" href="#yhttp.BaseApplication.hook" title="yhttp.BaseApplication.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.Application">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
@@ -92,7 +165,7 @@ it like:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pattern</strong> – Regular expression to match the requests.</p></li>
+<li><p><strong>pattern</strong> – Regular expression to match the request.</p></li>
 <li><p><strong>verb</strong> – If not given then <code class="docutils literal notranslate"><span class="pre">handler.__name__</span></code> will be used to
 match HTYP verb, Use <code class="docutils literal notranslate"><span class="pre">*</span></code> to catch all verbs.</p></li>
 <li><p><strong>insert</strong> – If not given, route will be appended to the end of the
@@ -139,45 +212,6 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="tutorials/quickstart.html#quickstart-commandlineinterface"><span class="std std-ref">Command Line Interface</span></a></p>
 </div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="yhttp.Application.when">
-<span class="sig-name descname"><span class="pre">when</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.when" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return decorator to registers the <code class="docutils literal notranslate"><span class="pre">func</span></code> into             <code class="xref py py-attr docutils literal notranslate"><span class="pre">Application.events</span></code> by its name.</p>
-<p>Currently these hooks are suuported:</p>
-<ul class="simple">
-<li><p>ready</p></li>
-<li><p>shutdown</p></li>
-<li><p>endresponse</p></li>
-</ul>
-<p>The hook name will be choosed by the func.__name__, so if you need to
-aware when <code class="docutils literal notranslate"><span class="pre">app.ready</span></code> is called write something like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
-<span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="o">...</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
-<span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="o">...</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">when</span>
-<span class="k">def</span> <span class="nf">endresponse</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="yhttp.Application.hook">
-<span class="sig-name descname"><span class="pre">hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only way to fire registered hooks.</p>
-<p>Hooks can registered by <a class="reference internal" href="#yhttp.Application.when" title="yhttp.Application.when"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.when()</span></code></a> with the name.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="s1">&#39;endresponse&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Extra parameters: <code class="docutils literal notranslate"><span class="pre">*a,</span> <span class="pre">**kw</span></code> will be passed to event handlers.</p>
-<p>Normally, users no need to call this method.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -231,35 +265,6 @@ found. if <code class="docutils literal notranslate"><span class="pre">str</span
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="yhttp.Application.ready">
-<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.ready" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the <code class="docutils literal notranslate"><span class="pre">ready</span></code> <a class="reference internal" href="#yhttp.Application.hook" title="yhttp.Application.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a>.</p>
-<p>You need to call this method before using the instance as the WSGI
-application.</p>
-<p>Typical usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@text</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s1">&#39;Hello World!&#39;</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="yhttp.Application.shutdown">
-<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.shutdown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the <code class="docutils literal notranslate"><span class="pre">shutdown</span></code> <a class="reference internal" href="#yhttp.Application.hook" title="yhttp.Application.hook"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hook()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="yhttp.Application.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actual WSGI Application.</p>
@@ -273,6 +278,59 @@ application.</p>
 </div>
 <p>Checkout the <a class="reference external" href="https://www.python.org/dev/peps/pep-0333/">PEP 333</a>
 for more info.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="rewrite-class">
+<h2>Rewrite Class<a class="headerlink" href="#rewrite-class" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="yhttp.Rewrite">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Rewrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Useful to route specific requests to other WSGI application.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.</span></p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">yhttp</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">yhttp</span><span class="o">.</span><span class="n">Application</span><span class="p">()</span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">yhttp</span><span class="o">.</span><span class="n">Application</span><span class="p">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">yhttp</span><span class="o">.</span><span class="n">Rewrite</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/foo/?&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">foo</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/bar/?(.*)&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;/b/\1&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
+
+<span class="nd">@root</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;root&#39;</span>
+
+<span class="nd">@foo</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;foo&#39;</span>
+
+<span class="nd">@bar</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/b&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;bar&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern</strong> – Regular expression to match the request.</p></li>
+<li><p><strong>app</strong> – Any WSGI application.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.Rewrite.route">
+<span class="sig-name descname"><span class="pre">route</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Rewrite.route" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.Rewrite.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Rewrite.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call self as a function.</p>
 </dd></dl>
 
 </dd></dl>
@@ -683,6 +741,7 @@ and encode the returned value by handler to json byte-string format.</p>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#application-class">Application Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rewrite-class">Rewrite Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-class">Request Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#headersmask-class">HeadersMask Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#response-class">Response Class</a></li>

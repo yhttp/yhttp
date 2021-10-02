@@ -8,20 +8,30 @@ API Reference
 Application Class
 ^^^^^^^^^^^^^^^^^ 
 
+.. autoclass:: BaseApplication
+
+   .. automethod:: when
+   .. automethod:: hook
+   .. automethod:: ready
+   .. automethod:: shutdown
+
 .. autoclass:: Application
 
    .. autoattribute:: settings
 
    .. automethod:: route
    .. automethod:: climain
-   .. automethod:: when
-   .. automethod:: hook
    .. automethod:: staticfile
    .. automethod:: staticdirectory
-   .. automethod:: ready
-   .. automethod:: shutdown
    .. automethod:: __call__
 
+Rewrite Class
+^^^^^^^^^^^^^ 
+
+.. autoclass:: Rewrite
+
+   .. automethod:: route
+   .. automethod:: __call__
 
 Request Class
 ^^^^^^^^^^^^^ 
@@ -113,4 +123,5 @@ statuses Module
    .. autofunction:: movedpermanently(url)
    .. autofunction:: found(url)
    .. autofunction:: statuscode
+
 
