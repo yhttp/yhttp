@@ -33,7 +33,7 @@ class Request:
     @lazyattribute
     def path(self):
         """Request URL without query string and ``scheme://domain.ext``."""
-        p = self.environ.get('PATH_INFO','')
+        p = self.environ.get('PATH_INFO', '')
         p = quote(p, safe='/;=,', encoding='latin1')
         p = unquote(p)
         if not p.startswith('/'):
