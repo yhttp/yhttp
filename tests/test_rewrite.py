@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from bddrest import status, response, when, Given
 
 import yhttp
@@ -159,3 +161,40 @@ def test_rewrite_hooks():
         'root shutdown',
         'app shutdown',
     ]
+
+
+def test_rewrite_encodedurl():
+    root = yhttp.Application()
+    foo = yhttp.Application()
+    app = yhttp.Rewrite(default=root)
+    app.route(r'/foo/?(.*)', r'/\1', foo)
+
+    @root.route()
+    def get(req):
+        return 'root'
+
+    @foo.route(r'/(.+)')
+    @yhttp.statuscode('201 Created')
+    def get(req, arg):
+        resp = f'foo: {arg}'
+        if req.query:
+            qs = ', '.join(f'{k}={v}' for k, v in req.query.items())
+            resp += f' qs: {qs}'
+
+        return resp
+
+    with Given(app):
+        assert status == 200
+        assert response.text == 'root'
+
+        when('/foo/bar')
+        assert status == 201
+        assert response.text == 'foo: bar'
+
+        when(quote('/foo/الف'))
+        assert status == 201
+        assert response.text == 'foo: الف'
+
+        when(quote('/foo/الف?a=ابجد'))
+        assert status == 201
+        assert response.text == 'foo: الف?a=ابجد'

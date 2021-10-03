@@ -1,6 +1,6 @@
 import wsgiref.util as wsgiutil
 from http import cookies
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, unquote
 
 from .forms import parseanyform
 from .lazyattribute import lazyattribute
@@ -33,7 +33,7 @@ class Request:
     @lazyattribute
     def path(self):
         """Request URL without query string and ``scheme://domain.ext``."""
-        p = self.environ['PATH_INFO']
+        p = unquote(self.environ['PATH_INFO'])
         if not p.startswith('/'):
             return f'/{p}'
 

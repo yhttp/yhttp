@@ -1,4 +1,5 @@
 import re
+from urllib.parse import unquote
 
 from .application import BaseApplication
 from .response import Response
@@ -94,7 +95,7 @@ class Rewrite(BaseApplication):
     def __call__(self, environ, startresponse):
         """Find the registred apllication, rewrite and forward the request.
         """
-        pathinfo = environ['PATH_INFO']
+        pathinfo = unquote(environ['PATH_INFO'])
         handler, newurl = self._findhandler(pathinfo)
 
         if handler is not None:

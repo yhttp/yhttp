@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from yhttp import notfound
 from bddrest import status, response, when
 
@@ -103,3 +105,18 @@ def test_routing_allverbs(app, Given):
         when(verb='put')
         assert status == 200
         assert response == 'all'
+
+
+def test_routing_encodedurl(app, Given):
+
+    @app.route(r'/(.+)')
+    def get(req, id_):
+        return id_
+
+    with Given('/12'):
+        assert status == 200
+        assert response == '12'
+
+        when(quote('/الف'))
+        assert status == 200
+        assert response == 'الف'
