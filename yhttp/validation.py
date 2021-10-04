@@ -214,8 +214,9 @@ class CustomValidator(Criterion):
 
 
 class RequestValidator:
-    def __init__(self, nobody=None, fields=None):
+    def __init__(self, nobody=None, fields=None, strict=False):
         self.nobody = nobody
+        self.strict = strict
 
         self.fields = {}
         if not fields:
@@ -234,6 +235,14 @@ class RequestValidator:
     def validate(self, request):
         if self.nobody and request.contentlength:
             raise statuses.status(400, 'Body Not Allowed')
+
+        if self.strict:
+            extrafields = set(request.form.keys()) - set(self.fields.keys())
+            if extrafields:
+                raise statuses.status(
+                    400,
+                    f'Invalid field(s): {", ".join(extrafields)}'
+                )
 
         for name, field in self.fields.items():
 

@@ -236,3 +236,25 @@ def test_customvalildator(app, Given):
 
         when(form=given | dict(bar='c'))
         assert status == '400 Value must be either a or b'
+
+
+def test_extraattribute(app, Given):
+
+    @app.route()
+    @validate(strict=True)
+    def post(req):
+        pass
+
+    @app.route()
+    @validate()
+    def put(req):
+        pass
+
+    with Given(verb='post', form=dict(bar='123')):
+        assert status == 400
+
+        when(verb='put')
+        assert status == 200
+
+        when(form=given - 'bar')
+        assert status == 200
