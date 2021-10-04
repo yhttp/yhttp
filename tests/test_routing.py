@@ -41,6 +41,25 @@ def test_routing_basic(app, Given):
         assert response == 'delete remove'
 
 
+def test_routing_order(app, Given):
+
+    @app.route(r'/([a-z0-9]+)')
+    def get(req, arg1):
+        return f'index {arg1}'
+
+    @app.route(r'/([a-z0-9]+)/bar/([a-z0-9]+)')
+    def get(req, arg1, arg2):
+        return f'foo {arg1} {arg2}'
+
+    with Given('/1'):
+        assert status == 200
+        assert response == 'index 1'
+
+        when('/foo/bar/baz')
+        assert status == 200
+        assert response == 'foo foo baz'
+
+
 def test_routing_argument(app, Given):
 
     @app.route(r'/(\d+)')
