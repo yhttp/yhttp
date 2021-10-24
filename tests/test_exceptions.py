@@ -1,5 +1,5 @@
 import pytest
-from bddrest import status, response
+from bddrest import status, response, when
 
 from yhttp import statuses
 
@@ -13,6 +13,12 @@ def test_httpstatus(app, Given):
     with Given():
         assert status == '400 Bad Request'
         assert response.text.startswith('400 Bad Request\r\n')
+        assert response.headers['content-type'] == 'text/plain; charset=utf-8'
+
+        app.settings.debug = False
+        when()
+        assert status == '400 Bad Request'
+        assert response.text == '400 Bad Request'
         assert response.headers['content-type'] == 'text/plain; charset=utf-8'
 
 
