@@ -239,7 +239,7 @@ class Application(BaseApplication):
 
         return response.start()
 
-    def route(self, pattern='/', verb=None, insert=None):
+    def route(self, pattern='/', flags=0, verb=None, insert=None):
         r"""Return a decorator to register a handler for given regex pattern.
 
         if ``verb`` is ``None`` then the function name will used instead.
@@ -297,6 +297,7 @@ class Application(BaseApplication):
 
 
         :param pattern: Regular expression to match the request.
+        :param flags: Regular expression flags. see :func:`re.compile`.
         :param verb: If not given then ``handler.__name__`` will be used to
                      match HTYP verb, Use ``*`` to catch all verbs.
         :param insert: If not given, route will be appended to the end of the
@@ -324,7 +325,7 @@ class Application(BaseApplication):
                         if v.kind == inspect.Parameter.KEYWORD_ONLY
                     }
                 )
-                route = (re.compile(f'^{pattern}$'), f, info)
+                route = (re.compile(f'^{pattern}$', flags), f, info)
                 if insert is not None:
                     routes.insert(insert, route)
                 else:

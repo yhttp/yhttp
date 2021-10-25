@@ -1,7 +1,8 @@
+import re
 from urllib.parse import quote
 
 from yhttp import notfound
-from bddrest import status, response, when
+from bddrest import status, response, when, given
 
 
 def test_routing_basic(app, Given):
@@ -139,3 +140,26 @@ def test_routing_encodedurl(app, Given):
         when(quote('/الف'))
         assert status == 200
         assert response == 'الف'
+
+        when('/foo bar')
+        assert status == 200
+        assert response == 'foo bar'
+
+        when('/foo%20bar')
+        assert status == 200
+        assert response == 'foo bar'
+
+
+def test_routing_encodedurl_route(app, Given):
+
+    @app.route(r'/([ a-z]+)', re.I)
+    def get(req, id_):
+        return id_
+
+    with Given('/id: foo%20bar'):
+        assert status == 200
+        assert response == 'foo bar'
+
+        when(url_parameters=given | dict(id='foo Bar'))
+        assert status == 200
+        assert response == 'foo Bar'
