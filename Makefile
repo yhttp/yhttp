@@ -13,8 +13,7 @@ cover:
 
 .PHONY: lint
 lint:
-	pylama
-
+	flake8
 
 .PHONY: dist
 dist:

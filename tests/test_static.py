@@ -17,8 +17,8 @@ def test_staticfile(app, Given, tmpdir):
         assert response == 'foo'
 
 
-def test_staticdirectory(app, Given, tempstruct):
-    temproot = tempstruct(**{
+def test_staticdirectory(app, Given, mockupfs):
+    temproot = mockupfs(**{
         'bar': {
             'index.txt': 'bar',
         },
@@ -58,8 +58,8 @@ def test_staticdirectory(app, Given, tempstruct):
         assert status == 404
 
 
-def test_staticdirectory_default_true(app, Given, tempstruct):
-    temproot = tempstruct(**{
+def test_staticdirectory_default_true(app, Given, mockupfs):
+    temproot = mockupfs(**{
         'bar': {
             'index.html': 'bar',
         },
