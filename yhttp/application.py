@@ -231,12 +231,6 @@ class Application(BaseApplication):
         except statuses.HTTPStatus as ex:
             ex.setupresponse(response, stacktrace=self.settings.debug)
 
-        # Setting cookies in response headers, if any
-        cookie = request.cookies.output()
-        if cookie:
-            for line in cookie.split('\r\n'):
-                response.headers.add(line)
-
         return response.start()
 
     def route(self, pattern='/', flags=0, verb=None, insert=None):

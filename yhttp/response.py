@@ -1,3 +1,5 @@
+from http import cookies
+
 from .headerset import HeaderSet
 
 
@@ -31,6 +33,7 @@ class Response:
         self.application = app
         self.headers = HeaderSet()
         self.startresponse = startresponse
+        self.cookies = cookies.SimpleCookie()
 
     @property
     def contenttype(self):
@@ -112,7 +115,25 @@ class Response:
         if contenttype:
             self.headers.add('content-type', contenttype)
 
+        # Setting cookies in response headers, if any
+        cookie = self.cookies.output()
+        if cookie:
+            for line in cookie.split('\r\n'):
+                self.headers.add(line)
+
         if self._firstchunk is not None:
             return self.startstream()
 
         return self.conclude()
+
+    def setcookie(self, key, value, **kw):
+        self.cookies[key] = value
+
+        if 'maxage' in kw:
+            kw['max-age'] = kw['maxage']
+            del kw['maxage']
+
+        for k, v in kw.items():
+            self.cookies[key][k] = v
+
+        return self.cookies[key]

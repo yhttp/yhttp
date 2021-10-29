@@ -6,11 +6,15 @@ from bddrest import status, response
 def test_cookie(app, Given):
     @app.route()
     def get(req):
-        counter = req.cookies['counter']
-        req.cookies['counter'] = str(int(counter.value) + 1)
-        req.cookies['counter']['max-age'] = 1
-        req.cookies['counter']['path'] = '/a'
-        req.cookies['counter']['domain'] = 'example.com'
+        resp = req.response
+        counter = req.cookies.get('counter')
+        resp.setcookie(
+            'counter',
+            str(int(counter.value) + 1),
+            maxage=1,
+            path='/a',
+            domain='example.com'
+        )
 
     headers = {'Cookie': 'counter=1;'}
     with Given(headers=headers):
