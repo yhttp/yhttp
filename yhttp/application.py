@@ -217,7 +217,7 @@ class Application(BaseApplication):
         for more info.
 
         """
-        response = Response(self, startresponse)
+        response = Response(self, environ, startresponse)
         request = Request(self, environ, response)
 
         try:

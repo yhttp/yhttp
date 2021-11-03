@@ -1,3 +1,4 @@
+from wsgiref.util import guess_scheme
 from http import cookies
 
 from .headerset import HeaderSet
@@ -29,10 +30,11 @@ class Response:
 
     _firstchunk = None
 
-    def __init__(self, app, startresponse):
+    def __init__(self, app, environ, startresponse):
         self.application = app
-        self.headers = HeaderSet()
+        self.environ = environ
         self.startresponse = startresponse
+        self.headers = HeaderSet()
         self.cookies = cookies.SimpleCookie()
 
     @property
@@ -129,6 +131,12 @@ class Response:
     def setcookie(self, key, value, **kw):
         self.cookies[key] = value
 
+        if kw.get('secure') is True:
+            if guess_scheme(self.environ) != 'https':
+                raise AssertionError(
+                    'Cannot set secure cookie when environ[\'scheme\'] is not'
+                    ' https'
+                )
         if 'maxage' in kw:
             kw['max-age'] = kw['maxage']
             del kw['maxage']

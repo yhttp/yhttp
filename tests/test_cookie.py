@@ -1,6 +1,9 @@
 from http import cookies
 
-from bddrest import status, response
+from bddrest import status, response, when
+
+
+from yhttp import statuses
 
 
 def test_cookie(app, Given):
@@ -29,3 +32,26 @@ def test_cookie(app, Given):
         assert counter['path'] == '/a'
         assert counter['domain'] == 'example.com'
         assert counter['max-age'] == '1'
+
+
+def test_secure_cookie(app, Given):
+    @app.route()
+    def get(req):
+        resp = req.response
+        try:
+            resp.setcookie(
+                'foo',
+                'bar',
+                secure=True
+            )
+        except AssertionError:
+            raise statuses.forbidden()
+
+    with Given():
+        assert status == 403
+
+        when(https=True)
+        assert status == 200
+        assert 'Set-cookie' in response.headers
+        assert response.headers['Set-cookie'] == \
+            'foo=bar; Secure'

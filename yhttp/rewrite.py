@@ -85,7 +85,7 @@ class Rewrite(BaseApplication):
         return None, None
 
     def _notfound(self, environ, startresponse):
-        response = Response(self, startresponse)
+        response = Response(self, environ, startresponse)
         statuses.notfound().setupresponse(
             response,
             stacktrace=self.settings.debug
