@@ -6,3 +6,7 @@ omit =
 
 [tool:pytest]
 addopts= --cov=yhttp tests
+
+[report]
+exclude_lines=
+	raise NotImplementedError

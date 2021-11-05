@@ -200,7 +200,7 @@ def test_regexpattern(app, Given):
 def test_customvalildator(app, Given):
     from yhttp.validation import Field
 
-    def customvalidator(value, container, field):
+    def customvalidator(req, value, container, field):
         assert isinstance(field, Field)
         if value not in 'ab':
             raise statuses.status(400, 'Value must be either a or b')

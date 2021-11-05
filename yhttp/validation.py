@@ -42,9 +42,9 @@ class Field:
         if callback:
             self.criteria.append(CustomValidator(callback))
 
-    def validate(self, container):
+    def validate(self, req, container):
         for criterion in self.criteria:
-            criterion.validate(self, container)
+            criterion.validate(req, self, container)
 
         return container
 
@@ -67,19 +67,19 @@ class Criterion:
         if len(parsederror) == 2:
             self.statustext = parsederror[1]
 
-    def validate(self, field: Field, container: dict):
+    def validate(self, req, field, container: dict):
         value = container.get(field.title)
         if value is None:
             return
 
         container[field.title] = self._validate(
+            req,
             container[field.title],
             container,
             field
         )
 
-    def _validate(self, value, container: dict, field: Field
-                  ):  # pragma: no cover
+    def _validate(self, req, value, container: dict, field):
         """Validate request.
 
         It must be overridden in the child class.
@@ -109,13 +109,13 @@ class FlagCriterion(Criterion):
 
 
 class RequiredValidator(FlagCriterion):
-    def validate(self, field, container):
+    def validate(self, req, field, container):
         if field.title not in container:
             raise self.create_exception(f'Field {field.title} is required')
 
 
 class NotNoneValidator(FlagCriterion):
-    def validate(self, field, container):
+    def validate(self, req, field, container):
         if field.title not in container:
             return
 
@@ -124,14 +124,14 @@ class NotNoneValidator(FlagCriterion):
 
 
 class ReadonlyValidator(FlagCriterion):
-    def validate(self, field, container):
+    def validate(self, req, field, container):
         if field.title in container:
             raise self.create_exception(f'Field {field.title} is readonly')
 
 
 class TypeValidator(Criterion):
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         type_ = self.expression
         try:
             return type_(value)
@@ -141,7 +141,7 @@ class TypeValidator(Criterion):
 
 class MinLengthValidator(Criterion):
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         if len(value) < self.expression:
             raise self.create_exception(
                 f'Minimum allowed length for field {field.title} is '
@@ -153,7 +153,7 @@ class MinLengthValidator(Criterion):
 
 class MaxLengthValidator(Criterion):
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         if len(value) > self.expression:
             raise self.create_exception(
                 f'Maximum allowed length for field {field.title} is '
@@ -165,7 +165,7 @@ class MaxLengthValidator(Criterion):
 
 class MinimumValidator(Criterion):
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         try:
             if value < self.expression:
                 raise self.create_exception()
@@ -180,7 +180,7 @@ class MinimumValidator(Criterion):
 
 class MaximumValidator(Criterion):
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         try:
             if value > self.expression:
                 raise self.create_exception()
@@ -200,7 +200,7 @@ class PatternValidator(Criterion):
         if isinstance(self.expression, str):
             self.expression = re.compile(self.expression)
 
-    def _validate(self, value, container, field):
+    def _validate(self, req, value, container, field):
         if self.expression.match(value) is None:
             raise self.create_exception(f'Invalid format: {field.title}')
 
@@ -209,8 +209,8 @@ class PatternValidator(Criterion):
 
 class CustomValidator(Criterion):
 
-    def _validate(self, value, container, field):
-        return self.expression(value, container, field)
+    def _validate(self, req, value, container, field):
+        return self.expression(req, value, container, field)
 
 
 class RequestValidator:
@@ -247,10 +247,10 @@ class RequestValidator:
         for name, field in self.fields.items():
 
             if request.query and name in request.query:
-                field.validate(request.query)
+                field.validate(request, request.query)
 
             else:
-                field.validate(request.form)
+                field.validate(request, request.form)
 
     def __call__(self, handler):
 
