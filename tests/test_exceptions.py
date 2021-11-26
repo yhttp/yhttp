@@ -10,6 +10,10 @@ def test_httpstatus(app, Given):
     def get(req):
         raise statuses.badrequest()
 
+    @app.route('/foo')
+    def get(req):
+        return statuses.badrequest()
+
     with Given():
         assert status == '400 Bad Request'
         assert response.text.startswith('400 Bad Request\r\n')
@@ -20,6 +24,9 @@ def test_httpstatus(app, Given):
         assert status == '400 Bad Request'
         assert response.text == '400 Bad Request'
         assert response.headers['content-type'] == 'text/plain; charset=utf-8'
+
+        when('/foo')
+        assert status == 400
 
 
 def test_unhandledexception(app, Given):

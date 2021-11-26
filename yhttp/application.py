@@ -223,6 +223,10 @@ class Application(BaseApplication):
         try:
             handler, arguments, querystrings = self._findhandler(request)
             body = handler(request, *arguments, **querystrings)
+
+            if isinstance(body, statuses.HTTPStatus):
+                raise body
+
             if isinstance(body, types.GeneratorType):
                 response._firstchunk = next(body)
 
