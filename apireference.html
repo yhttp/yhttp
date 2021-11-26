@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>API Reference &#8212; yhttp 3.4.5 documentation</title>
+    <title>API Reference &#8212; yhttp 3.5.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -34,10 +34,10 @@
 <h2>Base Application Class<a class="headerlink" href="#base-application-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.BaseApplication">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">BaseApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">BaseApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.BaseApplication" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.BaseApplication.settings">
-<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#yhttp.BaseApplication.settings" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.BaseApplication.settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance of <a class="reference external" href="https://pylover.github.io/pymlconf/pymlconf.html#pymlconf.Root" title="(in pymlconf v2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymlconf.Root</span></code></a> as the global configuration instance.</p>
 </dd></dl>
 
@@ -150,7 +150,7 @@ application.</p>
 <h2>Application Class<a class="headerlink" href="#application-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.Application">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#yhttp.BaseApplication" title="yhttp.application.BaseApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">yhttp.application.BaseApplication</span></code></a></p>
 <p>WSGI Web Application.</p>
 <p>Instance of this class can be used as a WSGI application.</p>
@@ -292,7 +292,7 @@ for more info.</p>
 <h2>Rewrite Class<a class="headerlink" href="#rewrite-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.Rewrite">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Rewrite" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Rewrite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#yhttp.BaseApplication" title="yhttp.application.BaseApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">yhttp.application.BaseApplication</span></code></a></p>
 <p>Useful to route specific requests to other WSGI application.</p>
 <div class="versionadded">
@@ -369,7 +369,7 @@ arguments.</p>
 <h2>Request Class<a class="headerlink" href="#request-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.Request">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Request" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent an HTTP request.</p>
 <p><a class="reference internal" href="#yhttp.Application.__call__" title="yhttp.Application.__call__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.__call__()</span></code></a> instantiates this class on each call.</p>
 </dd></dl>
@@ -379,7 +379,7 @@ arguments.</p>
 <h2>HeadersMask Class<a class="headerlink" href="#headersmask-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.HeadersMask">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HeadersMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeadersMask" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HeadersMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeadersMask" title="Permalink to this definition">¶</a></dt>
 <dd><p>A simple proxy over <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code>.</p>
 <p>Useful to get headers by their original name without the <code class="docutils literal notranslate"><span class="pre">HTTP_</span></code> prefix,
 which is the python’s WSGI servers default behavior.</p>
@@ -400,30 +400,30 @@ which is the python’s WSGI servers default behavior.</p>
 <h2>Response Class<a class="headerlink" href="#response-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.Response">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">Response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent the HTTP response.</p>
 <p>Which accessible by <code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code> inside handlers.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.status">
-<span class="sig-name descname"><span class="pre">status</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'200</span> <span class="pre">Ok'</span></em><a class="headerlink" href="#yhttp.Response.status" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'200</span> <span class="pre">Ok'</span></em><a class="headerlink" href="#yhttp.Response.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTTP Status code</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.charset">
-<span class="sig-name descname"><span class="pre">charset</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.charset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">charset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.charset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Response encoding, <code class="docutils literal notranslate"><span class="pre">None</span></code> for binary</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.length">
-<span class="sig-name descname"><span class="pre">length</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.length" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Response content length</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.type">
-<span class="sig-name descname"><span class="pre">type</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Response content type without charset.</p>
 </dd></dl>
 
@@ -435,7 +435,7 @@ which is the python’s WSGI servers default behavior.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.Response.headers">
-<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.headers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.Response.headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>An instance of <a class="reference internal" href="#yhttp.HeaderSet" title="yhttp.HeaderSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderSet</span></code></a> class.</p>
 </dd></dl>
 
@@ -474,7 +474,7 @@ to transfered to user.</p>
 <h2>HeaderSet Class<a class="headerlink" href="#headerset-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.HeaderSet">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HeaderSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeaderSet" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HeaderSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HeaderSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>A mutable case-insensitive ordered dictionary to keep HTTP headers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -490,7 +490,7 @@ to transfered to user.</p>
 <h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.HTTPStatus">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yhttp.</span></span><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.HTTPStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all HTTP Exceptions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
