@@ -14,7 +14,7 @@ with open(
 
 
 dependencies = [
-    'pymlconf >= 2.6, < 3',
+    'pymlconf >= 3.0.1, < 4',
     'easycli >= 1.5, < 2',
     'ujson',
 ]
