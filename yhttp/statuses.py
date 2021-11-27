@@ -83,8 +83,8 @@ internalservererror = partial(status, 500, 'Internal Server Error')
 badgateway = partial(status, 502, 'Bad Gateway')
 
 
-def redirect(code, text, location):
-    return status(code, text, headers=[('Location', location)], nobody=True)
+def redirect(code, text, location, **kw):
+    return ok(code, text, headers=[('Location', location)], nobody=True, **kw)
 
 
 #: HTTP 301 Moved Permanently exception factory
