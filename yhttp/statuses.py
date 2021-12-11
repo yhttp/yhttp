@@ -82,6 +82,12 @@ internalservererror = partial(status, 500, 'Internal Server Error')
 #: HTTP 502 Bad Gateway exception factory
 badgateway = partial(status, 502, 'Bad Gateway')
 
+#: HTTP 503 Service Unavailable exception factory
+serviceunavailable = partial(status, 503, 'Service Unavailable')
+
+#: HTTP 504 Gateway Timeout exception factory
+gatewaytimeout = partial(status, 504, 'Gateway Timeout')
+
 
 def redirect(code, text, location, **kw):
     return ok(code, text, headers=[('Location', location)], nobody=True, **kw)
