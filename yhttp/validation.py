@@ -215,6 +215,9 @@ class CustomValidator(Criterion):
 
 class RequestValidator:
     def __init__(self, nobody=None, fields=None, strict=False):
+        if nobody:
+            assert not strict, 'strict flag cannot set when nobody is true'
+
         self.nobody = nobody
         self.strict = strict
 
