@@ -36,10 +36,12 @@ def test_nobody_get(app, Given):
 
 def test_required(app, Given):
 
+    err = statuses.forbidden()
+
     @app.route()
     @validate(fields=dict(
         bar=dict(required=True),
-        baz=dict(required='700 Please provide baz'),
+        baz=dict(required=err),
     ))
     def post(req):
         pass
@@ -54,7 +56,8 @@ def test_required(app, Given):
         assert status == 200
 
         when(form=given - 'baz')
-        assert status == '700 Please provide baz'
+        assert status == '403 Forbidden'
+
 
 
 def test_notnone(app, Given):

@@ -52,6 +52,7 @@ class Field:
 class Criterion:
     statustext = None
     statuscode = 400
+    exception = None
 
     def __init__(self, expression):
         if not isinstance(expression, tuple):
@@ -61,11 +62,13 @@ class Criterion:
         # Expression is a tuple
         self.expression, error = expression
 
-        parsederror = error.split(' ', 1)
-        self.statuscode = int(parsederror[0])
-
-        if len(parsederror) == 2:
-            self.statustext = parsederror[1]
+        if isinstance(error, str):
+            parsederror = error.split(' ', 1)
+            self.statuscode = int(parsederror[0])
+            if len(parsederror) == 2:
+                self.statustext = parsederror[1]
+        else:
+            self.exception = error
 
     def validate(self, req, field, container: dict):
         value = container.get(field.title)
@@ -96,13 +99,16 @@ class Criterion:
         raise NotImplementedError()
 
     def create_exception(self, message):
+        if self.exception is not None:
+            return self.exception
+
         statustext = self.statustext or message
         return statuses.status(self.statuscode, statustext)
 
 
 class FlagCriterion(Criterion):
     def __init__(self, expression):
-        if isinstance(expression, str):
+        if isinstance(expression, (str,  statuses.HTTPStatus)):
             expression = (True, expression)
 
         return super().__init__(expression)
