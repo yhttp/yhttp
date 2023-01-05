@@ -59,7 +59,6 @@ def test_required(app, Given):
         assert status == '403 Forbidden'
 
 
-
 def test_notnone(app, Given):
     @app.route()
     @validate(fields=dict(

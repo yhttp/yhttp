@@ -108,7 +108,7 @@ class Criterion:
 
 class FlagCriterion(Criterion):
     def __init__(self, expression):
-        if isinstance(expression, (str,  statuses.HTTPStatus)):
+        if isinstance(expression, (str, statuses.HTTPStatus)):
             expression = (True, expression)
 
         return super().__init__(expression)
