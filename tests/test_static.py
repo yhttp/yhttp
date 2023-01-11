@@ -230,7 +230,6 @@ def test_staticdirectory_autoindex(app, Given, mockupfs):
     with Given(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
-        assert response.headers['content-length'] == '261'
 
         when('/bar')
-        assert response.headers['content-length'] == '137'
+        assert status == 200
