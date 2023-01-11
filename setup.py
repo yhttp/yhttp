@@ -1,4 +1,3 @@
-
 from setuptools import setup, find_packages
 import os.path
 import re
@@ -32,6 +31,11 @@ setup(
     install_requires=dependencies,
     packages=find_packages(exclude=['tests']),
     license='MIT',
+    entry_points={
+        'console_scripts': [
+            'yhttp = yhttp.main:app.climain'
+        ]
+    },
     classifiers=[
         'Environment :: Console',
         'Environment :: Web Environment',

@@ -29,3 +29,8 @@ lint:
 .PHONY: dist
 dist:
 	python setup.py sdist
+
+
+.PHONY: install
+install:
+	$(PIP) install -e .

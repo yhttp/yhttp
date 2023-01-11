@@ -3,6 +3,7 @@ source=yhttp
 concurrency=multiprocessing
 omit = 
     yhttp/ext/*
+    yhttp/main.py
 
 [tool:pytest]
 addopts= --cov=yhttp tests
