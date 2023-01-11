@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>API Reference &#8212; yhttp 3.7.1 documentation</title>
+    <title>API Reference &#8212; yhttp 3.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -233,7 +233,7 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yhttp.Application.staticdirectory">
-<span class="sig-name descname"><span class="pre">staticdirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">staticdirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoindex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.Application.staticdirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a directory with a regular expression pattern.</p>
 <p>So the files inside the directory are accessible by their names:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
@@ -255,6 +255,7 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 <li><p><strong>default</strong> – if None, the <code class="docutils literal notranslate"><span class="pre">app.settings.staticdir.default</span></code>
 (which default is <code class="docutils literal notranslate"><span class="pre">index.html</span></code>) will be used as the
 default document.</p></li>
+<li><p><strong>autoindex</strong> – Automatic directory indexing, default True.</p></li>
 <li><p><strong>fallback</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the <code class="docutils literal notranslate"><span class="pre">app.settings.staticdir.fallback</span></code>
 (which default is <code class="docutils literal notranslate"><span class="pre">index.html</span></code>) will be used as the
 fallback document if the requested resource was not
@@ -265,6 +266,9 @@ found. if <code class="docutils literal notranslate"><span class="pre">str</span
 </dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.13: </span>The <em>default</em> and <em>fallback</em> keyword arguments.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.8: </span>The <em>autoindex</em> keyword argument.</p>
 </div>
 </dd></dl>
 
