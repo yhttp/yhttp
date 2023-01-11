@@ -1,3 +1,4 @@
+import os
 from mimetypes import guess_type
 from os import path
 
@@ -26,7 +27,38 @@ def file(filename):
     return get
 
 
-def directory(rootpath, default=False, fallback=False):
+def index(directory):
+    rel = path.relpath(directory)
+    rel = '' if rel == '.' else rel
+
+    lines = [
+        '<!DOCTYPE html><html lang="en"><head>'
+        '<meta charset="UTF-8"/>'
+        f'<title>Index of /{rel}</title>'
+        '</head><body>'
+    ]
+    dirs = []
+    files = []
+    for f in os.listdir(directory):
+        if path.isdir(path.join(directory, f)):
+            dirs.append(f)
+        else:
+            files.append(f)
+
+    for d in sorted(dirs):
+        lines.append(f'<a href="{d}/">{d}/</a></br>')
+
+    for f in sorted(files):
+        lines.append(f'<a href="{f}">{f}</a></br>')
+
+    lines += [
+        '</body>'
+    ]
+
+    return '\n'.join(lines)
+
+
+def directory(rootpath, default=False, autoindex=True, fallback=False):
     """Create a static directory handler.
 
     So the files inside the directory are accessible by their names:
@@ -67,10 +99,14 @@ def directory(rootpath, default=False, fallback=False):
 
        The *default* and *fallback* keyword arguments.
 
+    .. versionadded:: 3.8
+
+       The *autoindex* keyword argument.
+
     """
 
     def get(request, location):
-        nonlocal fallback, default
+        nonlocal fallback, default, autoindex
 
         app = request.application
         response = request.response
@@ -80,11 +116,20 @@ def directory(rootpath, default=False, fallback=False):
             default = app.settings.staticdir.default
 
         if path.isdir(target):
+            targetdir = target
             if not default:
                 raise statuses.forbidden()
 
             # Default document
             target = path.join(target, default)
+
+            # Autoindex
+            if not path.exists(target) and autoindex:
+                resp = index(targetdir)
+                response.length = len(resp)
+                response.type = 'text/html'
+                yield resp.encode()
+                return
 
         # Fallback
         if not path.exists(target):

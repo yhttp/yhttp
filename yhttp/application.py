@@ -157,6 +157,7 @@ class Application(BaseApplication):
     _builtinsettings = '''
     debug: true
     staticdir:
+        autoindex: true
         default: index.html
         fallback: index.html
     '''
@@ -345,8 +346,8 @@ class Application(BaseApplication):
         """
         return self.route(pattern, **kw)(static.file(filename))
 
-    def staticdirectory(self, pattern, directory, default=None, fallback=None,
-                        **kw):
+    def staticdirectory(self, pattern, directory, default=None, autoindex=True,
+                        fallback=None, **kw):
         """Register a directory with a regular expression pattern.
 
         So the files inside the directory are accessible by their names:
@@ -370,6 +371,7 @@ class Application(BaseApplication):
         :param default: if None, the ``app.settings.staticdir.default``
                         (which default is ``index.html``) will be used as the
                         default document.
+        :param autoindex: Automatic directory indexing, default True.
         :param fallback: if ``True``, the ``app.settings.staticdir.fallback``
                         (which default is ``index.html``) will be used as the
                         fallback document if the requested resource was not
@@ -380,9 +382,14 @@ class Application(BaseApplication):
 
            The *default* and *fallback* keyword arguments.
 
+        .. versionadded:: 3.8
+
+           The *autoindex* keyword argument.
+
         """
         return self.route(f'{pattern}(.*)', **kw)(static.directory(
             directory,
             default,
+            autoindex,
             fallback
         ))

@@ -67,14 +67,6 @@ def test_staticdirectory_default_true(app, Given, mockupfs):
         'index.html': 'foo bar',
     })
 
-    # indextxtfilename = path.join(tmpdir, 'index.txt')
-    # with open(indextxtfilename, 'w') as f:
-    #     f.write('foo')
-
-    # indexhtmlfilename = path.join(tmpdir, 'index.html')
-    # with open(indexhtmlfilename, 'w') as f:
-    #     f.write('foo bar')
-
     app.staticdirectory('/', temproot, default=True)
 
     with Given(''):
@@ -221,3 +213,24 @@ def test_staticdirectory_fallback_notexistancefile(app, Given, tmpdir):
 
         when('/notexists.html')
         assert status == 404
+
+
+def test_staticdirectory_autoindex(app, Given, mockupfs):
+    temproot = mockupfs(**{
+        'foo': {
+            'foo.txt': 'foo'
+        },
+        'bar': {},
+        'baz.txt': 'baz',
+        'qux.txt': 'quz',
+    })
+
+    app.staticdirectory('/', temproot, default=True)
+
+    with Given(''):
+        assert status == 200
+        assert response.headers['content-type'] == 'text/html'
+        assert response.headers['content-length'] == '261'
+
+        when('/bar')
+        assert response.headers['content-length'] == '137'
