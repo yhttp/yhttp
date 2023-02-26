@@ -221,6 +221,9 @@ def test_length(app, Given):
         when(json=dict(bar='1'))
         assert status == '400 Allowed length for field bar is 6'
 
+        when(json=dict(bar='12345678'))
+        assert status == '400 Allowed length for field bar is 6'
+
 
 def test_regexpattern(app, Given):
     @app.route()
