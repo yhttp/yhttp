@@ -1,3 +1,4 @@
+import pytest
 from bddrest import status, given, when
 
 from yhttp import validate, statuses
@@ -119,6 +120,32 @@ def test_type(app, Given):
         assert status == 200
 
 
+def test_forcetype(app, Given):
+
+    with pytest.raises(ValueError):
+        validate(fields=dict(bar=dict(type_=int, forcetype=str)))
+
+    @app.route()
+    @validate(fields=dict(
+        bar=dict(forcetype=int),
+    ))
+    def post(req):
+        if 'bar' in req.form:
+            assert isinstance(req.form['bar'], int)
+
+    with Given(verb='post'):
+        assert status == 200
+
+        when(json=dict(bar='bar'))
+        assert status == '400 Invalid type: bar'
+
+        when(json=dict(bar='2'))
+        assert status == '400 Invalid type: bar'
+
+        when(json=dict(bar=2))
+        assert status == 200
+
+
 def test_type_querystring(app, Given):
     @app.route()
     @validate(fields=dict(
@@ -175,6 +202,27 @@ def test_minmaxlength(app, Given):
 
         when(form=given | dict(bar='123456'))
         assert status == '400 Maximum allowed length for field bar is 5'
+
+
+def test_length(app, Given):
+    @app.route()
+    @validate(fields=dict(
+        bar=dict(length=6),
+    ))
+    def post(req):
+        pass
+
+    with Given(verb='post', json=dict(bar='123456')):
+        assert status == 200
+
+        when(json=given - 'bar')
+        assert status == 200
+
+        when(json=dict(bar='1'))
+        assert status == '400 Allowed length for field bar is 6'
+
+        when(json=dict(bar='12345678'))
+        assert status == '400 Allowed length for field bar is 6'
 
 
 def test_regexpattern(app, Given):
