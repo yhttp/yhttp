@@ -6,9 +6,10 @@ from . import statuses
 
 
 class Field:
-    def __init__(self, title, required=None, type_=None, minimum=None,
-                 maximum=None, pattern=None, minlength=None, maxlength=None,
-                 callback=None, notnone=None, readonly=None):
+    def __init__(self, title, required=None, type_=None, forcetype=None,
+                 minimum=None, maximum=None, length=None, minlength=None,
+                 maxlength=None, callback=None, notnone=None, pattern=None,
+                 readonly=None):
         self.title = title
         self.criteria = []
 
@@ -21,8 +22,12 @@ class Field:
         if notnone:
             self.criteria.append(NotNoneValidator(notnone))
 
-        if type_:
+        if type_ and forcetype:
+            raise ValueError('Can\'t use type_ and forcetype at the same time')
+        elif type_:
             self.criteria.append(TypeValidator(type_))
+        elif forcetype:
+            self.criteria.append(ForceTypeValidator(forcetype))
 
         if minimum:
             self.criteria.append(MinimumValidator(minimum))
@@ -35,6 +40,9 @@ class Field:
 
         if maxlength:
             self.criteria.append(MaxLengthValidator(maxlength))
+
+        if length:
+            self.criteria.append(LengthValidator(length))
 
         if pattern:
             self.criteria.append(PatternValidator(pattern))
@@ -145,6 +153,16 @@ class TypeValidator(Criterion):
             raise self.create_exception(f'Invalid type: {field.title}')
 
 
+class ForceTypeValidator(Criterion):
+
+    def _validate(self, req, value, container, field):
+        type_ = self.expression
+        if not isinstance(value, type_):
+            raise self.create_exception(f'Invalid type: {field.title}')
+
+        return value
+
+
 class MinLengthValidator(Criterion):
 
     def _validate(self, req, value, container, field):
@@ -163,6 +181,18 @@ class MaxLengthValidator(Criterion):
         if len(value) > self.expression:
             raise self.create_exception(
                 f'Maximum allowed length for field {field.title} is '
+                f'{self.expression}'
+            )
+
+        return value
+
+
+class LengthValidator(Criterion):
+
+    def _validate(self, req, value, container, field):
+        if len(value) > self.expression or len(value) < self.expression:
+            raise self.create_exception(
+                f'Length for field {field.title} should be '
                 f'{self.expression}'
             )
 
