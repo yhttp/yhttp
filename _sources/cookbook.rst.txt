@@ -654,6 +654,38 @@ minlength/maxlength
        assert status == '400 Maximum allowed length for field bar is 5'
 
 
+length
+^^^^^^^^^^^^
+
+.. versionadded:: 3.9.0
+.. testsetup:: cookbook/validation/length
+
+   from yhttp import Application, validate
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/validation/length
+
+   @app.route()
+   @validate(fields=dict(
+       bar=dict(length=6),
+   ))
+   def post(req):
+       pass
+
+   with Given(verb='post', json=dict(bar='123456')):
+       assert status == 200
+
+       when(json=given - 'bar')
+       assert status == 200
+
+       when(json=dict(bar='1'))
+       assert status == '400 Allowed length for field bar is 6'
+
+       when(json=dict(bar='12345678'))
+       assert status == '400 Allowed length for field bar is 6'
+
+
 Custom Callback
 ^^^^^^^^^^^^^^^
 
