@@ -192,7 +192,7 @@ class LengthValidator(Criterion):
     def _validate(self, req, value, container, field):
         if len(value) > self.expression or len(value) < self.expression:
             raise self.create_exception(
-                f'Length for field {field.title} should be '
+                f'Allowed length for field {field.title} is '
                 f'{self.expression}'
             )
 

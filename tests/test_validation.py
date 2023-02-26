@@ -219,7 +219,7 @@ def test_length(app, Given):
         assert status == 200
 
         when(json=dict(bar='1'))
-        assert status == '400 Length for field bar should be 6'
+        assert status == '400 Allowed length for field bar is 6'
 
 
 def test_regexpattern(app, Given):
