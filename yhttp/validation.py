@@ -22,12 +22,10 @@ class Field:
         if notnone:
             self.criteria.append(NotNoneValidator(notnone))
 
-        if type_ and forcetype:
-            raise ValueError('Can\'t use type_ and forcetype at the same time')
         elif type_:
-            self.criteria.append(TypeValidator(type_))
-        elif forcetype:
-            self.criteria.append(ForceTypeValidator(forcetype))
+            self.criteria.append(
+                TypeValidator(type_, onerror='raise' if forcetype else 'cast')
+            )
 
         if minimum:
             self.criteria.append(MinimumValidator(minimum))
@@ -145,17 +143,23 @@ class ReadonlyValidator(FlagCriterion):
 
 class TypeValidator(Criterion):
 
-    def _validate(self, req, value, container, field):
+    def __init__(self, *args, onerror='cast', **kw):
+        super().__init__(*args, **kw)
+        if onerror == 'cast':
+            self._validate = self._validate_cast
+        elif onerror == 'raise':
+            self._validate = self._validate_raise
+        else:
+            raise ValueError(onerror)
+
+    def _validate_cast(self, req, value, container, field):
         type_ = self.expression
         try:
             return type_(value)
         except (ValueError, TypeError, InvalidOperation):
             raise self.create_exception(f'Invalid type: {field.title}')
 
-
-class ForceTypeValidator(Criterion):
-
-    def _validate(self, req, value, container, field):
+    def _validate_raise(self, req, value, container, field):
         type_ = self.expression
         if not isinstance(value, type_):
             raise self.create_exception(f'Invalid type: {field.title}')
