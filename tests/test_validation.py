@@ -2,6 +2,7 @@ import pytest
 from bddrest import status, given, when
 
 from yhttp import validate, statuses
+from yhttp.validation import TypeValidator
 
 
 def test_nobody(app, Given):
@@ -121,13 +122,12 @@ def test_type(app, Given):
 
 
 def test_forcetype(app, Given):
-
     with pytest.raises(ValueError):
-        validate(fields=dict(bar=dict(type_=int, forcetype=str)))
+        TypeValidator('str', onerror='bar')
 
     @app.route()
     @validate(fields=dict(
-        bar=dict(forcetype=int),
+        bar=dict(type_=int, forcetype=True),
     ))
     def post(req):
         if 'bar' in req.form:
