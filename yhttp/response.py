@@ -11,7 +11,7 @@ class Response:
     """
 
     #: HTTP Status code
-    status = '200 Ok'
+    status = '200 OK'
 
     #: Response encoding, ``None`` for binary
     charset = None
