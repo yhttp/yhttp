@@ -41,13 +41,14 @@ class HTTPStatus(Exception):
 #: Alias for :class:`.HTTPStatus`
 status = HTTPStatus
 
-ok = partial(status, keepheaders=True)
+#: HTTP 200 OK
+ok = partial(status, 200, 'OK', keepheaders=True)
 
 #: HTTP 201 Created exception factory
-created = partial(ok, 201, 'Created')
+created = partial(status, 201, 'Created', keepheaders=True)
 
 #: HTTP 204 No Content exception factory
-nocontent = partial(ok, 204, 'No Content', nobody=True)
+nocontent = partial(status, 204, 'No Content', keepheaders=True, nobody=True)
 
 #: HTTP 400 Bad Request exception factory
 badrequest = partial(status, 400, 'Bad Request')
@@ -90,7 +91,8 @@ gatewaytimeout = partial(status, 504, 'Gateway Timeout')
 
 
 def redirect(code, text, location, **kw):
-    return ok(code, text, headers=[('Location', location)], nobody=True, **kw)
+    return status(code, text, keepheaders=True,
+                  headers=[('Location', location)], nobody=True, **kw)
 
 
 #: HTTP 301 Moved Permanently exception factory
