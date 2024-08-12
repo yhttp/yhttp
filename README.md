@@ -10,23 +10,6 @@
 
 ## Contribution
 
-### Dependencies
-Install `postgresql` brefore use of this project.
-```bash
-apt install postgresql
-```
-
-### Prepare
-
-Create and grant the `postgresql` role with `createdb` permission to 
-authenticate the current `unix` user within `postgresql` using the peer 
-authentication.
-```bash
-echo "CREATE USER ${USER} WITH CREATEDB" | sudo -u postgres psql
-# Or
-echo "ALTER USER ${USER} CREATEDB" | sudo -u postgres psql
-```
-
 ### Virtualenv
 
 Create virtual environment:
