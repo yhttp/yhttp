@@ -1,8 +1,43 @@
-PRJ = yhttp
-PIP = pip3
 HERE = $(shell readlink -f `dirname .`)
-VENVNAME = $(shell basename $(HERE) | cut -d'-' -f1)
+VENVNAME = $(shell basename $(HERE))
 VENV = $(HOME)/.virtualenvs/$(VENVNAME)
+PKG = $(VENVNAME)
+PYTEST_FLAGS = -v
+TEST_DIR = tests
+PY = $(VENV)/bin/python3
+PIP = $(VENV)/bin/pip3
+PYTEST = $(VENV)/bin/pytest
+COVERAGE = $(VENV)/bin/coverage
+FLAKE8 = $(VENV)/bin/flake8
+TWINE = $(VENV)/bin/twine
+
+
+ifdef U
+  UNIT = tests/test_$(U).py
+else
+  UNIT = $(TEST_DIR)
+endif
+
+
+.PHONY: test
+test:
+	$(PYTEST) $(PYTEST_FLAGS) $(UNIT)
+
+
+.PHONY: cover
+cover:
+	$(PYTEST) $(PYTEST_FLAGS) --cov=$(PKG) $(UNIT)
+
+
+.PHONY: cover-html
+cover-html: cover
+	$(COVERAGE) html
+	@echo "Browse htmlcov/index.html for the covearge report"
+
+
+.PHONY: lint
+lint:
+	$(FLAKE8)
 
 
 .PHONY: venv
@@ -16,21 +51,31 @@ env:
 	$(PIP) install -e .
 
 
-.PHONY: cover
-cover:
-	pytest --cov=$(PRJ) tests
+.PHONY: venv-delete
+venv-delete: clean
+	rm -rf $(VENV)
 
 
-.PHONY: lint
-lint:
-	flake8
+.PHONY: sdist
+sdist:
+	$(PY) -m build --sdist
+
+
+.PHONY: bdist
+wheel:
+	$(PY) -m build --wheel
 
 
 .PHONY: dist
-dist:
-	python setup.py sdist
+dist: sdist wheel
 
 
-.PHONY: install
-install:
-	$(PIP) install -e .
+.PHONY: pypi
+pypi: dist
+	$(TWINE) upload dist/*.gz dist/*.whl
+
+
+.PHONY: clean
+clean:
+	rm -rf dist/*
+	rm -rf build/*

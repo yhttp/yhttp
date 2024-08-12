@@ -5,9 +5,6 @@ omit =
     yhttp/ext/*
     yhttp/main.py
 
-[tool:pytest]
-addopts= --cov=yhttp tests
-
 [report]
 exclude_lines=
 	raise NotImplementedError
