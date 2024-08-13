@@ -1,29 +1,12 @@
 from bddrest import status, response, when
 
 
-def test_querystringform(app, Given):
-
-    @app.route('/empty')
-    def get(req):
-        assert req.form == {}
-
-    @app.route()
-    def get(req):  # noqa: W0404
-        assert req['foo'] == 'bar'
-
-    with Given(query=dict(foo='bar')):
-        assert status == 200
-
-        when('/empty', query={})
-        assert status == 200
-
-
-def test_urlencodedform(app, Given):
+def test_form_urlencoded(app, Given):
 
     @app.route()
     def post(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
-        assert req.form['foo'] == 'bar'
+        assert req.form['foo'] == ['bar']
 
     @app.route()
     def patch(req):
@@ -41,7 +24,7 @@ def test_urlencodedform(app, Given):
         assert response == ''
 
 
-def test_urlencodedform_duplicatedfield(app, Given):
+def test_form_urlencoded_duplicatefields(app, Given):
 
     @app.route()
     def post(req):
@@ -55,7 +38,7 @@ def test_urlencodedform_duplicatedfield(app, Given):
         assert status == 200
 
 
-def test_jsonform(app, Given):
+def test_form_json(app, Given):
     app.settings.debug = False
 
     @app.route()
@@ -77,7 +60,7 @@ def test_jsonform(app, Given):
         assert response.text == '400 Cannot parse the request'
 
 
-def test_multipartform(app, Given):
+def test_form_multipart(app, Given):
     app.settings.debug = False
 
     @app.route()

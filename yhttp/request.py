@@ -66,39 +66,74 @@ class Request:
         if 'QUERY_STRING' not in self.environ:
             return {}
 
-        return {k: v[0] if len(v) == 1 else v for k, v in parse_qs(
+        qs = parse_qs(
             self.environ['QUERY_STRING'],
             keep_blank_values=True,
             strict_parsing=False
-        ).items()}
+        )
+
+        from pudb import set_trace; set_trace()
+        return qs
 
     @lazyattribute
     def form(self):
-        """Return dictionary representing the submitted from.
+        """Return a dictionary representing the submitted HTTP from.
 
-        Currently, json, urlencoded and multipart form are supported.
+        Parse form data from the environ dict and return a dictionary with the
+        form-field name as a key(unicode) and lists as values (multiple values
+        per key are possible).
+
+        .. note::
+            All common form types such as: json, urlencoded and multipart are
+            supported.
+
+        .. note::
+           On the first access to this attribute, the :meth:`.Request.files`
+           attribute will be initialized if any file fields are submitted using
+           the ``multipart/form`` content header.
 
         .. versionadded:: 2.6
-
            An easy way to get form values is:
-
            .. code-block::
 
               req['field-name']
 
            The above expression is the same as:
-
            .. code-block::
 
               req.form['field-name']
 
+        .. versionchanged:: 4.0
+           The multipart files are not represented by this attribute and will
+           be accessible by :meth:`.Request.files` instead.
 
         """
-        return parseanyform(
-            self.environ,
-            contentlength=self.contentlength,
-            contenttype=self.contenttype
-        )
+        fields, files = parseanyform(self)
+        self.files = files
+        return fields
+
+    @lazyattribute
+    def files(self):
+        """Return a dictionary representing the submitted files.
+
+        Parse multipart form data from the environ dict and return a
+        dictionary with the form-field name as a key(unicode) and
+        :class:`multipart.MultipartPart` instances as value, because the
+        form-field was a file-upload or the value is too big to fit
+        into memory limits.
+
+        .. note::
+           On the first access to this attribute, the :meth:`.Request.form`
+           attribute will be initialized if any not-file fields are submitted.
+
+        .. versionadded:: 4.0
+        """
+        if self.contenttype != 'multipart/form-data':
+            return {}
+
+        fields, files = parseanyform(self)
+        self.form = fields
+        return files
 
     @lazyattribute
     def cookies(self):

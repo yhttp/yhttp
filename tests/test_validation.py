@@ -1,14 +1,14 @@
 import pytest
 from bddrest import status, given, when
 
-from yhttp import validate, statuses
+from yhttp import validate_form, validate_query, statuses
 from yhttp.validation import TypeValidator
 
 
 def test_nobody(app, Given):
 
     @app.route()
-    @validate(nobody=True)
+    @validate_form(nobody=True)
     def foo(req):
         assert req.form == {}
 
@@ -25,9 +25,10 @@ def test_nobody(app, Given):
 def test_nobody_get(app, Given):
 
     @app.route()
-    @validate(nobody=True)
+    @validate_form(nobody=True)
     def get(req, *, bar=None):
-        assert req.form.get('bar') == bar
+        assert req.query.get('bar') == bar
+        assert req.form == {}
 
     with Given():
         assert status == 200
@@ -41,7 +42,7 @@ def test_required(app, Given):
     err = statuses.forbidden()
 
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(required=True),
         baz=dict(required=err),
     ))
@@ -55,7 +56,7 @@ def test_required(app, Given):
         assert status == '400 Field bar is required'
 
         when(form=given - 'baz', query=dict(baz='baz'))
-        assert status == 200
+        assert status == '403 Forbidden'
 
         when(form=given - 'baz')
         assert status == '403 Forbidden'
@@ -63,7 +64,7 @@ def test_required(app, Given):
 
 def test_notnone(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(notnone=True),
         baz=dict(notnone='700 baz cannot be null')
     ))
@@ -89,7 +90,7 @@ def test_notnone(app, Given):
 def test_readonly(app, Given):
 
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(readonly=True),
     ))
     def post(req):
@@ -104,7 +105,7 @@ def test_readonly(app, Given):
 
 def test_type(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(type_=int),
     ))
     def post(req):
@@ -126,7 +127,7 @@ def test_forcetype(app, Given):
         TypeValidator('str', onerror='bar')
 
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(type_=int, forcetype=True),
     ))
     def post(req):
@@ -148,7 +149,7 @@ def test_forcetype(app, Given):
 
 def test_type_querystring(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_query(fields=dict(
         bar=dict(type_=int),
     ))
     def get(req, *, bar=None):
@@ -161,7 +162,7 @@ def test_type_querystring(app, Given):
 
 def test_minimummaximum(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(
             minimum=2,
             maximum=9
@@ -185,7 +186,7 @@ def test_minimummaximum(app, Given):
 
 def test_minmaxlength(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(minlength=2, maxlength=5),
     ))
     def post(req):
@@ -206,7 +207,7 @@ def test_minmaxlength(app, Given):
 
 def test_length(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(length=6),
     ))
     def post(req):
@@ -227,7 +228,7 @@ def test_length(app, Given):
 
 def test_regexpattern(app, Given):
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(pattern=r'^\d+$'),
         baz=dict(pattern=(r'\d+$', '400 Only Integer'))
     ))
@@ -256,7 +257,7 @@ def test_customvalildator(app, Given):
             raise statuses.status(400, 'Value must be either a or b')
 
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=dict(callback=customvalidator)
     ))
     def post(req):
@@ -272,7 +273,7 @@ def test_customvalildator(app, Given):
         assert status == '400 Value must be either a or b'
 
     @app.route()
-    @validate(fields=dict(
+    @validate_form(fields=dict(
         bar=customvalidator
     ))
     def post(req):  # noqa: W0404
@@ -291,12 +292,12 @@ def test_customvalildator(app, Given):
 def test_extraattribute(app, Given):
 
     @app.route()
-    @validate(strict=True)
+    @validate_form(strict=True)
     def post(req):
         pass
 
     @app.route()
-    @validate()
+    @validate_form()
     def put(req):
         pass
 

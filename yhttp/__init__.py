@@ -3,7 +3,7 @@ __path__ = __import__('pkgutil').extend_path(__path__, __name__)
 
 
 from .application import BaseApplication, Application
-from .validation import validate
+from .validation import validate_form, validate_query
 from .contenttypes import contenttype, binary, utf8, json, text, html
 from .lazyattribute import lazyattribute
 from .request import Request, HeadersMask

@@ -18,6 +18,7 @@ def get(req):
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
 
+    from pudb import set_trace; set_trace()
     with Given(cliapp, f'serve --bind {freetcpport}', nowait=True) as s:
         url = f'http://localhost:{freetcpport}'
         time.sleep(1)

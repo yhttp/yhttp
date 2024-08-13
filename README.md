@@ -43,12 +43,17 @@ make test
 
 Execute specific test(s) using wildcard:
 ```bash
-make test U=db*
+make test F=tests/test_db*
+make test F=tests/test_form.py::test_querystringform
 ```
 
-Execute all tests and report coverage result:
+*refer to* [pytest documentation](https://docs.pytest.org/en/7.1.x/how-to/usage.html#how-to-invoke-pytest)
+*for more info about invoking tests.*
+
+Execute tests and report coverage result:
 ```bash
 make cover
+make cover F=tests/test_static.py
 make cover-html
 ```
 

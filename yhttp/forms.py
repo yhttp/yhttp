@@ -1,55 +1,54 @@
-import cgi
+from urllib.parse import parse_qs
 
 import ujson
+import multipart
 
 from . import statuses
 
 
-def getcgifieldvalue(field):
-    return field.value \
-        if isinstance(field, cgi.MiniFieldStorage) \
-        or (
-            isinstance(field, cgi.FieldStorage)
-            and not field._binary_file
-        ) \
-        else field
+def parseanyform(req):
+    files = {}
 
-
-def parseanyform(environ, contentlength=None, contenttype=None):
-    if contenttype == 'application/json':
-        if contentlength is None:
+    if req.contenttype == 'application/json':
+        if req.contentlength is None:
             raise statuses.status(400, 'Content-Length required')
 
-        fp = environ['wsgi.input']
-        data = fp.read(contentlength)
+        fp = req.environ['wsgi.input']
+        data = fp.read(req.contentlength)
         try:
-            return ujson.decode(data)
+            return ujson.decode(data), files
         except (ValueError, TypeError):
             raise statuses.status(400, 'Cannot parse the request')
 
-    if 'QUERY_STRING' not in environ:
-        environ['QUERY_STRING'] = ''
+    if req.contenttype == 'application/x-www-form-urlencoded':
+        try:
+            fp = req.environ['wsgi.input']
+            if not fp:
+                return {}, files
 
-    try:
-        storage = cgi.FieldStorage(
-            fp=environ['wsgi.input'],
-            environ=environ,
-            strict_parsing=False,
-            keep_blank_values=True
-        )
-    except (TypeError, ValueError):
-        raise statuses.status(400, 'Cannot parse the request')
+            fields = parse_qs(
+                qs=fp.read(req.contentlength).decode(),
+                keep_blank_values=True,
+                strict_parsing=True,
+            )
+        except (TypeError, ValueError, UnicodeError):
+            raise statuses.status(400, 'Cannot parse the request')
 
-    result = {}
-    if storage.list is None or not len(storage.list):
-        return result
+        if fields is None:
+            return {}, files
 
-    for k in storage:
-        v = storage[k]
+        return fields, files
 
-        if isinstance(v, list):
-            result[k] = [getcgifieldvalue(i) for i in v]
-        else:
-            result[k] = getcgifieldvalue(v)
+    if req.contenttype == 'multipart/form-data':
+        try:
+            fields, files = multipart.parse_form_data(
+                req.environ,
+                charset="utf8",
+                strict=True,
+            )
+        except multipart.MultipartError:
+            raise statuses.status(400, 'Cannot parse the request')
 
-    return result
+        return fields, files
+
+    return {}, files

@@ -421,11 +421,11 @@ required
 
 .. testcode:: cookbook/validation/required
 
-   from yhttp import validate
+   from yhttp import validate_form
 
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(required=True),
        baz=dict(required='700 Please provide baz'),
    ))
@@ -449,14 +449,14 @@ notnone
 
 .. testsetup:: cookbook/validation/notnone
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/notnone
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(notnone=True),
        baz=dict(notnone='700 baz cannot be null')
    ))
@@ -486,14 +486,14 @@ to the server.
 
 .. testsetup:: cookbook/validation/nobody
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/nobody
 
    @app.route()
-   @validate(nobody=True)
+   @validate_form(nobody=True)
    def foo(req):
        assert req.form == {}
 
@@ -511,14 +511,14 @@ readonly
 
 .. testsetup:: cookbook/validation/readonly
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/readonly
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(readonly=True),
    ))
    def post(req):
@@ -538,14 +538,14 @@ You can use regular expression to validate request fields:
 
 .. testsetup:: cookbook/validation/regex
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/regex
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(pattern=r'^\d+$'),
    ))
    def post(req):
@@ -569,14 +569,14 @@ value by ``form[field] = type(form[field])``.
 
 .. testsetup:: cookbook/validation/type
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/type
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(type_=int),
    ))
    def post(req):
@@ -594,14 +594,14 @@ minimum/maximum
 
 .. testsetup:: cookbook/validation/minmax
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/minmax
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(
            minimum=2,
            maximum=9
@@ -628,14 +628,14 @@ minlength/maxlength
 
 .. testsetup:: cookbook/validation/minmaxlength
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/minmaxlength
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(minlength=2, maxlength=5),
    ))
    def post(req):
@@ -660,14 +660,14 @@ length
 .. versionadded:: 3.9.0
 .. testsetup:: cookbook/validation/length
 
-   from yhttp import Application, validate
+   from yhttp import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/length
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(length=6),
    ))
    def post(req):
@@ -693,7 +693,7 @@ You can use your very own callable as the request validator:
 
 .. testsetup:: cookbook/validation/custom
 
-   from yhttp import Application, validate, statuses
+   from yhttp import Application, validate_form, statuses
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -707,7 +707,7 @@ You can use your very own callable as the request validator:
            raise statuses.status(400, 'Value must be either a or b')
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=dict(callback=customvalidator)
    ))
    def post(req):
@@ -723,7 +723,7 @@ You can use your very own callable as the request validator:
        assert status == '400 Value must be either a or b'
 
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        bar=customvalidator
    ))
    def post(req):

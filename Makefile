@@ -12,21 +12,21 @@ FLAKE8 = $(VENV)/bin/flake8
 TWINE = $(VENV)/bin/twine
 
 
-ifdef U
-  UNIT = tests/test_$(U).py
+ifdef F
+  TEST_FILTER = $(F)
 else
-  UNIT = $(TEST_DIR)
+  TEST_FILTER = $(TEST_DIR)
 endif
 
 
 .PHONY: test
 test:
-	$(PYTEST) $(PYTEST_FLAGS) $(UNIT)
+	$(PYTEST) $(PYTEST_FLAGS) $(TEST_FILTER)
 
 
 .PHONY: cover
 cover:
-	$(PYTEST) $(PYTEST_FLAGS) --cov=$(PKG) $(UNIT)
+	$(PYTEST) $(PYTEST_FLAGS) --cov=$(PKG) $(TEST_FILTER)
 
 
 .PHONY: cover-html

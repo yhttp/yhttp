@@ -1,5 +1,6 @@
 import functools
 import re
+import abc
 from _decimal import InvalidOperation
 
 from . import statuses
@@ -131,6 +132,9 @@ class NotNoneValidator(FlagCriterion):
         if field.title not in container:
             return
 
+        # values = container[field.title]
+        # if values:
+
         if container[field.title] is None:
             raise self.create_exception(f'Field {field.title} cannot be null')
 
@@ -170,11 +174,12 @@ class TypeValidator(Criterion):
 class MinLengthValidator(Criterion):
 
     def _validate(self, req, value, container, field):
-        if len(value) < self.expression:
-            raise self.create_exception(
-                f'Minimum allowed length for field {field.title} is '
-                f'{self.expression}'
-            )
+        for v in value:
+            if len(v) < self.expression:
+                raise self.create_exception(
+                    f'Minimum allowed length for field {field.title} is '
+                    f'{self.expression}'
+                )
 
         return value
 
@@ -182,11 +187,12 @@ class MinLengthValidator(Criterion):
 class MaxLengthValidator(Criterion):
 
     def _validate(self, req, value, container, field):
-        if len(value) > self.expression:
-            raise self.create_exception(
-                f'Maximum allowed length for field {field.title} is '
-                f'{self.expression}'
-            )
+        for v in value:
+            if len(v) > self.expression:
+                raise self.create_exception(
+                    f'Maximum allowed length for field {field.title} is '
+                    f'{self.expression}'
+                )
 
         return value
 
@@ -253,12 +259,8 @@ class CustomValidator(Criterion):
         return self.expression(req, value, container, field)
 
 
-class RequestValidator:
-    def __init__(self, nobody=None, fields=None, strict=False):
-        if nobody:
-            assert not strict, 'strict flag cannot set when nobody is true'
-
-        self.nobody = nobody
+class Validator(metaclass=abc.ABCMeta):
+    def __init__(self, fields=None, strict=False):
         self.strict = strict
 
         self.fields = {}
@@ -275,12 +277,9 @@ class RequestValidator:
 
             self.fields[name] = Field(name, **kw)
 
-    def validate(self, request):
-        if self.nobody and request.contentlength:
-            raise statuses.status(400, 'Body Not Allowed')
-
+    def validate(self, request, form):
         if self.strict:
-            extrafields = set(request.form.keys()) - set(self.fields.keys())
+            extrafields = set(form.keys()) - set(self.fields.keys())
             if extrafields:
                 raise statuses.status(
                     400,
@@ -288,18 +287,41 @@ class RequestValidator:
                 )
 
         for name, field in self.fields.items():
+            field.validate(request, form)
 
-            if request.query and name in request.query:
-                field.validate(request, request.query)
+    @abc.abstractmethod
+    def __call__(self, handler):
+        raise NotImplementedError
 
-            else:
-                field.validate(request, request.form)
+
+class FormValidator(Validator):
+    def __init__(self, nobody=None, fields=None, strict=False):
+        if nobody:
+            assert not strict, 'strict flag cannot set when nobody is true'
+
+        self.nobody = nobody
+        super().__init__(fields=fields, strict=strict)
 
     def __call__(self, handler):
+        @functools.wraps(handler)
+        def wrapper(request, *arguments, **kwargs):
+            if self.nobody and request.contentlength:
+                raise statuses.status(400, 'Body Not Allowed')
 
+            self.validate(request, request.form)
+            return handler(request, *arguments, **kwargs)
+
+        return wrapper
+
+
+class QueryValidator(Validator):
+    def __init__(self, fields=None, strict=False):
+        super().__init__(fields=fields, strict=strict)
+
+    def __call__(self, handler):
         @functools.wraps(handler)
         def wrapper(request, *arguments, **query):
-            self.validate(request)
+            self.validate(request, request.query)
             query = {
                 k: v for k, v in request.query.items()
                 if k in query
@@ -310,4 +332,8 @@ class RequestValidator:
 
 
 #: see :ref:`cookbook-validation`
-validate = RequestValidator
+validate_form = FormValidator
+
+
+#: see :ref:`cookbook-validation`
+validate_query = QueryValidator
