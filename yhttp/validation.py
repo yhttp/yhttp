@@ -134,7 +134,6 @@ class ReadonlyValidator(FlagCriterion):
 
 
 class TypeValidator(Criterion):
-
     def __init__(self, *args, onerror='cast', **kw):
         super().__init__(*args, **kw)
         if onerror == 'cast':
@@ -149,7 +148,9 @@ class TypeValidator(Criterion):
         try:
             return [type_(v) for v in value]
         except (ValueError, TypeError, InvalidOperation):
-            raise self.create_exception(f'Invalid type: {field.title}')
+            raise self.create_exception(
+                f'Invalid type: `{type(field.title).__name__}` for '
+                f'field `{field.title}`')
 
     def _validate_raise(self, req, value, container, field):
         type_ = self.expression
@@ -161,7 +162,6 @@ class TypeValidator(Criterion):
 
 
 class MinLengthValidator(Criterion):
-
     def _validate(self, req, value, container, field):
         for v in value:
             if len(v) < self.expression:
@@ -174,7 +174,6 @@ class MinLengthValidator(Criterion):
 
 
 class MaxLengthValidator(Criterion):
-
     def _validate(self, req, value, container, field):
         for v in value:
             if len(v) > self.expression:
@@ -187,13 +186,14 @@ class MaxLengthValidator(Criterion):
 
 
 class LengthValidator(Criterion):
-
     def _validate(self, req, value, container, field):
-        if len(value) > self.expression or len(value) < self.expression:
-            raise self.create_exception(
-                f'Allowed length for field {field.title} is '
-                f'{self.expression}'
-            )
+        for v in value:
+            l = len(v)
+            if self.expression > l or l > self.expression:
+                raise self.create_exception(
+                    f'Allowed length for field {field.title} is '
+                    f'{self.expression}'
+                )
 
         return value
 
@@ -202,8 +202,9 @@ class MinimumValidator(Criterion):
 
     def _validate(self, req, value, container, field):
         try:
-            if value < self.expression:
-                raise self.create_exception()
+            for v in value:
+                if v < self.expression:
+                    raise self.create_exception()
         except TypeError:
             raise self.create_exception(
                 f'Minimum allowed value for field {field.title} is '
@@ -217,8 +218,9 @@ class MaximumValidator(Criterion):
 
     def _validate(self, req, value, container, field):
         try:
-            if value > self.expression:
-                raise self.create_exception()
+            for v in value:
+                if v > self.expression:
+                    raise self.create_exception()
         except TypeError:
             raise self.create_exception(
                 f'Maximum allowed value for field {field.title} is '
@@ -236,8 +238,9 @@ class PatternValidator(Criterion):
             self.expression = re.compile(self.expression)
 
     def _validate(self, req, value, container, field):
-        if self.expression.match(value) is None:
-            raise self.create_exception(f'Invalid format: {field.title}')
+        for v in value:
+            if self.expression.match(v) is None:
+                raise self.create_exception(f'Invalid format: {field.title}')
 
         return value
 

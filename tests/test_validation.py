@@ -85,15 +85,16 @@ def test_type(app, Given):
     ))
     def post(req):
         if 'bar' in req.form:
-            assert isinstance(req.form['bar'], int)
+            for b in req.form['bar']:
+                assert isinstance(b, int)
 
     with Given(verb='post'):
         assert status == 200
 
-        when(json=dict(bar='bar'))
-        assert status == '400 Invalid type: bar'
+        when(form=dict(bar='bar'))
+        assert status == '400 Invalid type: `str` for field `bar`'
 
-        when(json=dict(bar='2'))
+        when(form=dict(bar='2'))
         assert status == 200
 
 
@@ -112,14 +113,11 @@ def test_ontypeerror(app, Given):
     with Given(verb='post'):
         assert status == 200
 
-        when(json=dict(bar='bar'))
+        when(form=dict(bar='bar'))
         assert status == '400 Invalid type: bar'
 
-        when(json=dict(bar='2'))
+        when(form=dict(bar='2'))
         assert status == '400 Invalid type: bar'
-
-        when(json=dict(bar=2))
-        assert status == 200
 
 
 def test_type_querystring(app, Given):
@@ -142,6 +140,7 @@ def test_minimummaximum(app, Given):
     @app.route()
     @validate_form(fields=dict(
         bar=dict(
+            type_=int,
             minimum=2,
             maximum=9
         ),
@@ -149,16 +148,16 @@ def test_minimummaximum(app, Given):
     def post(req):
         pass
 
-    with Given(verb='post', json=dict(bar=2)):
+    with Given(verb='post', form=dict(bar='2')):
         assert status == 200
 
-        when(json=dict(bar='bar'))
+        when(form=dict(bar='bar'))
+        assert status == '400 Invalid type: `str` for field `bar`'
+
+        when(form=dict(bar='1'))
         assert status == '400 Minimum allowed value for field bar is 2'
 
-        when(json=dict(bar=1))
-        assert status == '400 Minimum allowed value for field bar is 2'
-
-        when(json=dict(bar=10))
+        when(form=dict(bar='10'))
         assert status == '400 Maximum allowed value for field bar is 9'
 
 
@@ -191,16 +190,16 @@ def test_length(app, Given):
     def post(req):
         pass
 
-    with Given(verb='post', json=dict(bar='123456')):
+    with Given(verb='post', form=dict(bar='123456')):
         assert status == 200
 
-        when(json=given - 'bar')
+        when(form=given - 'bar')
         assert status == 200
 
-        when(json=dict(bar='1'))
+        when(form=dict(bar='12345'))
         assert status == '400 Allowed length for field bar is 6'
 
-        when(json=dict(bar='12345678'))
+        when(form=dict(bar='12345678'))
         assert status == '400 Allowed length for field bar is 6'
 
 
@@ -231,8 +230,9 @@ def test_customvalildator(app, Given):
 
     def customvalidator(req, value, container, field):
         assert isinstance(field, Field)
-        if value not in 'ab':
-            raise statuses.status(400, 'Value must be either a or b')
+        for v in value:
+            if v not in 'ab':
+                raise statuses.status(400, 'Value must be either a or b')
 
     @app.route()
     @validate_form(fields=dict(
