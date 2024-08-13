@@ -62,31 +62,6 @@ def test_required(app, Given):
         assert status == '403 Forbidden'
 
 
-def test_notnone(app, Given):
-    @app.route()
-    @validate_form(fields=dict(
-        bar=dict(notnone=True),
-        baz=dict(notnone='700 baz cannot be null')
-    ))
-    def post(req):
-        pass
-
-    with Given(verb='post', json=dict(bar='bar', baz='baz')):
-        assert status == 200
-
-        when(json=given - 'bar')
-        assert status == 200
-
-        when(json=given | dict(bar=None))
-        assert status == '400 Field bar cannot be null'
-
-        when(json=given - 'baz')
-        assert status == 200
-
-        when(json=given | dict(baz=None))
-        assert status == '700 baz cannot be null'
-
-
 def test_readonly(app, Given):
 
     @app.route()
@@ -122,13 +97,13 @@ def test_type(app, Given):
         assert status == 200
 
 
-def test_forcetype(app, Given):
+def test_ontypeerror(app, Given):
     with pytest.raises(ValueError):
         TypeValidator('str', onerror='bar')
 
     @app.route()
     @validate_form(fields=dict(
-        bar=dict(type_=int, forcetype=True),
+        bar=dict(type_=int, ontypeerror='raise'),
     ))
     def post(req):
         if 'bar' in req.form:
@@ -153,8 +128,11 @@ def test_type_querystring(app, Given):
         bar=dict(type_=int),
     ))
     def get(req, *, bar=None):
-        assert isinstance(req.query['bar'], int)
-        assert isinstance(bar, int)
+        for i in req.query['bar']:
+            assert isinstance(i, int)
+
+        for i in bar:
+            assert isinstance(i, int)
 
     with Given(query=dict(bar='2')):
         assert status == 200

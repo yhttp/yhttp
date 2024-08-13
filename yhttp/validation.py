@@ -7,7 +7,7 @@ from . import statuses
 
 
 class Field:
-    def __init__(self, title, required=None, type_=None, forcetype=None,
+    def __init__(self, title, required=None, type_=None, ontypeerror='cast',
                  minimum=None, maximum=None, length=None, minlength=None,
                  maxlength=None, callback=None, notnone=None, pattern=None,
                  readonly=None):
@@ -25,7 +25,7 @@ class Field:
 
         elif type_:
             self.criteria.append(
-                TypeValidator(type_, onerror='raise' if forcetype else 'cast')
+                TypeValidator(type_, onerror=ontypeerror)
             )
 
         if minimum:
@@ -127,18 +127,6 @@ class RequiredValidator(FlagCriterion):
             raise self.create_exception(f'Field {field.title} is required')
 
 
-class NotNoneValidator(FlagCriterion):
-    def validate(self, req, field, container):
-        if field.title not in container:
-            return
-
-        # values = container[field.title]
-        # if values:
-
-        if container[field.title] is None:
-            raise self.create_exception(f'Field {field.title} cannot be null')
-
-
 class ReadonlyValidator(FlagCriterion):
     def validate(self, req, field, container):
         if field.title in container:
@@ -159,14 +147,15 @@ class TypeValidator(Criterion):
     def _validate_cast(self, req, value, container, field):
         type_ = self.expression
         try:
-            return type_(value)
+            return [type_(v) for v in value]
         except (ValueError, TypeError, InvalidOperation):
             raise self.create_exception(f'Invalid type: {field.title}')
 
     def _validate_raise(self, req, value, container, field):
         type_ = self.expression
-        if not isinstance(value, type_):
-            raise self.create_exception(f'Invalid type: {field.title}')
+        for v in value:
+            if not isinstance(v, type_):
+                raise self.create_exception(f'Invalid type: {field.title}')
 
         return value
 

@@ -61,7 +61,7 @@ def test_rewrite_default():
     def get(req):
         resp = 'foo'
         if req.query:
-            qs = ', '.join(f'{k}={v}' for k, v in req.query.items())
+            qs = ', '.join(f'{k}={','.join(v)}' for k, v in req.query.items())
             resp += f' qs: {qs}'
 
         return resp

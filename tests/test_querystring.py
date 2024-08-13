@@ -6,7 +6,8 @@ def test_querystring(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-        return f'{req.query.get("foo")} {baz}'
+        return f'{','.join(req.query['foo'])} ' \
+            f'{','.join(baz) if baz else 'None'}'
 
     with Given('/?foo=bar&baz=qux'):
         assert status == 200

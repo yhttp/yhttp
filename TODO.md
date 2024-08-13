@@ -1,3 +1,5 @@
 - All TODOs
 - test flat and nested json forms
 - fileupload test
+- forcetype renamed to ontypeerror
+- req.json
