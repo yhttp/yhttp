@@ -19,7 +19,7 @@ def test_querystring(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-        return f'{','.join(req.query['foo'])} ' \
+        return f'{','.join(req.query["foo"])} ' \
             f'{','.join(baz) if baz else "None"}'
 
     with Given('/?foo=bar&baz=qux'):
