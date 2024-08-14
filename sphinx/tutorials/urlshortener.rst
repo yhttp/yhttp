@@ -178,7 +178,7 @@ Implement Shortener API
    import random
    
    import redis
-   from yhttp import Application, text, statuses, validate, statuscode
+   from yhttp import Application, text, statuses, validate_form, statuscode
    
    
    app = Application()
@@ -192,7 +192,7 @@ Implement Shortener API
    
    
    @app.route()
-   @validate(fields=dict(
+   @validate_form(fields=dict(
        url=dict(
            required='400 Field missing: url',
            pattern=(r'^http://.*', '400 Invalid URL')

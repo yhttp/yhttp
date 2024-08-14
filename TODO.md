@@ -1,6 +1,3 @@
-- req.json + test
-- test flat and nested json forms
-- fileupload test
 - forcetype renamed to ontypeerror
 - review documentation carefully
 - count validaotr limit number of identical fields in form

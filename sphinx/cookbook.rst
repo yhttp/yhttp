@@ -21,16 +21,16 @@ of-course, all query string will available as a dictionary via
 
 .. testcode:: cookbook/qs
 
-
    @app.route()
    @text
    def get(req, *, foo=None):
-       return f'{foo} {req.query.get("bar")}'
+       bar = req.query.get('bar')
+       return f'{foo[0] if foo else 'None'} {bar[0] if bar else 'None'}'
     
    app.ready()
 
-.. `*  due to Vim editor bug
 
+.. `*  due to Vim editor bug
 
 A painless way to test our code is `bddrest
 <https://github.com/pylover/bddrest>`_.
@@ -51,21 +51,18 @@ A painless way to test our code is `bddrest
 Form
 ----
 
-Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitted fields.
+Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the 
+submitted fields.
 
-.. versionadded:: 2.6
+.. versionchanged:: 4.0
 
    An easy way to get form values is:
 
    .. code-block::
 
-      req['field-name']
-
-   The above expression is the same as:
-
-   .. code-block::
-
+      req.query['field-name']
       req.form['field-name']
+      req.files['field-name']
 
 
 .. testcode:: cookbook/form
@@ -78,10 +75,11 @@ Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitte
    @text
    def post(req):
        try:
-           return f'{req["foo"]}'
+           return req.form['foo']
        except KeyError:
            raise statuses.badrequest()
-    
+
+
    app.ready()
    
 
@@ -90,6 +88,7 @@ Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitte
    from bddrest import Given, response, when, given, status
 
    with Given(app, verb='POST', form={'foo': 'bar'}):
+       assert status == 200
        assert response.text == 'bar'
 
        when(form=given - 'foo')
@@ -97,15 +96,19 @@ Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the submitte
 
 
 the ``form=`` parameter of the ``Given`` and ``when`` functions will send the
-given dictionary as a ``urlencoded`` HTTP form, but you can try ``json`` and 
-``multipart`` content types to ensure all API users will be happy!
+given dictionary as a ``urlencoded`` HTTP form, but you can also try 
+``multipart`` content type.
 
 .. testcode:: cookbook/form
 
-   with Given(app, verb='POST', json={'foo': 'bar'}):
+   from bddrest import Given, response, when, given, status
+   
+   with Given(app, verb='POST', form={'foo': 'bar'}):
+       assert status == 200
        assert response.text == 'bar'
 
    with Given(app, verb='POST', multipart={'foo': 'bar'}):
+       assert status == 200
        assert response.text == 'bar'
 
 
@@ -367,19 +370,8 @@ This is how to use :attr:`req.cookies <yhttp.Request.cookies>`:
 
    from yhttp import Application, text
    app = Application()
-
-.. testcode:: cookbook/cookie
-
-   @app.route()
-   def get(req):
-       counter = req.cookies['counter']
-       req.cookies['counter'] = str(int(counter.value) + 1)
-       req.cookies['counter']['max-age'] = 1
-       req.cookies['counter']['path'] = '/a'
-       req.cookies['counter']['domain'] = 'example.com'
-    
    app.ready()
-   
+
 
 Test:
 
@@ -387,12 +379,28 @@ Test:
 
    from http import cookies
 
-   from bddrest import Given, response, when, given
+   from bddrest import Given, response, when, given, status
+
+
+   @app.route()
+   def get(req):
+       resp = req.response
+       counter = req.cookies.get('counter')
+       resp.setcookie(
+           'counter',
+           str(int(counter.value) + 1),
+           maxage=1,
+           path='/a',
+           domain='example.com'
+       )
 
    headers = {'Cookie': 'counter=1;'}
    with Given(app, headers=headers):
+       assert status == 200
        assert 'Set-cookie' in response.headers
-        
+       assert response.headers['Set-cookie'] == \
+           'counter=2; Domain=example.com; Max-Age=1; Path=/a'
+
        cookie = cookies.SimpleCookie(response.headers['Set-cookie'])
        counter = cookie['counter']
        assert counter.value == '2'
@@ -421,62 +429,29 @@ required
 
 .. testcode:: cookbook/validation/required
 
-   from yhttp import validate_form
+   from yhttp import validate_form, statuses
 
 
    @app.route()
    @validate_form(fields=dict(
        bar=dict(required=True),
-       baz=dict(required='700 Please provide baz'),
+       baz=dict(required=statuses.forbidden()),
    ))
    def post(req):
-       ...
+       pass
 
-   with Given(app, verb='POST', form=dict(bar='bar', baz='baz')):
+   with Given(app, verb='post', form=dict(bar='bar', baz='baz')):
        assert status == 200
 
        when(form=given - 'bar')
        assert status == '400 Field bar is required'
 
        when(form=given - 'baz', query=dict(baz='baz'))
-       assert status == 200
+       assert status == '403 Forbidden'
 
        when(form=given - 'baz')
-       assert status == '700 Please provide baz'
+       assert status == '403 Forbidden'
 
-notnone
-^^^^^^^
-
-.. testsetup:: cookbook/validation/notnone
-
-   from yhttp import Application, validate_form
-   from bddrest import Given, when, status, given
-   app = Application()
-
-.. testcode:: cookbook/validation/notnone
-
-   @app.route()
-   @validate_form(fields=dict(
-       bar=dict(notnone=True),
-       baz=dict(notnone='700 baz cannot be null')
-   ))
-   def post(req):
-       ...
-
-   with Given(app, verb='POST', json=dict(bar='bar', baz='baz')):
-       assert status == 200
-
-       when(json=given - 'bar')
-       assert status == 200
-
-       when(json=given | dict(bar=None))
-       assert status == '400 Field bar cannot be null'
-
-       when(json=given - 'baz')
-       assert status == 200
-
-       when(json=given | dict(baz=None))
-       assert status == '700 baz cannot be null'
 
 nobody
 ^^^^^^
@@ -495,13 +470,16 @@ to the server.
    @app.route()
    @validate_form(nobody=True)
    def foo(req):
-       assert req.form == {}
+       assert req.form is None
 
-   with Given(app, verb='FOO'):
+   with Given(app, verb='foo'):
        assert status == 200
 
        when(form=dict(bar='baz'))
        assert status == '400 Body Not Allowed'
+
+       when(query=dict(bar='baz'))
+       assert status == 200
 
 
 readonly
@@ -580,13 +558,18 @@ value by ``form[field] = type(form[field])``.
        bar=dict(type_=int),
    ))
    def post(req):
-       pass
+       if req.form and 'bar' in req.form:
+           for b in req.form['bar']:
+               assert isinstance(b, int)
 
-   with Given(app, verb='POST'):
+   with Given(app, verb='post'):
        assert status == 200
 
-       when(json=dict(bar='bar'))
-       assert status == '400 Invalid type: bar'
+       when(form=dict(bar='bar'))
+       assert status == '400 Invalid type: `str` for field `bar`'
+
+       when(form=dict(bar='2'))
+       assert status == 200
 
 
 minimum/maximum
@@ -599,28 +582,25 @@ minimum/maximum
    app = Application()
 
 .. testcode:: cookbook/validation/minmax
-
+    
    @app.route()
    @validate_form(fields=dict(
-       bar=dict(
-           minimum=2,
-           maximum=9
-       ),
+       bar=dict(minlength=2, maxlength=5),
    ))
    def post(req):
        pass
 
-   with Given(app, verb='POST', json=dict(bar=2)):
+   with Given(app, verb='post', form=dict(bar='123')):
        assert status == 200
 
-       when(json=dict(bar='bar'))
-       assert status == '400 Minimum allowed value for field bar is 2'
+       when(form=given - 'bar')
+       assert status == 200
 
-       when(json=dict(bar=1))
-       assert status == '400 Minimum allowed value for field bar is 2'
+       when(form=given | dict(bar='1'))
+       assert status == '400 Minimum allowed length for field bar is 2'
 
-       when(json=dict(bar=10))
-       assert status == '400 Maximum allowed value for field bar is 9'
+       when(form=given | dict(bar='123456'))
+       assert status == '400 Maximum allowed length for field bar is 5'
 
 
 minlength/maxlength
@@ -655,7 +635,7 @@ minlength/maxlength
 
 
 length
-^^^^^^^^^^^^
+^^^^^^
 
 .. versionadded:: 3.9.0
 .. testsetup:: cookbook/validation/length
@@ -673,16 +653,16 @@ length
    def post(req):
        pass
 
-   with Given(verb='post', json=dict(bar='123456')):
+   with Given(app, verb='post', form=dict(bar='123456')):
        assert status == 200
 
-       when(json=given - 'bar')
+       when(form=given - 'bar')
        assert status == 200
 
-       when(json=dict(bar='1'))
+       when(form=dict(bar='1'))
        assert status == '400 Allowed length for field bar is 6'
 
-       when(json=dict(bar='12345678'))
+       when(form=dict(bar='12345678'))
        assert status == '400 Allowed length for field bar is 6'
 
 
@@ -701,9 +681,9 @@ You can use your very own callable as the request validator:
 
    from yhttp.validation import Field
 
-   def customvalidator(value, container, field):
+   def customvalidator(req, value, container, field):
        assert isinstance(field, Field)
-       if value not in 'ab':
+       if value[0] not in 'ab':
            raise statuses.status(400, 'Value must be either a or b')
 
    @app.route()

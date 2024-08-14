@@ -104,7 +104,8 @@ contenttype decorators
 validate decorator
 ^^^^^^^^^^^^^^^^^^
 
-.. autofunction:: validate
+.. autofunction:: validate_form
+.. autofunction:: validate_query
 
 
 statuses Module

@@ -10,11 +10,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import sys
 import os.path
 import re
+
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -73,8 +74,8 @@ html_static_path = ['_static']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
-    'pymlconf': ('https://pylover.github.io/pymlconf/', None),
-    'easycli': ('https://pylover.github.io/easycli/', None),
+    'pymlconf': ('https://pylover.github.io/pymlconf', None),
+    'easycli': ('https://pylover.github.io/easycli', None),
 }
 
 autodoc_default_flags = [

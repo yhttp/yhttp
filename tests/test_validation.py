@@ -39,12 +39,10 @@ def test_nobody_get(app, Given):
 
 def test_required(app, Given):
 
-    err = statuses.forbidden()
-
     @app.route()
     @validate_form(fields=dict(
         bar=dict(required=True),
-        baz=dict(required=err),
+        baz=dict(required=statuses.forbidden()),
     ))
     def post(req):
         pass
