@@ -1,15 +1,14 @@
 HERE = $(shell readlink -f `dirname .`)
-VENVNAME = $(shell basename $(HERE))
-VENV = $(HOME)/.virtualenvs/$(VENVNAME)
-PKG = $(VENVNAME)
+PKG = $(shell basename $(HERE))
+VENVPATH ?= $(HOME)/.virtualenvs/$(PKG)
 PYTEST_FLAGS = -v
 TEST_DIR = tests
-PY = $(VENV)/bin/python3
-PIP = $(VENV)/bin/pip3
-PYTEST = $(VENV)/bin/pytest
-COVERAGE = $(VENV)/bin/coverage
-FLAKE8 = $(VENV)/bin/flake8
-TWINE = $(VENV)/bin/twine
+PY ?= $(VENVPATH)/bin/python3
+PIP ?= $(VENVPATH)/bin/pip3
+PYTEST ?= $(VENVPATH)/bin/pytest
+COVERAGE ?= $(VENVPATH)/bin/coverage
+FLAKE8 ?= $(VENVPATH)/bin/flake8
+TWINE ?= $(VENVPATH)/bin/twine
 
 
 ifdef F
@@ -42,7 +41,7 @@ lint:
 
 .PHONY: venv
 venv:
-	python3 -m venv $(VENV)
+	python3 -m venv $(VENVPATH)
 
 
 .PHONY: env
@@ -51,9 +50,21 @@ env:
 	$(PIP) install -e .
 
 
+.PHONY: env-doc
+env-doc:
+	$(PIP) install -r requirements-doc.txt
+	$(PIP) install -e .
+
+
+.PHONY: env-ci
+env-ci:
+	$(PIP) install -r requirements-ci.txt
+	$(PIP) install -e .
+
+
 .PHONY: venv-delete
 venv-delete: clean
-	rm -rf $(VENV)
+	rm -rf $(VENVPATH)
 
 
 .PHONY: sdist

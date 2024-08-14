@@ -22,7 +22,7 @@ def multipart_parse(environ):
         if not files or len(files) == 0:
             files = None
 
-    except multipart.MultipartError as e:
+    except multipart.MultipartError:
         raise statuses.status(400, 'Cannot parse the request')
 
     return form, files
@@ -91,7 +91,7 @@ class Request:
         qs = parse_qs(
             self.environ['QUERY_STRING'],
             keep_blank_values=True,
-            strict_parsing=False
+            strict_parsing=True
         )
 
         return qs
