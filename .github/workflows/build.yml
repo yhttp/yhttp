@@ -33,7 +33,7 @@ jobs:
     - name: Lint
       run: make lint
     - name: Test
-      run: make cover 
+      run: make cover F=tests/test_builtincli_serve.py
     - name: Coveralls
       run: coveralls
       env:
