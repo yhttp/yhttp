@@ -3,17 +3,29 @@ from http import cookies
 from urllib.parse import parse_qs, unquote, quote
 
 import ujson
-import multipart
 
 from .lazyattribute import lazyattribute
 from . import statuses
+from . import multipart
 
 
 def multipart_parse(environ):
     try:
-        return multipart.parse_form_data(environ, charset="utf8", strict=True)
-    except multipart.MultipartError:
+        form, files = multipart.parse_form_data(
+            environ,
+            charset="utf8",
+            strict=True
+        )
+        if not form or len(form) == 0:
+            form = None
+
+        if not files or len(files) == 0:
+            files = None
+
+    except multipart.MultipartError as e:
         raise statuses.status(400, 'Cannot parse the request')
+
+    return form, files
 
 
 class Request:
@@ -151,8 +163,8 @@ class Request:
                 raise statuses.status(400, 'Cannot parse the request')
 
         if self.contenttype == 'multipart/form-data':
-            fields, self.files = multipart_parse(self.environ)
-            return fields
+            form, self.files = multipart_parse(self.environ)
+            return form
 
         return None
 
@@ -198,9 +210,6 @@ class Request:
         see :class:`.HeadersMask` class to figure out how it works.
         """
         return HeadersMask(self.environ)
-
-    def __getitem__(self, field):
-        return self.form[field]
 
 
 class HeadersMask:

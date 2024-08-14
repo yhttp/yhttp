@@ -4,6 +4,7 @@ concurrency=multiprocessing
 omit = 
     yhttp/ext/*
     yhttp/main.py
+	yhttp/multipart.py
 
 [report]
 exclude_lines=

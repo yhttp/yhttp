@@ -14,6 +14,8 @@ from .statuses import HTTPStatus, statuscode, status, badrequest, \
     preconditionfailed, notmodified, internalservererror, badgateway, \
     movedpermanently, found
 from .rewrite import Rewrite
+from .multipart import MultipartError, MultipartParser, MultipartPart, \
+   parse_form_data
 
 
 __version__ = '4.0.0'
