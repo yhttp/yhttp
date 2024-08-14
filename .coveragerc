@@ -1,6 +1,5 @@
 [run]
 source=yhttp
-concurrency=multiprocessing
 omit = 
     yhttp/ext/*
     yhttp/main.py
