@@ -1,10 +1,7 @@
-# Pick first word of directory as venv name
-HERE=`dirname "$(readlink -f "$BASH_SOURCE")"`
-
-DIRNAME=$(basename ${HERE})
-VENVNAME=$(echo ${DIRNAME} | cut -d'-' -f1)
-
-VENV=${HOME}/.virtualenvs/${VENVNAME}
-
-
-source ${VENV}/bin/activate
+# Usage:
+# source activate.sh
+# source path/to/activate.sh
+# . activate.sh
+VENV=$(basename `dirname "$(readlink -f "$BASH_SOURCE")"`)
+VENVPATH=${HOME}/.virtualenvs/${VENV}
+source ${VENVPATH}/bin/activate
