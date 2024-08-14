@@ -1,4 +1,3 @@
-- review documentation carefully
 - count validaotr limit number of identical fields in form
 - All TODOs
 
