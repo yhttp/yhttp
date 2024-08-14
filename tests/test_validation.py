@@ -104,6 +104,7 @@ def test_ontypeerror(app, Given):
 
     @app.route()
     @validate_form(fields=dict(
+        foo=dict(type_=str, ontypeerror='raise'),
         bar=dict(type_=int, ontypeerror='raise'),
     ))
     def post(req):
@@ -111,6 +112,9 @@ def test_ontypeerror(app, Given):
             assert isinstance(req.form['bar'], int)
 
     with Given(verb='post'):
+        assert status == 200
+
+        when(form=dict(foo='foo'))
         assert status == 200
 
         when(form=dict(bar='bar'))
