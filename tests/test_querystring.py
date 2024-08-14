@@ -22,8 +22,8 @@ def test_querystring_empty(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-        assert req.query.get('baz') == None
-        assert baz == None
+        assert req.query.get('baz') is None
+        assert baz is None
 
     with Given('/?baz='):
         assert status == 200

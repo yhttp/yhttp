@@ -9,8 +9,7 @@ from . import statuses
 class Field:
     def __init__(self, title, required=None, type_=None, ontypeerror='cast',
                  minimum=None, maximum=None, length=None, minlength=None,
-                 maxlength=None, callback=None, notnone=None, pattern=None,
-                 readonly=None):
+                 maxlength=None, callback=None, pattern=None, readonly=None):
         self.title = title
         self.criteria = []
 
@@ -19,9 +18,6 @@ class Field:
 
         if required:
             self.criteria.append(RequiredValidator(required))
-
-        if notnone:
-            self.criteria.append(NotNoneValidator(notnone))
 
         elif type_:
             self.criteria.append(
@@ -188,8 +184,8 @@ class MaxLengthValidator(Criterion):
 class LengthValidator(Criterion):
     def _validate(self, req, value, container, field):
         for v in value:
-            l = len(v)
-            if self.expression > l or l > self.expression:
+            vlen = len(v)
+            if self.expression > vlen or vlen > self.expression:
                 raise self.create_exception(
                     f'Allowed length for field {field.title} is '
                     f'{self.expression}'

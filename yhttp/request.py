@@ -93,12 +93,12 @@ class Request:
 
         .. versionadded:: 4.0
         """
-        if req.contenttype == 'application/json':
-            if req.contentlength is None:
+        if self.contenttype == 'application/json':
+            if self.contentlength is None:
                 raise statuses.status(400, 'Content-Length required')
 
-            fp = req.environ['wsgi.input']
-            data = fp.read(req.contentlength)
+            fp = self.environ['wsgi.input']
+            data = fp.read(self.contentlength)
             try:
                 return ujson.decode(data)
             except (ValueError, TypeError):
