@@ -40,6 +40,9 @@ def test_nobody_get(app, Given):
 def test_required(app, Given):
 
     @app.route()
+    @validate_query(fields=dict(
+        foo=dict(required=True),
+    ))
     @validate_form(fields=dict(
         bar=dict(required=True),
         baz=dict(required=statuses.forbidden()),
@@ -47,13 +50,14 @@ def test_required(app, Given):
     def post(req):
         pass
 
-    with Given(verb='post', form=dict(bar='bar', baz='baz')):
+    with Given(verb='post', query=dict(foo='foo'),
+               form=dict(bar='bar', baz='baz')):
         assert status == 200
 
         when(form=given - 'bar')
         assert status == '400 Field bar is required'
 
-        when(form=given - 'baz', query=dict(baz='baz'))
+        when(form=given - 'baz', query=given + dict(baz='baz'))
         assert status == '403 Forbidden'
 
         when(form=given - 'baz')

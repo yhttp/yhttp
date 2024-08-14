@@ -411,8 +411,8 @@ Test:
 
 .. _cookbook-validation:
 
-Request Valiation
------------------
+Request Validation
+------------------
 
 ``yhttp`` has a very flexible request validation system. these are some 
 examples:
@@ -429,10 +429,13 @@ required
 
 .. testcode:: cookbook/validation/required
 
-   from yhttp import validate_form, statuses
+   from yhttp import validate_form, validate_query, statuses
 
 
    @app.route()
+   @validate_query(fields=dict(
+       foo=dict(required=True),
+   ))
    @validate_form(fields=dict(
        bar=dict(required=True),
        baz=dict(required=statuses.forbidden()),
@@ -440,13 +443,14 @@ required
    def post(req):
        pass
 
-   with Given(app, verb='post', form=dict(bar='bar', baz='baz')):
+   with Given(app, verb='post', query=dict(foo='foo'), 
+           form=dict(bar='bar', baz='baz')):
        assert status == 200
 
        when(form=given - 'bar')
        assert status == '400 Field bar is required'
 
-       when(form=given - 'baz', query=dict(baz='baz'))
+       when(form=given - 'baz', query=given + dict(baz='baz'))
        assert status == '403 Forbidden'
 
        when(form=given - 'baz')

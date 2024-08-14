@@ -8,7 +8,6 @@ def test_from(app, Given):
     @text
     def post(req):
         try:
-            from pudb import set_trace; set_trace()
             return req.form['foo']
         except KeyError:
             raise statuses.badrequest()

@@ -101,11 +101,14 @@ contenttype decorators
 .. autofunction:: html
 
 
-validate decorator
-^^^^^^^^^^^^^^^^^^
+validation module
+^^^^^^^^^^^^^^^^^^^^^
 
-.. autofunction:: validate_form
-.. autofunction:: validate_query
+.. automodule:: yhttp.validation
+
+   .. autofunction:: validate_form
+   
+   .. autofunction:: validate_query
 
 
 statuses Module
