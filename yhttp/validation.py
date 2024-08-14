@@ -300,7 +300,7 @@ class FormValidator(Validator):
             if self.nobody and request.contentlength:
                 raise statuses.status(400, 'Body Not Allowed')
 
-            self.validate(request, request.form)
+            self.validate(request, request.form or {})
             return handler(request, *arguments, **kwargs)
 
         return wrapper
@@ -313,7 +313,7 @@ class QueryValidator(Validator):
     def __call__(self, handler):
         @functools.wraps(handler)
         def wrapper(request, *arguments, **query):
-            self.validate(request, request.query)
+            self.validate(request, request.query or {})
             query = {
                 k: v for k, v in request.query.items()
                 if k in query

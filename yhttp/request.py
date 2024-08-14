@@ -2,8 +2,18 @@ import wsgiref.util as wsgiutil
 from http import cookies
 from urllib.parse import parse_qs, unquote, quote
 
-from .forms import parseanyform
+import ujson
+import multipart
+
 from .lazyattribute import lazyattribute
+from . import statuses
+
+
+def multipart_parse(environ):
+    try:
+        return multipart.parse_form_data(environ, charset="utf8", strict=True)
+    except multipart.MultipartError:
+        raise statuses.status(400, 'Cannot parse the request')
 
 
 class Request:
@@ -75,6 +85,28 @@ class Request:
         return qs
 
     @lazyattribute
+    def json(self):
+        """Return a dictionary representing the submitted JSON document.
+
+        .. note::
+            ``Content-Type`` header must be ``aplication/json``.
+
+        .. versionadded:: 4.0
+        """
+        if req.contenttype == 'application/json':
+            if req.contentlength is None:
+                raise statuses.status(400, 'Content-Length required')
+
+            fp = req.environ['wsgi.input']
+            data = fp.read(req.contentlength)
+            try:
+                return ujson.decode(data)
+            except (ValueError, TypeError):
+                raise statuses.status(400, '`ujson`: Cannot parse the request')
+
+        return None
+
+    @lazyattribute
     def form(self):
         """Return a dictionary representing the submitted HTTP from.
 
@@ -83,13 +115,12 @@ class Request:
         per key are possible).
 
         .. note::
-            All common form types such as: json, urlencoded and multipart are
-            supported.
+            Both urlencoded and multipart are supported.
 
         .. note::
            On the first access to this attribute, the :meth:`.Request.files`
-           attribute will be initialized if any file fields are submitted using
-           the ``multipart/form`` content header.
+           attribute will be initialized. if any file fields are submitted
+           using the ``multipart/form`` content header.
 
         .. versionadded:: 2.6
            An easy way to get form values is:
@@ -107,9 +138,23 @@ class Request:
            be accessible by :meth:`.Request.files` instead.
 
         """
-        fields, files = parseanyform(self)
-        self.files = files
-        return fields
+        if self.contenttype == 'application/x-www-form-urlencoded':
+            try:
+                fp = self.environ['wsgi.input']
+                if fp:
+                    return parse_qs(
+                        qs=fp.read(self.contentlength).decode(),
+                        keep_blank_values=True,
+                        strict_parsing=True,
+                    )
+            except (TypeError, ValueError, UnicodeError):
+                raise statuses.status(400, 'Cannot parse the request')
+
+        if self.contenttype == 'multipart/form-data':
+            fields, self.files = multipart_parse(self.environ)
+            return fields
+
+        return None
 
     @lazyattribute
     def files(self):
@@ -127,12 +172,11 @@ class Request:
 
         .. versionadded:: 4.0
         """
-        if self.contenttype != 'multipart/form-data':
-            return {}
+        if self.contenttype == 'multipart/form-data':
+            self.form, files = multipart_parse(self.environ)
+            return files
 
-        fields, files = parseanyform(self)
-        self.form = fields
-        return files
+        return None
 
     @lazyattribute
     def cookies(self):

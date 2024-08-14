@@ -10,7 +10,7 @@ def test_nobody(app, Given):
     @app.route()
     @validate_form(nobody=True)
     def foo(req):
-        assert req.form == {}
+        assert req.form is None
 
     with Given(verb='foo'):
         assert status == 200
@@ -28,7 +28,7 @@ def test_nobody_get(app, Given):
     @validate_form(nobody=True)
     def get(req, *, bar=None):
         assert req.query.get('bar') == bar
-        assert req.form == {}
+        assert req.form is None
 
     with Given():
         assert status == 200
@@ -84,7 +84,7 @@ def test_type(app, Given):
         bar=dict(type_=int),
     ))
     def post(req):
-        if 'bar' in req.form:
+        if req.form and 'bar' in req.form:
             for b in req.form['bar']:
                 assert isinstance(b, int)
 
@@ -107,7 +107,7 @@ def test_ontypeerror(app, Given):
         bar=dict(type_=int, ontypeerror='raise'),
     ))
     def post(req):
-        if 'bar' in req.form:
+        if req.form and 'bar' in req.form:
             assert isinstance(req.form['bar'], int)
 
     with Given(verb='post'):
