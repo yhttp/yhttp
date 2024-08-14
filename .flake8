@@ -1,6 +1,7 @@
 [flake8]
 ignore = W503, F811
-exclude = build
+exclude = 
+	tests/test_multipart.py
 per-file-ignores =
 	yhttp/__init__.py: F401
 	tests/conftest.py: F401

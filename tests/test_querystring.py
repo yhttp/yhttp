@@ -7,10 +7,7 @@ def test_querystring_none(app, Given):
         bar = req.query.get('bar')
         return f'{foo[0] if foo else 'None'} {bar[0] if bar else 'None'}'
 
-
-    from bddrest import Given, response, when, given
-
-    with Given(app, '/?foo=foo&bar=bar'):
+    with Given('/?foo=foo&bar=bar'):
         assert response.text == 'foo bar'
 
         when(query=given - 'foo')

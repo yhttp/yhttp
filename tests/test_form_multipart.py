@@ -1,6 +1,6 @@
 import io
 
-from bddrest import status, response, when, given
+from bddrest import status, response, when
 
 
 def test_form_multipart(app, Given):

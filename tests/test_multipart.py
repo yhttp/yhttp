@@ -1,4 +1,11 @@
-# -*- coding: utf-8 -*-
+"""
+This module is modified version of https://github.com/defnull/multipart to
+accept multipart and url-encoded forms when verb is other than PUT or POST.
+HEAD, OPTION, GET and such verbs are remains prohibited.
+
+
+This module completely excluded from flake8.
+"""
 import unittest
 import base64
 import sys, os.path, tempfile
@@ -368,15 +375,15 @@ class TestBrokenMultipart(unittest.TestCase):
         self.assertMPError()
 
     def test_big_urlencoded_detect_early(self):
-       self.env['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
-       self.env['CONTENT_LENGTH'] = 1024+2
-       self.write('a='+'b'*1024)
-       self.assertMPError(mem_limit=1024)
+        self.env['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+        self.env['CONTENT_LENGTH'] = 1024 + 2
+        self.write('a=' + 'b' * 1024)
+        self.assertMPError(mem_limit=1024)
 
     def test_big_urlencoded_detect_late(self):
-       self.env['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
-       self.write('a='+'b'*1024)
-       self.assertMPError(mem_limit=1024)
+        self.env['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+        self.write('a=' + 'b' * 1024)
+        self.assertMPError(mem_limit=1024)
 
 
 ''' The files used by the following test were taken from the werkzeug library
@@ -384,7 +391,8 @@ class TestBrokenMultipart(unittest.TestCase):
     under BSD licence. See http://werkzeug.pocoo.org/ '''
 
 browser_test_cases = {}
-browser_test_cases['firefox3-2png1txt'] = {'data': base64.b64decode(to_bytes('''
+browser_test_cases['firefox3-2png1txt'] = {'data':
+                                           base64.b64decode(to_bytes('''
 LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0xODY0NTQ2NTE3MTM1MTkzNDE5NTE1ODEwMzAx
 MDUNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0iZmlsZTEiOyBmaWxlbmFt
 ZT0iYW5jaG9yLnBuZyINCkNvbnRlbnQtVHlwZTogaW1hZ2UvcG5nDQoNColQTkcNChoKAAAADUlI
@@ -416,7 +424,7 @@ kAAAAABJRU5ErkJggg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0xODY0NTQ2NTE3MTM1
 MTkzNDE5NTE1ODEwMzAxMDUNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0i
 dGV4dCINCg0KZXhhbXBsZSB0ZXh0DQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTE4NjQ1
 NDY1MTcxMzUxOTM0MTk1MTU4MTAzMDEwNS0tDQo=''')),
-'boundary':'---------------------------186454651713519341951581030105',
+'boundary': '---------------------------186454651713519341951581030105',
 'files': {'file1': (u'anchor.png', 'image/png', base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGdSURBVDjLpVMxa8JAFL6rAQUHXQoZpLU/
@@ -428,7 +436,8 @@ b2cymbG7gnK5vIX9USwWI1yAI/KjLGK7teEI8HN1TizrnZWdRxxsNps8vI3YLpVKbB2EWB6XkMHz
 gAlvriYRSW+app1Mpy/jSCRSRSyDUON5nuJGytaAHI/vVPv9p/FischivL96gEP2bGxorhVFqYXD
 YQFCScwBYa9EKU1OlAkB+QLEU2AGaJ7PWKlUDiF2BBw4P9Mt/KUoije+5uAv9gGcjD6Kg4wu3AAA
 AABJRU5ErkJggg=='''))),
-          'file2': (u'application_edit.png', 'image/png', base64.b64decode(to_bytes('''
+          'file2': (u'application_edit.png', 'image/png',
+                    base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJRSURBVBgZpcHda81xHMDx9+d3fudYzuYw
 2RaZ5yTWolEiuZpCSjGJFEktUUr8A6ZxQZGHmDtqdrGUXHgoeZqSp1F2bLFWjtkOB8PZzvmd7+dj
@@ -444,7 +453,8 @@ Z1FwaFe9j+d4eecaPd1dPxNTSlfWHm1v5y/EzBitblXp4JLZ5f6yBbOwaK5tsD+9c33jq/f8w2+m
 RSjOllPhkAAAAABJRU5ErkJggg==''')))},
 'forms': {'text': u'example text'}}
 
-browser_test_cases['firefox3-2pnglongtext'] = {'data': base64.b64decode(to_bytes('''
+browser_test_cases['firefox3-2pnglongtext'] = {'data':
+                                               base64.b64decode(to_bytes('''
 LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0xNDkwNDA0NDczOTc4NzE5MTAzMTc1NDcxMTc0
 OA0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJmaWxlMSI7IGZpbGVuYW1l
 PSJhY2NlcHQucG5nIg0KQ29udGVudC1UeXBlOiBpbWFnZS9wbmcNCg0KiVBORw0KGgoAAAANSUhE
@@ -481,7 +491,7 @@ gg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0xNDkwNDA0NDczOTc4NzE5MTAzMTc1NDcx
 MTc0OA0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJ0ZXh0Ig0KDQotLWxv
 bmcgdGV4dA0KLS13aXRoIGJvdW5kYXJ5DQotLWxvb2thbGlrZXMtLQ0KLS0tLS0tLS0tLS0tLS0t
 LS0tLS0tLS0tLS0tLS0xNDkwNDA0NDczOTc4NzE5MTAzMTc1NDcxMTc0OC0tDQo=''')),
-'boundary':'---------------------------14904044739787191031754711748',
+'boundary': '---------------------------14904044739787191031754711748',
 'files': {'file1': (u'accept.png', 'image/png', base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKfSURBVDjLpZPrS1NhHMf9O3bOdmwDCWRE
@@ -545,8 +555,9 @@ yPw8BFIiKPmNpKar7P7xb/zyT9P+o7OYvzzYSUt8U+TzxytodixEfgN3CFlQMNAcMgAAAABJRU5E
 rkJggg0KLS0tLS0tLS0tLS0tekVPOWpRS21MYzJDcTg4YzIzRHgxOQ0KQ29udGVudC1EaXNwb3Np
 dGlvbjogZm9ybS1kYXRhOyBuYW1lPSJ0ZXh0Ig0KDQpibGFmYXNlbCDDtsOkw7wNCi0tLS0tLS0t
 LS0tLXpFTzlqUUttTGMyQ3E4OGMyM0R4MTktLQ0K''')),
-'boundary':'----------zEO9jQKmLc2Cq88c23Dx19',
-'files': {'file1': (u'arrow_branch.png', 'image/png', base64.b64decode(to_bytes('''
+'boundary': '----------zEO9jQKmLc2Cq88c23Dx19',
+'files': {'file1': (u'arrow_branch.png', 'image/png',
+                    base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHYSURBVDjLlVLPS1RxHJynpVu7KEn0Vt+2
 l6IO5qGCIsIwCPwD6hTUaSk6REoUHeoQ0qVAMrp0COpY0SUIPVRgSl7ScCUTst6zIoqg0y7lvpnP
@@ -558,7 +569,8 @@ jYjSYuncngtdhakbM5dXlhgTNEMYLqB9q49MKgsPjTBXntVgkDNIgmI1VY2Q7QzgJ9rx++ci3ofz
 iBYiiELQEUAyhB/D29M3Zy+uIkDIhGYvgeKvIkbHxz6Tevzq6ut+ANh9fldetMn80OzZVVdgLFjB
 Q0tpEz68jcB4ifx3pQeictVXIEETnBPCKMLEwBIZAPJD767V/ETGwsjzYYiC6vzEP9asLo3SGuQv
 AAAAAElFTkSuQmCC'''))),
-          'file2': (u'award_star_bronze_1.png', 'image/png', base64.b64decode(to_bytes('''
+          'file2': (u'award_star_bronze_1.png', 'image/png',
+                    base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJvSURBVDjLhZNNSFRRFIC/N++9eWMzhkl/
 ZJqFMQMRFvTvImkXSdKiVRAURBRRW1eZA9EqaNOiFlZEtQxKyrJwUS0K+qEQzaTE/AtLHR3Hmffu
@@ -618,8 +630,9 @@ AAAAAElFTkSuQmCCDQotLS0tLS1XZWJLaXRGb3JtQm91bmRhcnlqZFNGaGNBUms4ZnlHTnk2DQpD
 b250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InRleHQiDQoNCnRoaXMgaXMgYW5v
 dGhlciB0ZXh0IHdpdGggw7xtbMOkw7x0cw0KLS0tLS0tV2ViS2l0Rm9ybUJvdW5kYXJ5amRTRmhj
 QVJrOGZ5R055Ni0tDQo=''')),
-'boundary':'----WebKitFormBoundaryjdSFhcARk8fyGNy6',
-'files': {'file1': (u'gtk-apply.png', 'image/png', base64.b64decode(to_bytes('''
+'boundary': '----WebKitFormBoundaryjdSFhcARk8fyGNy6',
+'files': {'file1': (u'gtk-apply.png', 'image/png',
+                    base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANnSURB
 VDiNldJ9aJVVHAfw7znPuS/PvW4405WbLWfbsBuNbramq5Tp7mLqIFPXINlwpAitaCAPjWKgBdXz
@@ -691,8 +704,9 @@ GK1uVengktnl/rIFs7Borm2wP71zfeOr9/zDb6ZFKM6WU+GQAAAAAElFTkSuQmCCDQotLS0tLS0t
 LS0tLS0tLS0tLS0tLS0tLS0tLS0tLTdkOTFiMDNhMjAxMjgNCkNvbnRlbnQtRGlzcG9zaXRpb246
 IGZvcm0tZGF0YTsgbmFtZT0idGV4dCINCg0KaWU2IHN1Y2tzIDotLw0KLS0tLS0tLS0tLS0tLS0t
 LS0tLS0tLS0tLS0tLS03ZDkxYjAzYTIwMTI4LS0NCg==''')),
-'boundary':'---------------------------7d91b03a20128',
-'files': {'file1': (u'file1.png', 'image/x-png', base64.b64decode(to_bytes('''
+'boundary': '---------------------------7d91b03a20128',
+        'files': {'file1': (u'file1.png', 'image/x-png',
+                        base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGdSURBVDjLpVMxa8JAFL6rAQUHXQoZpLU/
 oUOnDtKtW/MDBFHHThUKTgrqICgOEtd2EVxb2qFkKTgVChbSCnZTiVBEMBRLiEmafleCDaWxDX3w
@@ -703,7 +717,8 @@ b2cymbG7gnK5vIX9USwWI1yAI/KjLGK7teEI8HN1TizrnZWdRxxsNps8vI3YLpVKbB2EWB6XkMHz
 gAlvriYRSW+app1Mpy/jSCRSRSyDUON5nuJGytaAHI/vVPv9p/FischivL96gEP2bGxorhVFqYXD
 YQFCScwBYa9EKU1OlAkB+QLEU2AGaJ7PWKlUDiF2BBw4P9Mt/KUoije+5uAv9gGcjD6Kg4wu3AAA
 AABJRU5ErkJggg=='''))),
-          'file2': (u'file2.png', 'image/x-png', base64.b64decode(to_bytes('''
+              'file2': (u'file2.png', 'image/x-png',
+                        base64.b64decode(to_bytes('''
 iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJRSURBVBgZpcHda81xHMDx9+d3fudYzuYw
 2RaZ5yTWolEiuZpCSjGJFEktUUr8A6ZxQZGHmDtqdrGUXHgoeZqSp1F2bLFWjtkOB8PZzvmd7+dj
@@ -717,7 +732,8 @@ KFu4jvynJiIxIzcwg/SjF1RsOk9R+QJMlZCvqvwhQFdbM4XvrynIVHpfn2ZSWYyhzHS+PUtSueUC
 0cQ0QmpGyE9197TUnwzq1DnUKbXSxOb6S7xtPkjngzbGVVbzvS/FjaGt9DU8xlRRJdTCMDEzRjuy
 Z1FwaFe9j+d4eecaPd1dPxNTSlfWHm1v5y/EzBitblXp4JLZ5f6yBbOwaK5tsD+9c33jq/f8w2+m
 RSjOllPhkAAAAABJRU5ErkJggg==''')))},
-'forms': {'text': u'ie6 sucks :-/'}}
+    'forms': {'text': u'ie6 sucks :-/'}}
+
 
 class TestWerkzeugExamples(unittest.TestCase):
     def test_werkzeug_examples(self):
@@ -726,14 +742,18 @@ class TestWerkzeugExamples(unittest.TestCase):
             boundary = browser_test_cases[name]['boundary']
             files = browser_test_cases[name]['files']
             forms = browser_test_cases[name]['forms']
-            env = {'REQUEST_METHOD': 'POST',
-                   'CONTENT_TYPE': 'multipart/form-data; boundary=%s'%boundary,
-                   'wsgi.input': BytesIO(browser_test_cases[name]['data'])}
-            rforms, rfiles = mp.parse_form_data(env, strict=True, charset='utf8')
+            env = {
+                'REQUEST_METHOD': 'POST',
+                'CONTENT_TYPE': 'multipart/form-data; boundary=%s' % boundary,
+                'wsgi.input': BytesIO(browser_test_cases[name]['data'])
+            }
+            rforms, rfiles = mp.parse_form_data(env, strict=True,
+                                                charset='utf8')
             for field in files:
                 self.assertEqual(rfiles[field].name, field)
                 self.assertEqual(rfiles[field].filename, files[field][0])
                 self.assertEqual(rfiles[field].content_type, files[field][1])
-                self.assertEqual(rfiles[field].file.read(), to_bytes(files[field][2]))
+                self.assertEqual(rfiles[field].file.read(),
+                                 to_bytes(files[field][2]))
             for field in forms:
                 self.assertEqual(rforms[field], forms[field])
