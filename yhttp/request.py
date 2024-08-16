@@ -91,7 +91,7 @@ class Request:
         qs = parse_qs(
             self.environ['QUERY_STRING'],
             keep_blank_values=True,
-            strict_parsing=True
+            strict_parsing=False
         )
 
         return qs
