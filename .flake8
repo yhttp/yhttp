@@ -3,5 +3,5 @@ ignore = W503, F811
 exclude = 
 	tests/test_multipart.py
 per-file-ignores =
-	yhttp/__init__.py: F401
+	yhttp/__init__.py: F401, F403
 	tests/conftest.py: F401
