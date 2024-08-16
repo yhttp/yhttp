@@ -87,8 +87,7 @@ def test_type(app, Given):
     ))
     def post(req):
         if req.form and 'bar' in req.form:
-            for b in req.form['bar']:
-                assert isinstance(b, int)
+            assert isinstance(req.form['bar'], int)
 
     with Given(verb='post'):
         assert status == 200
@@ -129,14 +128,13 @@ def test_ontypeerror(app, Given):
 def test_type_querystring(app, Given):
     @app.route()
     @validate_query(fields=dict(
-        bar=dict(type_=int),
+        bar=dict(
+            type_=int
+        ),
     ))
     def get(req, *, bar=None):
-        for i in req.query['bar']:
-            assert isinstance(i, int)
-
-        for i in bar:
-            assert isinstance(i, int)
+        assert isinstance(req.query['bar'], int)
+        assert isinstance(bar, int)
 
     with Given(query=dict(bar='2')):
         assert status == 200

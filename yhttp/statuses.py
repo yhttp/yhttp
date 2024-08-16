@@ -2,6 +2,33 @@ import traceback
 from functools import partial, wraps
 
 
+__all__ = [
+    'HTTPStatus',
+    'statuscode',
+    'status',
+    'ok',
+    'created',
+    'nocontent',
+    'badrequest',
+    'unauthorized',
+    'forbidden',
+    'notfound',
+    'methodnotallowed',
+    'conflict',
+    'gone',
+    'lengthrequired',
+    'unprocessablecontent',
+    'preconditionfailed',
+    'notmodified',
+    'internalservererror',
+    'badgateway',
+    'serviceunavailable',
+    'gatewaytimeout',
+    'movedpermanently',
+    'found',
+]
+
+
 class HTTPStatus(Exception):
     """Base class for all HTTP Exceptions.
 
@@ -71,8 +98,14 @@ conflict = partial(status, 409, 'Conflict')
 #: HTTP 410 Gone exception factory
 gone = partial(status, 410, 'Gone')
 
+#: HTTP 411 Length Required
+lengthrequired = partial(status, 411, 'Length Required')
+
 #: HTTP 412 Precondition Failed exception factory
 preconditionfailed = partial(status, 412, 'Precondition Failed')
+
+#: HTTP 422 Unprocessable Content
+unprocessablecontent = partial(status, 422, 'Unprocessable Content')
 
 #: HTTP 304 Not Modified exception factory
 notmodified = partial(status, 304, 'Not Modified', nobody=True)

@@ -1,7 +1,8 @@
 - count validaotr limit number of identical fields in form
 - All TODOs
-
-
+- helper functions such as req.getjson(force=), getform(...), 
+- check document cross refrences
+- test space in query string
 
 ../../.virtualenvs/yhttp/lib/python3.12/site-packages/bddrest/headerset.py:1
   /home/vahid/.virtualenvs/yhttp/lib/python3.12/site-packages/bddrest/headerset.py:1: DeprecationWarning: typing.re is deprecated, import directly from typing instead. typing.re will be removed in Python 3.13.

@@ -10,10 +10,7 @@ from .lazyattribute import lazyattribute
 from .request import Request, HeadersMask
 from .response import Response
 from .headerset import HeaderSet
-from .statuses import HTTPStatus, statuscode, status, badrequest, \
-    unauthorized, forbidden, notfound, methodnotallowed, conflict, gone, \
-    preconditionfailed, notmodified, internalservererror, badgateway, \
-    movedpermanently, found
+from .statuses import *
 from .rewrite import Rewrite
 from .multipart import MultipartError, MultipartParser, MultipartPart, \
     parse_form_data

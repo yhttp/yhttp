@@ -5,7 +5,7 @@ def test_querystring_none(app, Given):
     @app.route()
     def get(req, *, foo=None):
         bar = req.query.get('bar')
-        return f'{foo[0] if foo else "None"} {bar[0] if bar else "None"}'
+        return f'{foo if foo else "None"} {bar if bar else "None"}'
 
     with Given('/?foo=foo&bar=bar'):
         assert response.text == 'foo bar'
@@ -19,8 +19,8 @@ def test_querystring(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-        return f'{",".join(req.query["foo"])} ' \
-            f'{",".join(baz) if baz else "None"}'
+        return f'{req.query["foo"]} ' \
+            f'{baz if baz else "None"}'
 
     with Given('/?foo=bar&baz=qux'):
         assert status == 200
@@ -35,8 +35,22 @@ def test_querystring_empty(app, Given):
 
     @app.route()
     def get(req, *, baz=None):
-        assert req.query.get('baz') is None
-        assert baz is None
+        assert req.query['baz'] == ''
+        assert baz == ''
 
     with Given('/?baz='):
         assert status == 200
+
+
+def test_querystring_duplicatefields(app, Given):
+
+    @app.route()
+    def post(req):
+        return ', '.join(req.query.getall('foo'))
+
+    with Given(
+            verb='post',
+            query='foo=bar&foo=baz',
+    ):
+        assert status == 200
+        assert response.text == 'bar, baz'

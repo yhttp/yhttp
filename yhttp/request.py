@@ -7,6 +7,7 @@ import ujson
 from .lazyattribute import lazyattribute
 from . import statuses
 from . import multipart
+from . import multidict
 
 
 def multipart_parse(environ):
@@ -16,12 +17,6 @@ def multipart_parse(environ):
             charset="utf8",
             strict=True
         )
-        if not form or len(form) == 0:
-            form = None
-
-        if not files or len(files) == 0:
-            files = None
-
     except multipart.MultipartError:
         raise statuses.status(400, 'Cannot parse the request')
 
@@ -94,7 +89,20 @@ class Request:
             strict_parsing=True
         )
 
-        return qs
+        return multidict.MultiDict(backend=qs)
+
+    @lazyattribute
+    def body(self):
+        """Reads the request body.
+        """
+        if not self.contentlength:
+            return None
+
+        fp = self.environ.get('wsgi.input')
+        if fp is None:
+            raise ValueError('wsgi.input environ valriable is None')
+
+        return fp.read(self.contentlength)
 
     @lazyattribute
     def json(self):
@@ -105,18 +113,37 @@ class Request:
 
         .. versionadded:: 4.0
         """
-        if self.contenttype == 'application/json':
-            if self.contentlength is None:
-                raise statuses.status(400, 'Content-Length required')
 
-            fp = self.environ['wsgi.input']
-            data = fp.read(self.contentlength)
-            try:
-                return ujson.decode(data)
-            except (ValueError, TypeError):
-                raise statuses.status(400, '`ujson`: Cannot parse the request')
+        b = self.body
+        if b is None:
+            return None
 
-        return None
+        return ujson.decode(b)
+
+    def getjson(self, relax=False):
+        """Return the reuest body as a decoded JSON object.
+
+        This is actualy a wrapper around the :attr:`.Request.json`. but raises
+        :exc:`.statuses.lengthrequired` and
+        :exc:`.statuses.unprocessablecontent` instead of programmatic
+        :mod:`ujson` exceptions if ``relax=False`` (the default behaviour).
+
+        if ``relax=True``, it returns ``None`` on any failure.
+        """
+
+        try:
+            if self.json is None:
+                if relax:
+                    return None
+
+                raise statuses.lengthrequired()
+        except ujson.JSONDecodeError:
+            if relax:
+                return None
+
+            raise statuses.unprocessablecontent()
+
+        return self.json
 
     @lazyattribute
     def form(self):
@@ -150,19 +177,9 @@ class Request:
            be accessible by :meth:`.Request.files` instead.
 
         """
-        if self.contenttype == 'application/x-www-form-urlencoded':
-            try:
-                fp = self.environ['wsgi.input']
-                if fp:
-                    return parse_qs(
-                        qs=fp.read(self.contentlength).decode(),
-                        keep_blank_values=True,
-                        strict_parsing=True,
-                    )
-            except (TypeError, ValueError, UnicodeError):
-                raise statuses.status(400, 'Cannot parse the request')
-
-        if self.contenttype == 'multipart/form-data':
+        if self.contenttype and self.contenttype in (
+                'multipart/form-data'
+                'application/x-www-form-urlencoded'):
             form, self.files = multipart_parse(self.environ)
             return form
 

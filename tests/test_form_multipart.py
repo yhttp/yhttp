@@ -2,6 +2,8 @@ import io
 
 from bddrest import status, response, when
 
+from yhttp.multidict import MultiDict
+
 
 def test_form_multipart(app, Given):
     app.settings.debug = False
@@ -9,14 +11,16 @@ def test_form_multipart(app, Given):
     @app.route()
     def post(req):
         assert req.contenttype.startswith('multipart/form')
-        assert req.files is None
+        assert req.files is not None
+        assert isinstance(req.files, MultiDict)
         assert req.form['foo'] == 'bar'
 
     @app.route()
     def patch(req):
         assert req.contenttype.startswith('multipart/form')
+        assert req.files is not None
+        assert isinstance(req.files, MultiDict)
         assert req.form['foo'] == 'bar'
-        assert req.files is None
 
     @app.route()
     def put(req):

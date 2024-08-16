@@ -5,11 +5,12 @@ def test_form_urlencoded_malformed(app, Given):
     @app.route()
     def post(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
-        assert req.form['foo'] == ['bar']
+        assert 'foobarbaz' in req.form
+        assert len(req.form) == 1
 
     with Given(verb='post', content_type='application/x-www-form-urlencoded',
                body='foobarbaz'):
-        assert status == '400 Cannot parse the request'
+        assert status == 200
 
 
 def test_form_urlencoded(app, Given):
@@ -17,7 +18,7 @@ def test_form_urlencoded(app, Given):
     @app.route()
     def post(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
-        assert req.form['foo'] == ['bar']
+        assert req.form['foo'] == 'bar'
 
     @app.route()
     def patch(req):
@@ -39,7 +40,7 @@ def test_form_urlencoded_duplicatefields(app, Given):
 
     @app.route()
     def post(req):
-        assert req.form['foo'] == ['bar', 'baz']
+        assert req.form.getall('foo') == ['bar', 'baz']
 
     with Given(
             verb='post',
