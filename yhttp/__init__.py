@@ -14,6 +14,7 @@ from .statuses import *
 from .rewrite import Rewrite
 from .multipart import MultipartError, MultipartParser, MultipartPart, \
     parse_form_data
+from .multidict import MultiDict
 
 
 __version__ = '4.0.0'

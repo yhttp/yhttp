@@ -278,19 +278,19 @@ class Validator(metaclass=abc.ABCMeta):
 class FormValidator(Validator):
     def __init__(self, nobody=None, fields=None, strict=False):
         if nobody:
-            assert not strict, 'strict flag cannot set when nobody is true'
+            assert fields is None, 'fields argument can\'t be used with nobody'
 
         self.nobody = nobody
         super().__init__(fields=fields, strict=strict)
 
     def __call__(self, handler):
         @functools.wraps(handler)
-        def wrapper(request, *arguments, **kwargs):
-            if self.nobody and request.contentlength:
+        def wrapper(req, *arguments, **kwargs):
+            if self.nobody and req.contentlength:
                 raise statuses.status(400, 'Body Not Allowed')
 
-            self.validate(request, request.form or {})
-            return handler(request, *arguments, **kwargs)
+            self.validate(req, req.getform(relax=not self.strict) or {})
+            return handler(req, *arguments, **kwargs)
 
         return wrapper
 

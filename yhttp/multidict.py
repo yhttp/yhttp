@@ -3,9 +3,9 @@ from collections.abc import MutableMapping
 
 class MultiDict(MutableMapping):
     """ A dict that remembers old values for each key.
-        HTTP headers may repeat with differing values,
-        such as Set-Cookie. We need to remember all
-        values.
+
+    HTTP headers and query strings may repeat with differing values, such as
+    Set-Cookie. We need to remember all values.
     """
 
     def __init__(self, backend=None, *args, **kwargs):

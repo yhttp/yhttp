@@ -10,7 +10,7 @@ def test_nobody(app, Given):
     @app.route()
     @validate_form(nobody=True)
     def foo(req):
-        assert req.form is None
+        assert req.getform(relax=True) is None
 
     with Given(verb='foo'):
         assert status == 200
@@ -28,7 +28,7 @@ def test_nobody_get(app, Given):
     @validate_form(nobody=True)
     def get(req, *, bar=None):
         assert req.query.get('bar') == bar
-        assert req.form is None
+        assert req.getform(relax=True) is None
 
     with Given():
         assert status == 200
@@ -86,8 +86,9 @@ def test_type(app, Given):
         bar=dict(type_=int),
     ))
     def post(req):
-        if req.form and 'bar' in req.form:
-            assert isinstance(req.form['bar'], int)
+        form = req.getform(relax=True)
+        if form and 'bar' in form:
+            assert isinstance(form['bar'], int)
 
     with Given(verb='post'):
         assert status == 200
@@ -109,8 +110,9 @@ def test_ontypeerror(app, Given):
         bar=dict(type_=int, ontypeerror='raise'),
     ))
     def post(req):
-        if req.form and 'bar' in req.form:
-            assert isinstance(req.form['bar'], int)
+        form = req.getform(relax=True)
+        if form and 'bar' in form:
+            assert isinstance(form['bar'], int)
 
     with Given(verb='post'):
         assert status == 200
@@ -289,5 +291,8 @@ def test_extraattribute(app, Given):
         when(verb='put')
         assert status == 200
 
-        when(form=given - 'bar')
+        when(verb='put', form=given - 'bar')
         assert status == 200
+
+        when(form=given - 'bar')
+        assert status == 411

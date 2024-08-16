@@ -53,6 +53,12 @@ HeaderSet Class
    :members:
 
 
+MultiDict
+^^^^^^^^^
+
+.. autoclass:: MultiDict
+
+
 HTTPStatus Class
 ^^^^^^^^^^^^^^^^
 

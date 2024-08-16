@@ -1,5 +1,6 @@
 import wsgiref.util as wsgiutil
 from http import cookies
+import functools
 from urllib.parse import parse_qs, unquote, quote
 
 import ujson
@@ -10,17 +11,11 @@ from . import multipart
 from . import multidict
 
 
-def multipart_parse(environ):
-    try:
-        form, files = multipart.parse_form_data(
-            environ,
-            charset="utf8",
-            strict=True
-        )
-    except multipart.MultipartError:
-        raise statuses.status(400, 'Cannot parse the request')
-
-    return form, files
+multipart_parse = functools.partial(
+    multipart.parse_form_data,
+    charset="utf8",
+    strict=True
+)
 
 
 class Request:
@@ -117,7 +112,7 @@ class Request:
         return ujson.decode(b)
 
     def getjson(self, relax=False):
-        """Return the reuest body as a decoded JSON object.
+        """Return the request body as a decoded JSON object.
 
         This is actualy a wrapper around the :attr:`.Request.json`. but raises
         :exc:`.statuses.lengthrequired` and
@@ -125,6 +120,8 @@ class Request:
         :mod:`ujson` exceptions if ``relax=False`` (the default behaviour).
 
         if ``relax=True``, it returns ``None`` on any failure.
+
+        .. versionadded: 4.0
         """
 
         try:
@@ -143,7 +140,7 @@ class Request:
 
     @lazyattribute
     def form(self):
-        """Return a dictionary representing the submitted HTTP from.
+        """Return a :class:`MultiDict` representing the submitted HTTP from.
 
         Parse form data from the environ dict and return a dictionary with the
         form-field name as a key(unicode) and lists as values (multiple values
@@ -172,14 +169,47 @@ class Request:
            The multipart files are not represented by this attribute and will
            be accessible by :meth:`.Request.files` instead.
 
-        """
-        if self.contenttype and self.contenttype in (
-                'multipart/form-data'
-                'application/x-www-form-urlencoded'):
-            form, self.files = multipart_parse(self.environ)
-            return form
+        .. versionchanged:: 4.0
+           You may get all values for an identical field using:
 
-        return None
+           .. code-block::
+
+              req.form.getall('field-name')
+
+        """
+        form, self.files = multipart_parse(self.environ)
+
+        return form
+
+    def getform(self, relax=False):
+        """Return the request body as a :class:`MultiDict` object.
+
+        This is actualy a wrapper around the :attr:`.Request.form`. but raises
+        :exc:`.statuses.lengthrequired` and
+        :exc:`.statuses.unprocessablecontent` instead of programmatic
+        exceptions if ``relax=False`` (the default behaviour).
+
+        if ``relax=True``, it returns ``None`` on any failure.
+
+        .. versionadded: 4.0
+        """
+
+        if not self.contentlength:
+            if relax:
+                return None
+
+            raise statuses.lengthrequired()
+
+        try:
+            return self.form
+
+        except multipart.MultipartError:
+            if relax:
+                return None
+
+            raise statuses.unprocessablecontent()
+
+        return self.form
 
     @lazyattribute
     def files(self):
@@ -197,11 +227,38 @@ class Request:
 
         .. versionadded:: 4.0
         """
-        if self.contenttype == 'multipart/form-data':
-            self.form, files = multipart_parse(self.environ)
-            return files
+        self.form, files = multipart_parse(self.environ)
+        return files
 
-        return None
+    def getfiles(self, relax=False):
+        """Return the request body as a :class:`MultiDict` object.
+
+        This is actualy a wrapper around the :attr:`.Request.files`. but raises
+        :exc:`.statuses.lengthrequired` and
+        :exc:`.statuses.unprocessablecontent` instead of programmatic
+        exceptions if ``relax=False`` (the default behaviour).
+
+        if ``relax=True``, it returns ``None`` on any failure.
+
+        .. versionadded: 4.0
+        """
+
+        if not self.contentlength:
+            if relax:
+                return None
+
+            raise statuses.lengthrequired()
+
+        try:
+            return self.files
+
+        except multipart.MultipartError:
+            if relax:
+                return None
+
+            raise statuses.unprocessablecontent()
+
+        return self.files
 
     @lazyattribute
     def cookies(self):
