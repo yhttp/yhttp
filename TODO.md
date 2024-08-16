@@ -1,3 +1,2 @@
 - count validator limit number of identical fields in form
 - helper functions such as req.getjson(force=), getform(...), 
-- test space in query string

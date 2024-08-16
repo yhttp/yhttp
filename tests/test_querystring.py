@@ -1,6 +1,18 @@
 from bddrest import status, when, response, given
 
 
+def test_querystring_encoding(app, Given):
+    @app.route()
+    def get(req):
+        return ', '.join([f'{k}={v}' for k, v in req.query.items()])
+
+    with Given(query='foo=bar baz'):
+        assert response.text == 'foo=bar baz'
+
+        when(query=given + dict(qux='thud quux'))
+        assert response.text == 'foo=bar baz, qux=thud quux'
+
+
 def test_querystring_none(app, Given):
     @app.route()
     def get(req, *, foo=None):
