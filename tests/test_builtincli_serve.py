@@ -16,8 +16,8 @@ def get(req):
     return 'foo'
 
 
-@pytest.mark.skip(reason='no way of currently testing this, due the'
-                  'Github actions bug')
+# @pytest.mark.skip(reason='no way of currently testing this, due the'
+#                   'Github actions bug')
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
 
