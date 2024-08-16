@@ -24,6 +24,10 @@ rest of the system python packages.
 
 Create a file named: ``hello.py``:
 
+.. testsetup:: cookbook/qs
+   
+   from yhttp import Application, text
+
 .. testcode::
 
    from yhttp import Application, text

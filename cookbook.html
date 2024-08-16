@@ -1,17 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Cookbook &#8212; yhttp 4.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <title>Cookbook &#8212; yhttp 4.1.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=bea0a91a"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="apireference.html" />
@@ -29,17 +29,18 @@
           <div class="body" role="main">
             
   <section id="cookbook">
-<span id="id1"></span><h1>Cookbook<a class="headerlink" href="#cookbook" title="Permalink to this heading">¶</a></h1>
+<span id="id1"></span><h1>Cookbook<a class="headerlink" href="#cookbook" title="Link to this heading">¶</a></h1>
 <section id="query-string">
-<h2>Query String<a class="headerlink" href="#query-string" title="Permalink to this heading">¶</a></h2>
+<h2>Query String<a class="headerlink" href="#query-string" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> will dispatch query string to the python’s <code class="docutils literal notranslate"><span class="pre">keywordonly</span></code> argument
 if defined in handler, see <code class="docutils literal notranslate"><span class="pre">foo</span></code> argument in the example below.</p>
 <p>of-course, all query string will available as a dictionary via
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code>.</p>
+<a class="reference internal" href="apireference.html#yhttp.Request.query" title="yhttp.Request.query"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.query</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">foo</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">req</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">foo</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;None&quot;</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">bar</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">bar</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;None&quot;</span><span class="si">}</span><span class="s1">&#39;</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
@@ -56,15 +57,17 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 </div>
 </section>
 <section id="form">
-<span id="cookbook-form"></span><h2>Form<a class="headerlink" href="#form" title="Permalink to this heading">¶</a></h2>
-<p>Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code> as a dictionary to access the submitted fields.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 2.6: </span>An easy way to get form values is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The above expression is the same as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+<span id="cookbook-form"></span><h2>Form<a class="headerlink" href="#form" title="Link to this heading">¶</a></h2>
+<p>Use <a class="reference internal" href="apireference.html#yhttp.Request.form" title="yhttp.Request.form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.form</span></code></a> as a dictionary to access the
+submitted fields.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 4.0: </span>An easy way to get form values is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+<span class="n">req</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+<span class="n">req</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+
+<span class="n">req</span><span class="o">.</span><span class="n">getform</span><span class="p">()[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
+<span class="n">req</span><span class="o">.</span><span class="n">getfiles</span><span class="p">()[</span><span class="s1">&#39;field-name&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -75,10 +78,8 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="nd">@text</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">req</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">badrequest</span><span class="p">()</span>
+     <span class="k">return</span> <span class="n">req</span><span class="o">.</span><span class="n">getform</span><span class="p">()[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+
 
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
@@ -86,25 +87,30 @@ if defined in handler, see <code class="docutils literal notranslate"><span clas
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
 
 <span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
 
     <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">411</span>
 </pre></div>
 </div>
 <p>the <code class="docutils literal notranslate"><span class="pre">form=</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">Given</span></code> and <code class="docutils literal notranslate"><span class="pre">when</span></code> functions will send the
-given dictionary as a <code class="docutils literal notranslate"><span class="pre">urlencoded</span></code> HTTP form, but you can try <code class="docutils literal notranslate"><span class="pre">json</span></code> and
-<code class="docutils literal notranslate"><span class="pre">multipart</span></code> content types to ensure all API users will be happy!</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+given dictionary as a <code class="docutils literal notranslate"><span class="pre">urlencoded</span></code> HTTP form, but you can also try
+<code class="docutils literal notranslate"><span class="pre">multipart</span></code> content type.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
 
 <span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="settings">
-<span id="cookbook-settings"></span><h2>Settings<a class="headerlink" href="#settings" title="Permalink to this heading">¶</a></h2>
+<span id="cookbook-settings"></span><h2>Settings<a class="headerlink" href="#settings" title="Link to this heading">¶</a></h2>
 <p>Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">app.settings</span></code> attribute to update global
 settings instance for the application. this is an instance of
 <a class="reference external" href="https://pylover.github.io/pymlconf/pymlconf.html#pymlconf.Root" title="(in pymlconf v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymlconf.Root</span></code></a>.</p>
@@ -133,7 +139,7 @@ after the <code class="xref py py-meth docutils literal notranslate"><span class
 <p><a class="reference external" href="https://pylover.github.io/pymlconf">pymlconf</a></p>
 </div>
 <section id="debug-flag">
-<h3>Debug Flag<a class="headerlink" href="#debug-flag" title="Permalink to this heading">¶</a></h3>
+<h3>Debug Flag<a class="headerlink" href="#debug-flag" title="Link to this heading">¶</a></h3>
 <p>You can do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
@@ -146,7 +152,7 @@ after the <code class="xref py py-meth docutils literal notranslate"><span class
 </section>
 </section>
 <section id="http-status">
-<h2>HTTP Status<a class="headerlink" href="#http-status" title="Permalink to this heading">¶</a></h2>
+<h2>HTTP Status<a class="headerlink" href="#http-status" title="Link to this heading">¶</a></h2>
 <p>There are tree ways to set HTTP status code for response:</p>
 <ul class="simple">
 <li><p>use <a class="reference internal" href="apireference.html#yhttp.statuses.statuscode" title="yhttp.statuses.statuscode"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuscode()</span></code></a> decorator.</p></li>
@@ -154,17 +160,17 @@ after the <code class="xref py py-meth docutils literal notranslate"><span class
 <li><p>set <a class="reference internal" href="apireference.html#yhttp.Response.status" title="yhttp.Response.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.response.status</span></code></a> directly.</p></li>
 </ul>
 <p>These are some builtin HTTP status factory functions:</p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.badrequest" title="yhttp.statuses.badrequest"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.unauthorized" title="yhttp.statuses.unauthorized"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.forbidden" title="yhttp.statuses.forbidden"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.forbidden()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.notfound" title="yhttp.statuses.notfound"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notfound()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.methodnotallowed" title="yhttp.statuses.methodnotallowed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.methodnotallowed()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.conflict" title="yhttp.statuses.conflict"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.conflict()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.gone" title="yhttp.statuses.gone"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.gone()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.preconditionfailed" title="yhttp.statuses.preconditionfailed"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.preconditionfailed()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.notmodified" title="yhttp.statuses.notmodified"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notmodified()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.internalservererror" title="yhttp.statuses.internalservererror"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.internalservererror()</span></code></a></p>
-<p><a class="reference internal" href="apireference.html#yhttp.statuses.badgateway" title="yhttp.statuses.badgateway"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badgateway()</span></code></a></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badrequest()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.unauthorized()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.forbidden()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notfound()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.methodnotallowed()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.conflict()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.gone()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.preconditionfailed()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.notmodified()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.internalservererror()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.badgateway()</span></code></p>
 <p><a class="reference internal" href="apireference.html#yhttp.statuses.movedpermanently" title="yhttp.statuses.movedpermanently"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></a></p>
 <p><a class="reference internal" href="apireference.html#yhttp.statuses.found" title="yhttp.statuses.found"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></a></p>
 <p>See the example below for usage:</p>
@@ -190,7 +196,7 @@ code for all requests.</p>
 </pre></div>
 </div>
 <section id="http-redirect">
-<h3>HTTP Redirect<a class="headerlink" href="#http-redirect" title="Permalink to this heading">¶</a></h3>
+<h3>HTTP Redirect<a class="headerlink" href="#http-redirect" title="Link to this heading">¶</a></h3>
 <p>To redirect the request to another location raise a
 <a class="reference internal" href="apireference.html#yhttp.statuses.movedpermanently" title="yhttp.statuses.movedpermanently"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.movedpermanently()</span></code></a> or <a class="reference internal" href="apireference.html#yhttp.statuses.found" title="yhttp.statuses.found"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.found()</span></code></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">found</span><span class="p">(</span><span class="s1">&#39;http://example.com&#39;</span><span class="p">)</span>
@@ -198,8 +204,8 @@ code for all requests.</p>
 </div>
 </section>
 <section id="custom-http-status">
-<h3>Custom HTTP Status<a class="headerlink" href="#custom-http-status" title="Permalink to this heading">¶</a></h3>
-<p>Use <a class="reference internal" href="apireference.html#yhttp.statuses.status" title="yhttp.statuses.status"><code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.status()</span></code></a> to raise your very own status code and text.</p>
+<h3>Custom HTTP Status<a class="headerlink" href="#custom-http-status" title="Link to this heading">¶</a></h3>
+<p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">statuses.status()</span></code> to raise your very own status code and text.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="s1">&#39;Custom Status Text&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -213,7 +219,7 @@ code for all requests.</p>
 </section>
 </section>
 <section id="routing">
-<span id="cookbook-routing"></span><h2>Routing<a class="headerlink" href="#routing" title="Permalink to this heading">¶</a></h2>
+<span id="cookbook-routing"></span><h2>Routing<a class="headerlink" href="#routing" title="Link to this heading">¶</a></h2>
 <p>the only way to register handler for http requests is
 <a class="reference internal" href="apireference.html#yhttp.Application.route" title="yhttp.Application.route"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.route()</span></code></a> decorator factory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>                 <span class="c1"># Default route</span>
@@ -232,7 +238,7 @@ code for all requests.</p>
 <p>Handler function’s name will be used as HTTP verb. so, the <code class="docutils literal notranslate"><span class="pre">get</span></code> in the
 example above stands for the HTTP <code class="docutils literal notranslate"><span class="pre">GET</span></code> method.</p>
 <section id="any-verb">
-<span id="cookbook-anyverb"></span><h3>Any Verb<a class="headerlink" href="#any-verb" title="Permalink to this heading">¶</a></h3>
+<span id="cookbook-anyverb"></span><h3>Any Verb<a class="headerlink" href="#any-verb" title="Link to this heading">¶</a></h3>
 <p>Another approach is to us a single star <code class="docutils literal notranslate"><span class="pre">*</span></code> to catch any verb.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">verb</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>          <span class="c1"># Match any HTTP verb</span>
 <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -240,12 +246,12 @@ example above stands for the HTTP <code class="docutils literal notranslate"><sp
 </pre></div>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 3.1.</span></p>
+<p><span class="versionmodified added">Added in version 3.1.</span></p>
 </div>
 </section>
 </section>
 <section id="static-contents">
-<span id="cookbook-static"></span><h2>Static Contents<a class="headerlink" href="#static-contents" title="Permalink to this heading">¶</a></h2>
+<span id="cookbook-static"></span><h2>Static Contents<a class="headerlink" href="#static-contents" title="Link to this heading">¶</a></h2>
 <p><a class="reference internal" href="apireference.html#yhttp.Application" title="yhttp.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class has two methods: <a class="reference internal" href="apireference.html#yhttp.Application.staticfile" title="yhttp.Application.staticfile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticfile()</span></code></a>
 and <a class="reference internal" href="apireference.html#yhttp.Application.staticdirectory" title="yhttp.Application.staticdirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.staticdirectory()</span></code></a> to complete this mission!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/a\.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;path/to/a.txt&#39;</span><span class="p">)</span>
@@ -260,27 +266,32 @@ and <a class="reference internal" href="apireference.html#yhttp.Application.stat
 </div>
 </section>
 <section id="http-cookie">
-<h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Permalink to this heading">¶</a></h2>
-<p>This is how to use <code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="n">counter</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>
-    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/a&#39;</span>
-    <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">][</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;example.com&#39;</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
-</pre></div>
-</div>
+<h2>HTTP Cookie<a class="headerlink" href="#http-cookie" title="Link to this heading">¶</a></h2>
+<p>This is how to use <a class="reference internal" href="apireference.html#yhttp.Request.cookies" title="yhttp.Request.cookies"><code class="xref py py-attr docutils literal notranslate"><span class="pre">req.cookies</span></code></a>:</p>
 <p>Test:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">cookies</span>
 
-<span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span>
+<span class="kn">from</span> <span class="nn">bddrest</span> <span class="kn">import</span> <span class="n">Given</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">status</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">response</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;counter&#39;</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">setcookie</span><span class="p">(</span>
+        <span class="s1">&#39;counter&#39;</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">maxage</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s1">&#39;/a&#39;</span><span class="p">,</span>
+        <span class="n">domain</span><span class="o">=</span><span class="s1">&#39;example.com&#39;</span>
+    <span class="p">)</span>
 
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Cookie&#39;</span><span class="p">:</span> <span class="s1">&#39;counter=1;&#39;</span><span class="p">}</span>
 <span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
     <span class="k">assert</span> <span class="s1">&#39;Set-cookie&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Set-cookie&#39;</span><span class="p">]</span> <span class="o">==</span> \
+        <span class="s1">&#39;counter=2; Domain=example.com; Max-Age=1; Path=/a&#39;</span>
 
     <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookies</span><span class="o">.</span><span class="n">SimpleCookie</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Set-cookie&#39;</span><span class="p">])</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">[</span><span class="s1">&#39;counter&#39;</span><span class="p">]</span>
@@ -291,86 +302,66 @@ and <a class="reference internal" href="apireference.html#yhttp.Application.stat
 </pre></div>
 </div>
 </section>
-<section id="request-valiation">
-<span id="cookbook-validation"></span><h2>Request Valiation<a class="headerlink" href="#request-valiation" title="Permalink to this heading">¶</a></h2>
+<section id="request-validation">
+<span id="cookbook-validation"></span><h2>Request Validation<a class="headerlink" href="#request-validation" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> has a very flexible request validation system. these are some
 examples:</p>
 <section id="required">
-<h3>required<a class="headerlink" href="#required" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">validate</span>
+<h3>required<a class="headerlink" href="#required" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp</span> <span class="kn">import</span> <span class="n">validate_form</span><span class="p">,</span> <span class="n">validate_query</span><span class="p">,</span> <span class="n">statuses</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_query</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">foo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">))</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="n">baz</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="s1">&#39;700 Please provide baz&#39;</span><span class="p">),</span>
+    <span class="n">baz</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="n">statuses</span><span class="o">.</span><span class="n">forbidden</span><span class="p">()),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="o">...</span>
+    <span class="k">pass</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)):</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span>
+        <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)):</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
     <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Field bar is required&#39;</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">given</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">(</span><span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;403 Forbidden&#39;</span>
 
     <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;700 Please provide baz&#39;</span>
-</pre></div>
-</div>
-</section>
-<section id="notnone">
-<h3>notnone<a class="headerlink" href="#notnone" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">notnone</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="n">baz</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">notnone</span><span class="o">=</span><span class="s1">&#39;700 baz cannot be null&#39;</span><span class="p">)</span>
-<span class="p">))</span>
-<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="o">...</span>
-
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)):</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Field bar cannot be null&#39;</span>
-
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">baz</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;700 baz cannot be null&#39;</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;403 Forbidden&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="nobody">
-<h3>nobody<a class="headerlink" href="#nobody" title="Permalink to this heading">¶</a></h3>
+<h3>nobody<a class="headerlink" href="#nobody" title="Link to this heading">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">nobody</span></code> validator when you need to prevent users to post any HTTP body
 to the server.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">nobody</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">nobody</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">req</span><span class="o">.</span><span class="n">form</span> <span class="o">==</span> <span class="p">{}</span>
+    <span class="k">assert</span> <span class="n">req</span><span class="o">.</span><span class="n">getform</span><span class="p">(</span><span class="n">relax</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;FOO&#39;</span><span class="p">):</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">):</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
     <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Body Not Allowed&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 </pre></div>
 </div>
 </section>
 <section id="readonly">
-<h3>readonly<a class="headerlink" href="#readonly" title="Permalink to this heading">¶</a></h3>
+<h3>readonly<a class="headerlink" href="#readonly" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">readonly</span></code> means the field should not exists on the request form.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -385,10 +376,10 @@ to the server.</p>
 </div>
 </section>
 <section id="pattern">
-<h3>pattern<a class="headerlink" href="#pattern" title="Permalink to this heading">¶</a></h3>
+<h3>pattern<a class="headerlink" href="#pattern" title="Link to this heading">¶</a></h3>
 <p>You can use regular expression to validate request fields:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^\d+$&#39;</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -406,54 +397,56 @@ to the server.</p>
 </div>
 </section>
 <section id="type">
-<h3>type<a class="headerlink" href="#type" title="Permalink to this heading">¶</a></h3>
+<h3>type<a class="headerlink" href="#type" title="Link to this heading">¶</a></h3>
 <p>Type validator gets a callable as the <code class="docutils literal notranslate"><span class="pre">type</span></code> and tries to cast the field’s
 value by <code class="docutils literal notranslate"><span class="pre">form[field]</span> <span class="pre">=</span> <span class="pre">type(form[field])</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="k">pass</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">getform</span><span class="p">(</span><span class="n">relax</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span> <span class="ow">and</span> <span class="s1">&#39;bar&#39;</span> <span class="ow">in</span> <span class="n">form</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">form</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">):</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">):</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Invalid type: bar&#39;</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Invalid type: `str` for field `bar`&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 </pre></div>
 </div>
 </section>
 <section id="minimum-maximum">
-<h3>minimum/maximum<a class="headerlink" href="#minimum-maximum" title="Permalink to this heading">¶</a></h3>
+<h3>minimum/maximum<a class="headerlink" href="#minimum-maximum" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">minimum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">maximum</span><span class="o">=</span><span class="mi">9</span>
-    <span class="p">),</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">minlength</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="k">pass</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">2</span><span class="p">)):</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="p">)):</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed value for field bar is 2&#39;</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed value for field bar is 2&#39;</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Minimum allowed length for field bar is 2&#39;</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Maximum allowed value for field bar is 9&#39;</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Maximum allowed length for field bar is 5&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="minlength-maxlength">
-<h3>minlength/maxlength<a class="headerlink" href="#minlength-maxlength" title="Permalink to this heading">¶</a></h3>
+<h3>minlength/maxlength<a class="headerlink" href="#minlength-maxlength" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">minlength</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxlength</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -474,43 +467,43 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 </div>
 </section>
 <section id="length">
-<h3>length<a class="headerlink" href="#length" title="Permalink to this heading">¶</a></h3>
+<h3>length<a class="headerlink" href="#length" title="Link to this heading">¶</a></h3>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 3.9.0.</span></p>
+<p><span class="versionmodified added">Added in version 3.9.0.</span></p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
     <span class="k">pass</span>
 
-<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">)):</span>
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">)):</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">))</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Allowed length for field bar is 6&#39;</span>
 
-    <span class="n">when</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;12345678&#39;</span><span class="p">))</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;12345678&#39;</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Allowed length for field bar is 6&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="custom-callback">
-<h3>Custom Callback<a class="headerlink" href="#custom-callback" title="Permalink to this heading">¶</a></h3>
+<h3>Custom Callback<a class="headerlink" href="#custom-callback" title="Link to this heading">¶</a></h3>
 <p>You can use your very own callable as the request validator:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp.validation</span> <span class="kn">import</span> <span class="n">Field</span>
 
-<span class="k">def</span> <span class="nf">customvalidator</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">customvalidator</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Field</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;ab&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;ab&#39;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">statuses</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Value must be either a or b&#39;</span><span class="p">)</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">customvalidator</span><span class="p">)</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -526,7 +519,7 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
     <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Value must be either a or b&#39;</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="nd">@validate_form</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">bar</span><span class="o">=</span><span class="n">customvalidator</span>
 <span class="p">))</span>
 <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -551,7 +544,7 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">yhttp</a></h1>
 
@@ -562,7 +555,16 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
@@ -573,7 +575,7 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 <li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#static-contents">Static Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#request-valiation">Request Valiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request-validation">Request Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="apireference.html">API Reference</a></li>
@@ -588,16 +590,6 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
