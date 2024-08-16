@@ -17,4 +17,4 @@ from .multipart import MultipartError, MultipartParser, MultipartPart, \
 from .multidict import MultiDict
 
 
-__version__ = '4.1.2'
+__version__ = '4.1.3'

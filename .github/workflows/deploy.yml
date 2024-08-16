@@ -1,12 +1,12 @@
-ame: Documentation
+name: Deploy
 
 on:
   release:
     types: [created]
 
 jobs:
-  sphinx:
-    name: Deploy
+  deploy:
+    name: Deploy 
     runs-on: ubuntu-latest
     env:
       VENVPATH: /usr 
