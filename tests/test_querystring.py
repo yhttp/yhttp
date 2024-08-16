@@ -14,7 +14,6 @@ def test_querystring_none(app, Given):
         assert response.text == 'None bar'
 
 
-# TODO: test duplicate fields in both kwargsonly and req.query
 def test_querystring(app, Given):
 
     @app.route()
@@ -45,7 +44,8 @@ def test_querystring_empty(app, Given):
 def test_querystring_duplicatefields(app, Given):
 
     @app.route()
-    def post(req):
+    def post(req, *, foo=None):
+        assert foo == 'baz'
         return ', '.join(req.query.getall('foo'))
 
     with Given(

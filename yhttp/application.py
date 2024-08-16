@@ -180,12 +180,12 @@ class Application(BaseApplication):
                 continue
 
             arguments = [a for a in match.groups() if a is not None]
-            querystrings = {
+            query = {
                 k: v for k, v in request.query.items()
                 if k in info['kwonly']
             }
 
-            return handler, arguments, querystrings
+            return handler, arguments, query
 
         return None, None, None
 
@@ -229,8 +229,8 @@ class Application(BaseApplication):
         request = Request(self, environ, response)
 
         try:
-            handler, arguments, querystrings = self._findhandler(request)
-            body = handler(request, *arguments, **querystrings)
+            handler, arguments, query = self._findhandler(request)
+            body = handler(request, *arguments, **query)
 
             if isinstance(body, statuses.HTTPStatus):
                 raise body
