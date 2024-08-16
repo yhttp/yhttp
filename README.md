@@ -103,10 +103,16 @@ to upload `sdists` and `wheel` packages on [PyPI](https://pypi.org).
 ## Documentation
 
 ```bash
+make doc
+make livedoc
+make doctest
+```
+
+Or 
+
+```bash
 cd sphinx
 make doctest
 make html
 make livehtml
 ```
-
-

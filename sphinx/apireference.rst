@@ -5,90 +5,59 @@ API Reference
 .. currentmodule:: yhttp
 
 
-Base Application Class
-^^^^^^^^^^^^^^^^^^^^^^ 
-
-.. autoclass:: BaseApplication
-
-   .. autoattribute:: settings
-   .. automethod:: when
-   .. automethod:: hook
-   .. automethod:: ready
-   .. automethod:: shutdown
-   .. automethod:: climain
 
 Application Class
 ^^^^^^^^^^^^^^^^^ 
 
+.. autoclass:: BaseApplication
+   :members:
+
+
 .. autoclass:: Application
    :show-inheritance:
+   :members:
 
-   .. automethod:: route
-   .. automethod:: staticfile
-   .. automethod:: staticdirectory
-   .. automethod:: __call__
 
 Rewrite Class
 ^^^^^^^^^^^^^ 
 
 .. autoclass:: Rewrite
    :show-inheritance:
-
-   .. automethod:: route
-   .. automethod:: __call__
+   :members:
 
 Request Class
 ^^^^^^^^^^^^^ 
 
 .. autoclass:: Request
-
-   .. autoproperty:: verb
-   .. autoproperty:: path
-   .. autoproperty:: fullpath
-   .. autoproperty:: contentlength
-   .. autoproperty:: contenttype
-   .. autoproperty:: query
-   .. autoproperty:: form
-   .. autoproperty:: cookies
-   .. autoproperty:: scheme
-   .. autoproperty:: headers
-   .. autoproperty:: response
-   .. autoproperty:: environ
+   :members:
 
 
 HeadersMask Class
 ^^^^^^^^^^^^^^^^^
 
 .. autoclass:: HeadersMask
+   :members:
 
 
 Response Class
 ^^^^^^^^^^^^^^ 
 
 .. autoclass:: Response
-
-   .. autoattribute:: status
-   .. autoattribute:: charset
-   .. autoattribute:: length
-   .. autoattribute:: type
-   .. autoattribute:: contenttype
-   .. autoattribute:: headers
-
-   .. automethod:: conclude
-   .. automethod:: startstream
-   .. automethod:: start
+   :members:
 
 
 HeaderSet Class
 ^^^^^^^^^^^^^^^
 
 .. autoclass:: HeaderSet
+   :members:
 
 
 HTTPStatus Class
 ^^^^^^^^^^^^^^^^
 
 .. autoclass:: HTTPStatus
+   :members:
 
 
 contenttype decorators
@@ -102,12 +71,11 @@ contenttype decorators
 
 
 validation module
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 .. automodule:: yhttp.validation
 
    .. autofunction:: validate_form
-   
    .. autofunction:: validate_query
 
 
@@ -115,21 +83,4 @@ statuses Module
 ^^^^^^^^^^^^^^^
 
 .. automodule:: yhttp.statuses
-   
-   .. autofunction:: status(code, text)
-   .. autofunction:: badrequest()
-   .. autofunction:: unauthorized()
-   .. autofunction:: forbidden()
-   .. autofunction:: notfound()
-   .. autofunction:: methodnotallowed()
-   .. autofunction:: conflict()
-   .. autofunction:: gone()
-   .. autofunction:: preconditionfailed()
-   .. autofunction:: notmodified()
-   .. autofunction:: internalservererror()
-   .. autofunction:: badgateway()
-   .. autofunction:: movedpermanently(url)
-   .. autofunction:: found(url)
-   .. autofunction:: statuscode
-
-
+   :members:

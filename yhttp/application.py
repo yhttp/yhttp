@@ -21,6 +21,9 @@ class BaseApplication:
     #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
     cliarguments = None
 
+    #: A dictionary to hold registered functions to specific hooks.
+    events = None
+
     def __init__(self, version=None):
         self.version = version
         self.events = {}
@@ -28,8 +31,8 @@ class BaseApplication:
         self.settings = pymlconf.Root(self._builtinsettings)
 
     def when(self, func):
-        """Return decorator to registers the ``func`` into \
-            :attr:`.Application.events` by its name.
+        """Return decorator to registers the ``func`` into :attr:`events` by
+        its name.
 
         Currently these hooks are suuported:
 
@@ -38,7 +41,7 @@ class BaseApplication:
         * endresponse
 
         The hook name will be choosed by the func.__name__, so if you need to
-        aware when ``app.ready`` is called write something like this:
+        aware when :meth:`ready` is called write something like this:
 
         .. code-block::
 
@@ -62,7 +65,7 @@ class BaseApplication:
     def hook(self, name, *a, **kw):
         """Only way to fire registered hooks.
 
-        Hooks can registered by :meth:`.Application.when` with the name.
+        Hooks can registered by :meth:`when()` with the name.
 
         .. code-block::
 
@@ -105,7 +108,8 @@ class BaseApplication:
         self.hook('ready', self)
 
     def shutdown(self):
-        """Call the ``shutdown`` :meth:`hook`."""
+        """Call the ``shutdown`` :meth:`hook`.
+        """
         self.hook('shutdown', self)
 
     def climain(self, argv=None):
@@ -161,6 +165,9 @@ class Application(BaseApplication):
         default: index.html
         fallback: index.html
     '''
+
+    #: A dictionionary to hold the regext routes handler mappings.
+    routes = None
 
     def __init__(self, version=None):
         self.routes = {}
@@ -300,9 +307,9 @@ class Application(BaseApplication):
         :param verb: If not given then ``handler.__name__`` will be used to
                      match HTYP verb, Use ``*`` to catch all verbs.
         :param insert: If not given, route will be appended to the end of the
-                       :attr:`Application.routes`. Otherwise it must be an
+                       :attr:`routes`. Otherwise it must be an
                        integer indicating the place to insert the new route
-                       into :attr:`Application.routes` attribute.
+                       into :attr:`routes` attribute.
 
         .. versionadded:: 2.9
 

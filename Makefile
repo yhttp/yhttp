@@ -90,3 +90,18 @@ pypi: dist
 clean:
 	rm -rf dist/*
 	rm -rf build/*
+
+
+.PHONY: doc
+doc:
+	cd sphinx; make html
+
+
+.PHONY: doctest
+doctest:
+	cd sphinx; make html
+
+
+.PHONY: livedoc
+livedoc:
+	cd sphinx; make livehtml
