@@ -91,7 +91,7 @@ class Request:
         qs = parse_qs(
             self.environ['QUERY_STRING'],
             keep_blank_values=True,
-            strict_parsing=False
+            strict_parsing=True
         )
 
         return qs
@@ -157,7 +157,7 @@ class Request:
                     return parse_qs(
                         qs=fp.read(self.contentlength).decode(),
                         keep_blank_values=True,
-                        strict_parsing=False,
+                        strict_parsing=True,
                     )
             except (TypeError, ValueError, UnicodeError):
                 raise statuses.status(400, 'Cannot parse the request')
