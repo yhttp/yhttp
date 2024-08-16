@@ -9,10 +9,7 @@ class MultiDict(MutableMapping):
     """
 
     def __init__(self, backend=None, *args, **kwargs):
-        if backend is None:
-            self.dict = dict()
-        else:
-            self.dict = backend
+        self.dict = backend if backend is not None else dict()
 
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
