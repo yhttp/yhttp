@@ -1,6 +1,7 @@
 import time
 
 import requests
+import pytest
 from bddcli import Application as CLIApplication, Given
 
 from yhttp import Application, text
@@ -15,6 +16,8 @@ def get(req):
     return 'foo'
 
 
+@pytest.mark.skip(reason='no way of currently testing this, due the'
+                  'Github actions bug')
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
 
