@@ -25,7 +25,7 @@ of-course, all query string will available as a dictionary via
    @text
    def get(req, *, foo=None):
        bar = req.query.get('bar')
-       return f'{foo if foo else 'None'} {bar if bar else 'None'}'
+       return f'{foo if foo else "None"} {bar if bar else "None"}'
     
    app.ready()
 

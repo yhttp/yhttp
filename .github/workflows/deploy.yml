@@ -1,4 +1,4 @@
-name: Documentation
+ame: Documentation
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   sphinx:
-    name: Sphinx
+    name: Deploy
     runs-on: ubuntu-latest
     env:
       VENVPATH: /usr 
@@ -31,3 +31,10 @@ jobs:
         BRANCH: gh-pages
         FOLDER: sphinx/_build/html
         CLEAN: true
+    - name: Create distributions
+      run: make dist
+    - name: Publish a Python distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1.9
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_TOKEN }}
