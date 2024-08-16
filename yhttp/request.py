@@ -157,7 +157,7 @@ class Request:
                     return parse_qs(
                         qs=fp.read(self.contentlength).decode(),
                         keep_blank_values=True,
-                        strict_parsing=True,
+                        strict_parsing=False,
                     )
             except (TypeError, ValueError, UnicodeError):
                 raise statuses.status(400, 'Cannot parse the request')
