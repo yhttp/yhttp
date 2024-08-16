@@ -25,7 +25,7 @@ of-course, all query string will available as a dictionary via
    @text
    def get(req, *, foo=None):
        bar = req.query.get('bar')
-       return f'{foo[0] if foo else 'None'} {bar[0] if bar else 'None'}'
+       return f'{foo if foo else 'None'} {bar if bar else 'None'}'
     
    app.ready()
 
@@ -63,6 +63,9 @@ submitted fields.
       req.query['field-name']
       req.form['field-name']
       req.files['field-name']
+      
+      req.getform()['field-name']
+      req.getfiles()['field-name']
 
 
 .. testcode:: cookbook/form
@@ -74,10 +77,7 @@ submitted fields.
    @app.route()
    @text
    def post(req):
-       try:
-           return req.form['foo']
-       except KeyError:
-           raise statuses.badrequest()
+        return req.getform()['foo']
 
 
    app.ready()
@@ -92,7 +92,7 @@ submitted fields.
        assert response.text == 'bar'
 
        when(form=given - 'foo')
-       assert status == 400
+       assert status == 411
 
 
 the ``form=`` parameter of the ``Given`` and ``when`` functions will send the
@@ -474,7 +474,7 @@ to the server.
    @app.route()
    @validate_form(nobody=True)
    def foo(req):
-       assert req.form is None
+       assert req.getform(relax=True) is None
 
    with Given(app, verb='foo'):
        assert status == 200
@@ -562,9 +562,9 @@ value by ``form[field] = type(form[field])``.
        bar=dict(type_=int),
    ))
    def post(req):
-       if req.form and 'bar' in req.form:
-           for b in req.form['bar']:
-               assert isinstance(b, int)
+       form = req.getform(relax=True)
+       if form and 'bar' in form:
+           assert isinstance(form['bar'], int)
 
    with Given(app, verb='post'):
        assert status == 200

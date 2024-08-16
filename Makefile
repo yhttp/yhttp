@@ -99,7 +99,7 @@ doc:
 
 .PHONY: doctest
 doctest:
-	cd sphinx; make html
+	cd sphinx; make doctest
 
 
 .PHONY: livedoc
