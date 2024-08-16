@@ -98,11 +98,7 @@ class Request:
         if not self.contentlength:
             return None
 
-        fp = self.environ.get('wsgi.input')
-        if fp is None:
-            raise ValueError('wsgi.input environ valriable is None')
-
-        return fp.read(self.contentlength)
+        return self.environ.get('wsgi.input').read(self.contentlength)
 
     @lazyattribute
     def json(self):

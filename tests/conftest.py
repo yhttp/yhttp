@@ -10,6 +10,10 @@ from yhttp_devutils.fixtures import mockupfs, freetcpport
 from yhttp import Application
 
 
+GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
+    and 'GITHUB_RUN_ID' in os.environ
+
+
 @pytest.fixture
 def app():
     return Application()

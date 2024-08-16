@@ -5,6 +5,7 @@ import pytest
 from bddcli import Application as CLIApplication, Given
 
 from yhttp import Application, text
+from .conftest import GITHUBACTIONS
 
 
 app = Application()
@@ -16,14 +17,16 @@ def get(req):
     return 'foo'
 
 
-@pytest.mark.skip(reason='no way of currently testing this, due the'
-                  'Github actions bug')
+@pytest.mark.skipif(
+    GITHUBACTIONS,
+    reason='no way of currently testing this by GH, due the Github actions bug'
+)
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
 
     with Given(cliapp, f'serve --bind {freetcpport}', nowait=True) as s:
         url = f'http://localhost:{freetcpport}'
-        time.sleep(1)
+        time.sleep(2)
         r = requests.get(url)
         assert r.text == 'foo'
         s.kill()
