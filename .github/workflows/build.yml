@@ -28,12 +28,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        make env-ci
+        make env-doc
         sudo cp `which bddcli-bootstrapper` /usr/local/bin
     - name: Lint
       run: make lint
     - name: Test
       run: make cover
+    - name: Sphinx Doctest
+      working-directory: sphinx
+      run: make doctest
     - name: Coveralls
       run: coveralls
       env:

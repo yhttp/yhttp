@@ -12,6 +12,9 @@ Welcome to yhttp's documentation!
 .. image:: https://github.com/yhttp/yhttp/workflows/Build/badge.svg?branch=master
    :target: https://github.com/yhttp/yhttp/actions
 
+.. image:: https://github.com/yhttp/yhttp/actions/workflows/build.yml/badge.svg
+   :target: https://github.com/yhttp/yhttp/actions/workflows/build.yml
+
 .. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
    :target: https://coveralls.io/github/yhttp/yhttp?branch=master
 

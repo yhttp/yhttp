@@ -5,8 +5,8 @@ on:
     types: [created]
 
 jobs:
-  deploy:
-    name: Deploy 
+  deploydoc:
+    name: Deploy document
     runs-on: ubuntu-latest
     env:
       VENVPATH: /usr 
@@ -16,9 +16,6 @@ jobs:
       uses: actions/setup-python@v2
     - name: Install dependencies
       run: make env-doc
-    - name: Sphinx Doctest
-      working-directory: sphinx
-      run: make doctest
     - name: Sphinx Build
       working-directory: sphinx
       run: |
@@ -31,6 +28,17 @@ jobs:
         BRANCH: gh-pages
         FOLDER: sphinx/_build/html
         CLEAN: true
+
+  deploypypi:
+    name: Deploy to PyPI
+    needs: deploydoc
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+    - name: Install dependencies
+      run: make env-ci
     - name: Create distributions
       run: make dist
     - name: Publish a Python distribution to PyPI
