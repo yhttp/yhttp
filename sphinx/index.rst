@@ -18,7 +18,7 @@ Welcome to yhttp's documentation!
 .. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
    :target: https://coveralls.io/github/yhttp/yhttp?branch=master
 
-.. image:: https://img.shields.io/badge/Python-%3E%3D3.6-blue
+.. image:: https://img.shields.io/badge/Python-%3E%3D3.10-blue
    :target: https://python.org
 
 
