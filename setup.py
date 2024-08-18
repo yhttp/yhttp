@@ -1,10 +1,11 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 import os.path
 import re
 
+
 # reading package's version (same way sqlalchemy does)
 with open(
-    os.path.join(os.path.dirname(__file__), 'yhttp', '__init__.py')
+    os.path.join(os.path.dirname(__file__), 'yhttp/core', '__init__.py')
 ) as v_file:
     package_version = \
         re.compile('.*__version__ = \'(.*?)\'', re.S)\
@@ -29,11 +30,15 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',  # This is important!
     install_requires=dependencies,
-    packages=find_packages(exclude=['tests']),
     license='MIT',
+    packages=find_namespace_packages(
+        where='.',
+        include=['yhttp'],
+        exclude=['tests']
+    ),
     entry_points={
         'console_scripts': [
-            'yhttp = yhttp.main:app.climain'
+            'yhttp = yhttp.core.main:app.climain'
         ]
     },
     classifiers=[

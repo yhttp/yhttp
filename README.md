@@ -10,6 +10,11 @@
 
 ## Contribution
 
+### Clone 
+```bash
+git clone --recurse-submodules git@github.com:yhttp/yhttp.git
+```
+
 ### Virtualenv
 
 Create virtual environment:

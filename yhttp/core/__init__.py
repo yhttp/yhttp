@@ -1,6 +1,4 @@
-# noqa
 """yhttp micro http framework."""
-__path__ = __import__('pkgutil').extend_path(__path__, __name__)
 
 
 from .application import BaseApplication, Application
@@ -17,4 +15,4 @@ from .multipart import MultipartError, MultipartParser, MultipartPart, \
 from .multidict import MultiDict
 
 
-__version__ = '4.1.4'
+__version__ = '5.0.0-dev'
