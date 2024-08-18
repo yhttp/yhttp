@@ -21,7 +21,10 @@ jobs:
       PYTEST: pytest
       COVERAGE: coverage
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -64,6 +67,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
