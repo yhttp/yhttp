@@ -4,7 +4,7 @@ import requests
 import pytest
 from bddcli import Application as CLIApplication, Given
 
-from yhttp import Application, text
+from yhttp.core import Application, text
 from .conftest import GITHUBACTIONS
 
 

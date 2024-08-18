@@ -1,4 +1,4 @@
-from yhttp import text, statuses
+from yhttp.core import text, statuses
 
 from bddrest import response, when, given, status
 

@@ -1,7 +1,7 @@
 from bddcli import Application as CLIApplication, Given, stderr, stdout, \
     status, when
 
-from yhttp import Application, __version__
+from yhttp.core import Application, __version__
 
 
 app = Application(version=__version__)

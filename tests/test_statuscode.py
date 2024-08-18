@@ -1,7 +1,7 @@
 from bddrest import status, when, response
 
-from yhttp import statuscode
-from yhttp.statuses import nocontent, ok
+from yhttp.core import statuscode
+from yhttp.core.statuses import nocontent, ok
 
 
 def test_status(app, Given):

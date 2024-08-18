@@ -12,8 +12,8 @@ import sys, os.path, tempfile
 
 from io import BytesIO
 
-from yhttp import multipart as mp
-from yhttp.multipart import to_bytes
+from yhttp.core import multipart as mp
+from yhttp.core.multipart import to_bytes
 
 
 #TODO: bufsize=10, line=1234567890--boundary\n

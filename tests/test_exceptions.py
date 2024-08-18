@@ -1,7 +1,7 @@
 import pytest
 from bddrest import status, response, when
 
-from yhttp import statuses
+from yhttp.core import statuses
 
 
 def test_httpstatus(app, Given):

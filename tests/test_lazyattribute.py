@@ -1,4 +1,4 @@
-from yhttp.lazyattribute import lazyattribute
+from yhttp.core.lazyattribute import lazyattribute
 
 
 def test_lazyattribute():

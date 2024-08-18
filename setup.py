@@ -1,6 +1,7 @@
-from setuptools import setup, find_namespace_packages
 import os.path
 import re
+
+from setuptools import setup, find_namespace_packages
 
 
 # reading package's version (same way sqlalchemy does)
@@ -33,7 +34,7 @@ setup(
     license='MIT',
     packages=find_namespace_packages(
         where='.',
-        include=['yhttp'],
+        include=['yhttp.core'],
         exclude=['tests']
     ),
     entry_points={

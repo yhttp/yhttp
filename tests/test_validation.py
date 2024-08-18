@@ -1,8 +1,8 @@
 import pytest
 from bddrest import status, given, when
 
-from yhttp import validate_form, validate_query, statuses
-from yhttp.validation import TypeValidator
+from yhttp.core import validate_form, validate_query, statuses
+from yhttp.core.validation import TypeValidator, Field
 
 
 def test_nobody(app, Given):
@@ -232,8 +232,6 @@ def test_regexpattern(app, Given):
 
 
 def test_customvalildator(app, Given):
-    from yhttp.validation import Field
-
     def customvalidator(req, value, container, field):
         assert isinstance(field, Field)
         for v in value:

@@ -1,5 +1,5 @@
 
-from yhttp.multidict import MultiDict
+from yhttp.core.multidict import MultiDict
 
 
 def test_multidict():

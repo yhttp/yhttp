@@ -1,12 +1,12 @@
 from bddrest import response, status
 
-import yhttp
+import yhttp.core as y
 
 
 def test_jsonencoding(app, Given):
 
     @app.route()
-    @yhttp.json
+    @y.json
     def get(req):
         return dict(foo='bar')
 

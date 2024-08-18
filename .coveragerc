@@ -1,9 +1,8 @@
 [run]
 source=yhttp
 omit = 
-    yhttp/ext/*
-    yhttp/main.py
-	yhttp/multipart.py
+    yhttp/core/main.py
+	yhttp/core/multipart.py
 
 [report]
 exclude_lines=

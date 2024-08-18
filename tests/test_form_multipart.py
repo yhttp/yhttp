@@ -2,7 +2,7 @@ import io
 
 from bddrest import status, when
 
-from yhttp.multidict import MultiDict
+from yhttp.core.multidict import MultiDict
 
 
 def test_form_multipart(app, Given):

@@ -1,8 +1,9 @@
 import re
 from urllib.parse import quote
 
-from yhttp import notfound
 from bddrest import status, response, when, given
+
+from yhttp.core import notfound
 
 
 def test_routing_basic(app, Given):

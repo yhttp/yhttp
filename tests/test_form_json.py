@@ -1,5 +1,5 @@
 import ujson
-from yhttp import statuses
+from yhttp.core import statuses
 from bddrest import status, response, when
 
 

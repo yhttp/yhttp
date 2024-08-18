@@ -2,14 +2,14 @@ from urllib.parse import quote
 
 from bddrest import status, response, when, Given
 
-import yhttp
+import yhttp.core as y
 
 
 def test_rewrite_nodefault():
     log = []
-    foo = yhttp.Application()
-    bar = yhttp.Application()
-    app = yhttp.Rewrite()
+    foo = y.Application()
+    bar = y.Application()
+    app = y.Rewrite()
     app.route(r'/foo/?', r'/', foo)
     app.route(r'/bar/?', r'/', bar)
 
@@ -18,7 +18,7 @@ def test_rewrite_nodefault():
         log.append('app endresponse')
 
     @foo.route()
-    @yhttp.statuscode('201 Created')
+    @y.statuscode('201 Created')
     def get(req):
         return 'foo'
 
@@ -47,9 +47,9 @@ def test_rewrite_nodefault():
 
 
 def test_rewrite_default():
-    root = yhttp.Application()
-    foo = yhttp.Application()
-    app = yhttp.Rewrite(default=root)
+    root = y.Application()
+    foo = y.Application()
+    app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @root.route()
@@ -57,7 +57,7 @@ def test_rewrite_default():
         return 'root'
 
     @foo.route()
-    @yhttp.statuscode('201 Created')
+    @y.statuscode('201 Created')
     def get(req):
         resp = 'foo'
         if req.query:
@@ -88,9 +88,9 @@ def test_rewrite_default():
 
 def test_rewrite_hooks():
     log = []
-    root = yhttp.Application()
-    foo = yhttp.Application()
-    app = yhttp.Rewrite(default=root)
+    root = y.Application()
+    foo = y.Application()
+    app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @app.when
@@ -130,7 +130,7 @@ def test_rewrite_hooks():
         return 'root'
 
     @foo.route()
-    @yhttp.statuscode('201 Created')
+    @y.statuscode('201 Created')
     def get(req):
         return 'foo'
 
@@ -164,9 +164,9 @@ def test_rewrite_hooks():
 
 
 def test_rewrite_encodedurl():
-    root = yhttp.Application()
-    foo = yhttp.Application()
-    app = yhttp.Rewrite(default=root)
+    root = y.Application()
+    foo = y.Application()
+    app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @root.route()
@@ -174,7 +174,7 @@ def test_rewrite_encodedurl():
         return 'root'
 
     @foo.route(r'/(.+)')
-    @yhttp.statuscode('201 Created')
+    @y.statuscode('201 Created')
     def get(req, arg):
         resp = f'foo: {arg}'
         if req.query:

@@ -3,7 +3,7 @@ import tempfile
 from bddcli import Application as CLIApplication, Given, stdout, status, when
 from easycli import SubCommand
 
-from yhttp import Rewrite
+from yhttp.core import Rewrite
 
 
 class Foo(SubCommand):

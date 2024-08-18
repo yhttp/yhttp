@@ -1,4 +1,4 @@
-from yhttp.headerset import HeaderSet
+from yhttp.core.headerset import HeaderSet
 
 
 def test_headerset():

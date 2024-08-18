@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
     - name: Install dependencies
-      run: make env-doc
+      run: make env ENV=doc
     - name: Sphinx Build
       working-directory: sphinx
       run: |
@@ -38,7 +38,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
     - name: Install dependencies
-      run: make env-ci
+      run: make env ENV=ci
     - name: Create distributions
       run: make dist
     - name: Publish a Python distribution to PyPI

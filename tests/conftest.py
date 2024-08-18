@@ -5,9 +5,9 @@ import functools
 
 import bddrest
 import pytest
-from yhttp_devutils.fixtures import mockupfs, freetcpport
 
-from yhttp import Application
+from yhttp.core import Application
+from yhttp.dev.fixtures import mockupfs, freetcpport
 
 
 GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
