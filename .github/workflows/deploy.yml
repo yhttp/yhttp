@@ -13,12 +13,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
     - name: Install dependencies
-      run: make env ENV=doc
+      run: |
+        git clone https://github.com/pylover/python-makelib.git make
+        make env ENV=doc
     - name: Sphinx Build
       working-directory: sphinx
       run: |
@@ -41,12 +41,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
     - name: Install dependencies
-      run: make env ENV=ci
+      run: |
+        git clone https://github.com/pylover/python-makelib.git make
+        make env ENV=ci
     - name: Create distributions
       run: make dist
     - name: Publish a Python distribution to PyPI
