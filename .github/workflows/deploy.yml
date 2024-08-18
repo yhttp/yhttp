@@ -25,7 +25,7 @@ jobs:
         make html
         touch _build/html/.nojekyll 
     - name: Deploy to gh-pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         GITHUB_TOKEN: ${{ secrets.PAT }}
         BRANCH: gh-pages
