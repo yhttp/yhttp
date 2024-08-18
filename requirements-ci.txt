@@ -7,4 +7,4 @@ pytest >= 4.4.0
 pytest-cov
 bddcli
 flake8
-git+https://github.com/yhttp/yhttp-dev.git
+yhttp-dev >= 3.0.5
