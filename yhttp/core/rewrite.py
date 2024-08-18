@@ -13,13 +13,13 @@ class Rewrite(BaseApplication):
 
     .. code-block::
 
-       import yhttp
+       import yhttp.core as y
 
-       root = yhttp.Application()
-       foo = yhttp.Application()
-       bar = yhttp.Application()
+       root = y.Application()
+       foo = y.Application()
+       bar = y.Application()
 
-       app = yhttp.Rewrite(default=root)
+       app = y.Rewrite(default=root)
        app.route(r'/foo/?', r'/', foo)
        app.route(r'/bar/?(.*)', r'/b/\1', bar)
        app.ready()
@@ -50,13 +50,13 @@ class Rewrite(BaseApplication):
 
         .. code-block::
 
-           import yhttp
+           import yhttp.core as y
 
-           root = yhttp.Application()
-           foo = yhttp.Application()
-           bar = yhttp.Application()
+           root = y.Application()
+           foo = y.Application()
+           bar = y.Application()
 
-           app = yhttp.Rewrite(default=root)
+           app = y.Rewrite(default=root)
            app.route(r'/foo/([a-z]+)/(\d+)', r'/books/\2/\1', foo)
            # Add other applications
            app.ready()
@@ -66,7 +66,7 @@ class Rewrite(BaseApplication):
 
         :param pattern: A regex pattern to match the ``environ['PATH_INFO']``.
         :param repl: URL Rewrite rule, See :py:func:`re.sub`
-        :param handler: An instance of :class:`yhttp.BaseApplication`.
+        :param handler: An instance of :class:`BaseApplication`.
         """
         self.routes.append((
             re.compile(pattern),

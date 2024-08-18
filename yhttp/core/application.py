@@ -92,7 +92,7 @@ class BaseApplication:
 
         .. code-block::
 
-           from yhttp import Application, text
+           from yhttp.core import Application, text
 
 
            app = Application()
@@ -215,7 +215,7 @@ class Application(BaseApplication):
 
         .. code-block::
 
-           from yhttp import Application
+           from yhttp.core import Application
 
 
            app = Application()

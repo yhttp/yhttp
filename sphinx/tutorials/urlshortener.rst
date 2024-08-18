@@ -81,7 +81,7 @@ package.
    
    
    dependencies = [
-       'yhttp >= 2.5, < 3',
+       'yhttp >= 5, < 6',
        'redis',
    ]
    
@@ -178,7 +178,7 @@ Implement Shortener API
    import random
    
    import redis
-   from yhttp import Application, text, statuses, validate_form, statuscode
+   from yhttp.core import Application, text, statuses, validate_form, statuscode
    
    
    app = Application()

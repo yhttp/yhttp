@@ -1,9 +1,8 @@
 API Reference
 =============
 
-.. module:: yhttp
-.. currentmodule:: yhttp
-
+.. module:: yhttp.core
+.. currentmodule:: yhttp.core
 
 
 Application Class
@@ -79,14 +78,15 @@ contenttype decorators
 validation module
 ^^^^^^^^^^^^^^^^^
 
-.. automodule:: yhttp.validation
 
-   .. autofunction:: validate_form
-   .. autofunction:: validate_query
+.. autofunction:: validate_form
+.. autofunction:: validate_query
 
 
 statuses Module
 ^^^^^^^^^^^^^^^
 
-.. automodule:: yhttp.statuses
+.. currentmodule:: yhttp.core.statuses
+
+.. automodule:: yhttp.core.statuses
    :members:

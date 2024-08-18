@@ -27,7 +27,7 @@ author = 'Vahid Mardani'
 # The full version, including alpha/beta/rc tags
 # reading package's version (same way sqlalchemy does)
 with open(
-    os.path.join(os.path.dirname(__file__), '../yhttp', '__init__.py')
+    os.path.join(os.path.dirname(__file__), '../yhttp/core', '__init__.py')
 )as v_file:
 
     package_version = \

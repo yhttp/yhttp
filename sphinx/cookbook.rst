@@ -12,11 +12,11 @@ Query String
 if defined in handler, see ``foo`` argument in the example below.
 
 of-course, all query string will available as a dictionary via
-:attr:`req.query <yhttp.Request.query>`.
+:attr:`req.query <yhttp.core.Request.query>`.
 
 .. testsetup:: cookbook/qs
 
-   from yhttp import Application, text
+   from yhttp.core import Application, text
    app = Application()
 
 .. testcode:: cookbook/qs
@@ -51,7 +51,7 @@ A painless way to test our code is `bddrest
 Form
 ----
 
-Use :attr:`req.form <yhttp.Request.form>` as a dictionary to access the 
+Use :attr:`req.form <yhttp.core.Request.form>` as a dictionary to access the 
 submitted fields.
 
 .. versionchanged:: 4.0
@@ -70,7 +70,7 @@ submitted fields.
 
 .. testcode:: cookbook/form
 
-   from yhttp import Application, text, statuses
+   from yhttp.core import Application, text, statuses
    app = Application()
 
 
@@ -177,48 +177,50 @@ HTTP Status
 There are tree ways to set HTTP status code for response: 
 
 * use :func:`.statuscode` decorator.
-* raise an instance of :class:`.HTTPStatus` class
-* set :attr:`req.response.status <yhttp.Response.status>` directly.
+* raise an instance of :class:`.statuses.HTTPStatus` class
+* set :attr:`req.response.status <yhttp.core.Response.status>` directly.
 
 These are some builtin HTTP status factory functions: 
 
-:func:`.statuses.badrequest`
+.. currentmodule:: yhttp.core.statuses
 
-:func:`.statuses.unauthorized`
+:func:`badrequest`
 
-:func:`.statuses.forbidden`
+:func:`unauthorized`
 
-:func:`.statuses.notfound`
+:func:`forbidden`
 
-:func:`.statuses.methodnotallowed`
+:func:`notfound`
 
-:func:`.statuses.conflict`
+:func:`methodnotallowed`
 
-:func:`.statuses.gone`
+:func:`conflict`
 
-:func:`.statuses.preconditionfailed`
+:func:`gone`
 
-:func:`.statuses.notmodified`
+:func:`preconditionfailed`
 
-:func:`.statuses.internalservererror`
+:func:`notmodified`
 
-:func:`.statuses.badgateway`
+:func:`internalservererror`
 
-:func:`.statuses.movedpermanently`
+:func:`badgateway`
 
-:func:`.statuses.found`
+:func:`movedpermanently`
+
+:func:`found`
 
 See the example below for usage:
 
 
 .. testsetup:: cookbook/status
 
-   from yhttp import Application, text
+   from yhttp.core import Application, text
    app = Application()
 
 .. testcode:: cookbook/status
 
-   from yhttp import statuses
+   from yhttp.core import statuses
 
    @app.route()
    def get(req):
@@ -241,13 +243,13 @@ code for all requests.
 
 .. testsetup:: cookbook/statuscode
 
-   from yhttp import Application, statuscode
+   from yhttp.core import Application, statuscode
    app = Application()
 
 
 .. testcode:: cookbook/statuscode
 
-   from yhttp import statuscode
+   from yhttp.core import statuscode
 
    @app.route()
    @statuscode('201 Created')
@@ -285,7 +287,7 @@ Use :func:`.statuses.status` to raise your very own status code and text.
 
    raise statuses.status(700, 'Custom Status Text')
 
-Or set :attr:`req.response.status <yhttp.Response.status>` directly.
+Or set :attr:`req.response.status <yhttp.core.Response.status>` directly.
 
 .. code-block:: python
 
@@ -364,11 +366,11 @@ and :meth:`.Application.staticdirectory` to complete this mission!
 HTTP Cookie
 -----------
 
-This is how to use :attr:`req.cookies <yhttp.Request.cookies>`:
+This is how to use :attr:`req.cookies <yhttp.core.Request.cookies>`:
 
 .. testsetup:: cookbook/cookie
 
-   from yhttp import Application, text
+   from yhttp.core import Application, text
    app = Application()
    app.ready()
 
@@ -423,13 +425,13 @@ required
 
 .. testsetup:: cookbook/validation/required
 
-   from yhttp import Application
+   from yhttp.core import Application
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/required
 
-   from yhttp import validate_form, validate_query, statuses
+   from yhttp.core import validate_form, validate_query, statuses
 
 
    @app.route()
@@ -465,7 +467,7 @@ to the server.
 
 .. testsetup:: cookbook/validation/nobody
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -493,7 +495,7 @@ readonly
 
 .. testsetup:: cookbook/validation/readonly
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -520,7 +522,7 @@ You can use regular expression to validate request fields:
 
 .. testsetup:: cookbook/validation/regex
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -551,7 +553,7 @@ value by ``form[field] = type(form[field])``.
 
 .. testsetup:: cookbook/validation/type
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -581,7 +583,7 @@ minimum/maximum
 
 .. testsetup:: cookbook/validation/minmax
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -612,7 +614,7 @@ minlength/maxlength
 
 .. testsetup:: cookbook/validation/minmaxlength
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -644,7 +646,7 @@ length
 .. versionadded:: 3.9.0
 .. testsetup:: cookbook/validation/length
 
-   from yhttp import Application, validate_form
+   from yhttp.core import Application, validate_form
    from bddrest import Given, when, status, given
    app = Application()
 
@@ -677,13 +679,13 @@ You can use your very own callable as the request validator:
 
 .. testsetup:: cookbook/validation/custom
 
-   from yhttp import Application, validate_form, statuses
+   from yhttp.core import Application, validate_form, statuses
    from bddrest import Given, when, status, given
    app = Application()
 
 .. testcode:: cookbook/validation/custom
 
-   from yhttp.validation import Field
+   from yhttp.core.validation import Field
 
    def customvalidator(req, value, container, field):
        assert isinstance(field, Field)

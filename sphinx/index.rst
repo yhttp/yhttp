@@ -31,7 +31,7 @@ A lightweight flask-like HTTP framework.
 
 .. testcode::
 
-   from yhttp import Application
+   from yhttp.core import Application
 
    app = Application()
 
@@ -63,7 +63,7 @@ Features
 - Easy to extend.
 - Builtin extensible CLI.
 - Request :ref:`Validation <cookbook-validation>`
-- Simple WSGI Rewrite: :py:class:`yhttp.Rewrite`
+- Simple WSGI Rewrite: :py:class:`yhttp.core.Rewrite`
 
 Contents
 ********

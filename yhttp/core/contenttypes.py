@@ -10,7 +10,7 @@ def contenttype(contenttype=None, charset=None, dump=None):
 
        import json
 
-       from yhttp import contenttype
+       from yhttp.core import contenttype
 
        @app.route()
        @contenttype('application/json', 'utf8', json.dumps)
@@ -18,7 +18,7 @@ def contenttype(contenttype=None, charset=None, dump=None):
            return {'foo': 'bar'}
 
     There are ready to use contenttype decorators which can importes from
-    ``yhttp`` package, like: :func:`.json`.
+    ``yhttp.core`` package, like: :func:`.json`.
 
     You may create your very own content type decorator by calling this
     function with desired arguments, for example:
@@ -76,7 +76,7 @@ Handlers must return :class:`bytes` when this decorator is used.
 
 .. code-block::
 
-   from yhttp import binary
+   from yhttp.core import binary
 
 
    @app.route()
@@ -98,7 +98,7 @@ Handlers must return :class:`dict` when this decorator is used.
 
 .. code-block::
 
-   from yhttp import json
+   from yhttp.core import json
 
 
    @app.route()
@@ -119,7 +119,7 @@ Handlers must return :class:`str` when this decorator is used.
 
 .. code-block::
 
-   from yhttp import text
+   from yhttp.core import text
 
 
    @app.route()
@@ -140,7 +140,7 @@ Handlers must return :class:`str` when this decorator is used.
 
 .. code-block::
 
-   from yhttp import html
+   from yhttp.core import html
 
 
    @app.route()

@@ -26,11 +26,11 @@ Create a file named: ``hello.py``:
 
 .. testsetup:: cookbook/qs
    
-   from yhttp import Application, text
+   from yhttp.core import Application, text
 
 .. testcode::
 
-   from yhttp import Application, text
+   from yhttp.core import Application, text
 
 
    app = Application()
@@ -125,7 +125,7 @@ Lets take a look at ``hello.py``.
    #! /usr/bin/env python3
    import sys
    
-   from yhttp import Application, text
+   from yhttp.core import Application, text
    
    
    app = Application()
@@ -344,7 +344,7 @@ hello.py
 
    import sys
    
-   from yhttp import Application
+   from yhttp.core import Application
    from easycli import SubCommand
    
    
