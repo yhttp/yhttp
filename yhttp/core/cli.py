@@ -40,7 +40,11 @@ class Serve(SubCommand):
         args.application.ready()
         httpd = make_server(host, int(port), args.application)
         print(f'Demo server started http://{host}:{port}')
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("CTRL+C pressed.")
+            args.application.shutdown()
 
 
 class Main(Root):
