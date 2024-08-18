@@ -9,7 +9,7 @@ jobs:
     name: Deploy document
     runs-on: ubuntu-latest
     env:
-      VENVPATH: /usr 
+      PREFIX: /usr 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -36,6 +36,8 @@ jobs:
     name: Deploy to PyPI
     needs: deploydoc
     runs-on: ubuntu-latest
+    env:
+      PREFIX: /usr 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
