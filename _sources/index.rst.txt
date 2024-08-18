@@ -12,10 +12,13 @@ Welcome to yhttp's documentation!
 .. image:: https://github.com/yhttp/yhttp/workflows/Build/badge.svg?branch=master
    :target: https://github.com/yhttp/yhttp/actions
 
+.. image:: https://github.com/yhttp/yhttp/actions/workflows/build.yml/badge.svg
+   :target: https://github.com/yhttp/yhttp/actions/workflows/build.yml
+
 .. image:: https://coveralls.io/repos/github/yhttp/yhttp/badge.svg?branch=master
    :target: https://coveralls.io/github/yhttp/yhttp?branch=master
 
-.. image:: https://img.shields.io/badge/Python-%3E%3D3.6-blue
+.. image:: https://img.shields.io/badge/Python-%3E%3D3.10-blue
    :target: https://python.org
 
 
@@ -28,7 +31,7 @@ A lightweight flask-like HTTP framework.
 
 .. testcode::
 
-   from yhttp import Application
+   from yhttp.core import Application
 
    app = Application()
 
@@ -60,7 +63,7 @@ Features
 - Easy to extend.
 - Builtin extensible CLI.
 - Request :ref:`Validation <cookbook-validation>`
-- Simple WSGI Rewrite: :py:class:`yhttp.Rewrite`
+- Simple WSGI Rewrite: :py:class:`yhttp.core.Rewrite`
 
 Contents
 ********
