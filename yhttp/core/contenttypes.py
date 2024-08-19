@@ -2,6 +2,8 @@ from functools import partial, wraps
 
 import ujson
 
+from .statuses import HTTPStatus
+
 
 def contenttype(contenttype=None, charset=None, dump=None):
     r"""Yield a decorator to set response content type and encoding.
@@ -53,15 +55,28 @@ def contenttype(contenttype=None, charset=None, dump=None):
 
     def decorator(handler):
         @wraps(handler)
-        def wrapper(request, *a, **kw):
+        def wrapper(req, *a, **kw):
             if contenttype:
-                request.response.type = contenttype
+                req.response.type = contenttype
 
             if charset:
-                request.response.charset = charset
+                req.response.charset = charset
 
-            body = handler(request, *a, **kw)
-            return dump(body) if dump else body
+            try:
+                body = handler(req, *a, **kw)
+            except HTTPStatus as ex:
+                body = ex
+
+            if isinstance(body, HTTPStatus):
+                if not body.keepheaders:
+                    raise body
+
+                return body
+
+            if dump:
+                return dump(body)
+
+            return body
 
         return wrapper
 
