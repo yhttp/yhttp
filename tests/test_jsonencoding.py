@@ -1,6 +1,6 @@
 from bddrest import response, status
 
-from yhttp.core import json, statuses
+from yhttp.core import json
 
 
 def test_jsonencoding(app, Given):
