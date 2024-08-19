@@ -1,10 +1,10 @@
 build
 setuptools
-bddrest >= 4.4.1, < 5
 coveralls >= 2.2
 coverage
+flake8
 pytest >= 4.4.0
 pytest-cov
-bddcli
-flake8
-yhttp-dev >= 3.0.5
+bddrest >= 4.4.1, < 5
+bddcli >= 2.5.1, < 3
+yhttp-dev >= 3.1.2
