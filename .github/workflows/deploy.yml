@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         git clone https://github.com/pylover/python-makelib.git make
-        make env ENV=doc
+        make install-doc
     - name: Sphinx Build
       working-directory: sphinx
       run: |
@@ -46,7 +46,7 @@ jobs:
     - name: Install dependencies
       run: |
         git clone https://github.com/pylover/python-makelib.git make
-        make env ENV=ci
+        make install-common
     - name: Create distributions
       run: make dist
     - name: Publish a Python distribution to PyPI

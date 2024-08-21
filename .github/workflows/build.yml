@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: |
         git clone https://github.com/pylover/python-makelib.git make
-        make env ENV=doc
+        make install-doc
         sudo cp `which bddcli-bootstrapper` /usr/local/bin
     - name: Lint
       run: make lint
