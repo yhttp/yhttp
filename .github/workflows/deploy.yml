@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         git clone https://github.com/pylover/python-makelib.git make
-        make install-doc
+        make install-common install-doc editable-install
     - name: Sphinx Build
       working-directory: sphinx
       run: |
@@ -46,7 +46,7 @@ jobs:
     - name: Install dependencies
       run: |
         git clone https://github.com/pylover/python-makelib.git make
-        make install-common
+        make install-common editable-install
     - name: Create distributions
       run: make dist
     - name: Publish a Python distribution to PyPI
