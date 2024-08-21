@@ -10,8 +10,8 @@ PYDEPS_COMMON += \
 include make/common.mk
 include make/venv.mk
 include make/install.mk
+include make/sphinx.mk
 include make/lint.mk
 include make/test.mk
-include make/sphinx.mk
 include make/dist.mk
 include make/pypi.mk
