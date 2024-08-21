@@ -15,4 +15,4 @@ from .multipart import MultipartError, MultipartParser, MultipartPart, \
 from .multidict import MultiDict
 
 
-__version__ = '5.0.2'
+__version__ = '5.0.3'
