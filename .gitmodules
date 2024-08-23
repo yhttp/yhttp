@@ -1,3 +1,0 @@
-[submodule "make"]
-	path = make
-	url = git@github.com:pylover/python-makelib.git
