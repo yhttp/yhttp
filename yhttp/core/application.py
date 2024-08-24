@@ -1,4 +1,5 @@
 import inspect
+import functools
 import re
 import types
 
@@ -8,6 +9,7 @@ from . import statuses, static
 from .request import Request
 from .response import Response
 from .cli import Main
+from .guard import Guard
 
 
 class BaseApplication:
@@ -400,3 +402,20 @@ class Application(BaseApplication):
             autoindex,
             fallback
         ))
+
+    def bodyguard(self, strict=False, fields=None):
+        guard = Guard(strict, fields)
+
+        def decorator(handler):
+            @functools.wraps(handler)
+            def _handler(req, *args, **kwargs):
+                if strict and (not fields) and req.contentlength:
+                    # Body not allowed
+                    raise statuses.badrequest()
+
+                req.form = guard(req, req.getform(relax=True) or {})
+                return handler(req, *args, **kwargs)
+
+            return _handler
+
+        return decorator

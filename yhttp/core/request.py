@@ -209,8 +209,6 @@ class Request:
 
             raise statuses.unprocessablecontent()
 
-        return self.form
-
     @lazyattribute
     def files(self):
         """Return a dictionary representing the submitted files.
