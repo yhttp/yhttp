@@ -76,13 +76,13 @@ class Request:
     def query(self):
         """Return A dictionary representing the submitted query string."""
         if 'QUERY_STRING' not in self.environ:
-            return {}
-
-        qs = parse_qs(
-            self.environ['QUERY_STRING'],
-            keep_blank_values=True,
-            strict_parsing=True
-        )
+            qs = {}
+        else:
+            qs = parse_qs(
+                self.environ['QUERY_STRING'],
+                keep_blank_values=True,
+                strict_parsing=True
+            )
 
         return multidict.MultiDict(backend=qs)
 

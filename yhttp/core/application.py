@@ -419,3 +419,20 @@ class Application(BaseApplication):
             return _handler
 
         return decorator
+
+    def queryguard(self, strict=False, fields=None):
+        guard = Guard(strict, fields)
+
+        def decorator(handler):
+            @functools.wraps(handler)
+            def _handler(req, *args, **kwargs):
+                if strict and (not fields) and req.query:
+                    # Body not allowed
+                    raise statuses.badrequest()
+
+                req.form = guard(req, req.query or {})
+                return handler(req, *args, **kwargs)
+
+            return _handler
+
+        return decorator

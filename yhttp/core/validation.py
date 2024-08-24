@@ -8,8 +8,7 @@ from . import statuses
 
 
 warnings.warn(
-    'the yhttp-core.validation module is deprecated, use yhttp.core.guard ' \
-    'instead',
+    'yhttp.core.validation module is deprecated, use yhttp.core.guard instead',
     DeprecationWarning,
     stacklevel=2
 )

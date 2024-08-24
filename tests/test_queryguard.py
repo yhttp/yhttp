@@ -3,14 +3,14 @@ from bddrest import status, given, when, response
 from yhttp.core import statuses, guard as g, json
 
 
-def test_guard_strict(app, Given):
+def test_queryguard_strict(app, Given):
     @app.route()
-    @app.bodyguard(strict=True)
+    @app.queryguard(strict=True)
     def get(req):
         pass
 
     @app.route()
-    @app.bodyguard(strict=True, fields=(
+    @app.queryguard(strict=True, fields=(
         g.String('foo', optional=True),
         g.Integer('bar', optional=True),
     ))
@@ -20,47 +20,46 @@ def test_guard_strict(app, Given):
     with Given():
         assert status == 200
 
-        when(form=dict(foo='bar'))
+        when(query=dict(foo='bar'))
         assert status == '400 Bad Request'
 
-    with Given(verb='post', form=dict(foo='bar')):
+    with Given(verb='post', query=dict(foo='bar')):
         assert status == 200
 
-        when(form=given - 'foo')
+        when(query=given - 'foo')
         assert status == 200
 
-        when(form=given | dict(baz='baz'))
+        when(query=given | dict(baz='baz'))
         assert status == '400 Invalid field(s): baz'
 
-        when(form=given | dict(bar='bar'))
+        when(query=given | dict(bar='bar'))
         assert status == '400 bar: Integer Required'
 
 
-def test_guard_string(app, Given):
+def test_queryguard_string(app, Given):
     @app.route()
-    @app.bodyguard(fields=(
+    @app.queryguard(fields=(
         g.String('foo', optional=True, length=(1, 3), pattern=r'^[a-z]+$'),
     ))
     @json
     def post(req):
-        f = req.getform(relax=True)
-        return f.dict
+        return req.query.dict
 
-    with Given(verb='post', form=dict(foo='abc', bar='2')):
+    with Given(verb='post', query=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=['2'])
 
-        when(form=given - 'foo')
+        when(query=given - 'foo')
         assert status == 200
 
-        when(form=dict(foo=''))
+        when(query=dict(foo=''))
         assert status == '400 foo: Length must be between 1 and 3'
 
-        when(form=dict(foo='12'))
+        when(query=dict(foo='12'))
         assert status == '400 foo: Invalid Format'
 
 
-def test_guard_integer(app, Given):
+def test_queryguard_integer(app, Given):
     def nozero(req, field, value):
         if value == 0:
             raise statuses.status(400, f'{field.name}: Zero Not Allowed')
@@ -68,30 +67,29 @@ def test_guard_integer(app, Given):
         return 0
 
     @app.route()
-    @app.bodyguard(fields=(
+    @app.queryguard(fields=(
         g.Integer('bar', range=(-2, 5), callback=nozero),
     ))
     @json
     def post(req):
-        f = req.getform(relax=True)
-        return f.dict
+        return req.query.dict
 
-    with Given(verb='post', form=dict(foo='abc', bar='2')):
+    with Given(verb='post', query=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=[2])
 
-        when(form=dict(bar='-2'))
+        when(query=dict(bar='-2'))
         assert status == 200
         assert response.json == dict(bar=[-2])
 
-        when(form=dict(bar='-3'))
+        when(query=dict(bar='-3'))
         assert status == '400 bar: Value must be between -2 and 5'
 
-        when(form=given - 'bar')
+        when(query=given - 'bar')
         assert status == '400 bar: Required'
 
-        when(form=dict(bar='bar'))
+        when(query=dict(bar='bar'))
         assert status == '400 bar: Integer Required'
 
-        when(form=given | dict(bar=0))
+        when(query=given | dict(bar=0))
         assert status == '400 bar: Zero Not Allowed'
