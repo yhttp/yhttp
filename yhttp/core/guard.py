@@ -3,6 +3,7 @@ import re
 from . import statuses
 
 
+# TODO: documentation
 class Field:
     statuscode_missing = 400
 

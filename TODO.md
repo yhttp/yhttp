@@ -1,4 +1,4 @@
+- query validator
 - count validator limit number of identical fields in form
 - helper functions such as req.getjson(force=), getform(...), 
 - dry readme
-- deprecate validation module

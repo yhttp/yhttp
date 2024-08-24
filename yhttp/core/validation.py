@@ -1,9 +1,18 @@
 import functools
 import re
 import abc
+import warnings
 from _decimal import InvalidOperation
 
 from . import statuses
+
+
+warnings.warn(
+    'the yhttp-core.validation module is deprecated, use yhttp.core.guard ' \
+    'instead',
+    DeprecationWarning,
+    stacklevel=2
+)
 
 
 class Field:

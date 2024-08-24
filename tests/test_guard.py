@@ -3,9 +3,6 @@ from bddrest import status, given, when, response
 from yhttp.core import statuses, guard as g, json
 
 
-# TODO: documentation
-
-
 def test_guard_strict(app, Given):
     @app.route()
     @app.bodyguard(strict=True)
