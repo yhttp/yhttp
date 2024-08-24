@@ -324,6 +324,8 @@ Handler function's name will be used as HTTP verb. so, the ``get`` in the
 example above stands for the HTTP ``GET`` method. 
 
 
+.. _cookbook-pathparams:
+
 Path Parameters
 ^^^^^^^^^^^^^^^
 All un-named and named capture groups ``(...)``, ``(?...)`` and 
