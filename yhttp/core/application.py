@@ -13,6 +13,8 @@ from .guard import Guard
 
 
 class BaseApplication:
+    """Base application for :class:`Application` and :class:`Rewrite`
+    """
     _builtinsettings = '''
     debug: true
     '''
@@ -158,6 +160,17 @@ class Application(BaseApplication):
     """WSGI Web Application.
 
     Instance of this class can be used as a WSGI application.
+
+    :cvar bodyguard_factory: A factory of :class:`.Guard` and or it's
+                             subclasses to be used in
+                             :meth:`Application.bodyguard` to instantiate a new
+                             guard for a handler. default: :class:`.Guard`.
+    :cvar queryguard_factory: A factory of :class:`.Guard` and or it's
+                              subclasses to be used in
+                              :meth:`Application.queryguard` to instantiate a
+                              new guard for a handler.
+                              default: :class:`.Guard`.
+    :ivar routes: A dictionionary to hold the regext routes handler mappings.
     """
 
     _builtinsettings = '''
@@ -168,8 +181,9 @@ class Application(BaseApplication):
         fallback: index.html
     '''
 
-    #: A dictionionary to hold the regext routes handler mappings.
     routes = None
+    bodyguard_factory = Guard
+    queryguard_factory = Guard
 
     def __init__(self, version=None):
         self.routes = {}
@@ -403,8 +417,34 @@ class Application(BaseApplication):
             fallback
         ))
 
-    def bodyguard(self, strict=False, fields=None):
-        guard = Guard(strict, fields)
+    def bodyguard(self, fields=None, strict=False):
+        """A decorator factory to validate HTTP request's body.
+
+        .. versionadded:: 5.1
+
+        .. code-block::
+
+           from yhttp.core import guard as g
+
+           @app.route()
+           @app.bodyguard(fields=(
+               g.String('foo', length=(1, 8), pattern=r'\\d+', optional=True),
+               g.Integer('bar', range=(0, 9), optional=True),
+           ), strict=True)
+           @json()
+           def post(req):
+               ...
+
+        This method calls the :attr:`bodyguard_factory` to
+        intantiate a :class:`Guard` class or it's subclasses.
+
+        :param fields: A tuple of :class:`Gurad.Field` subclass instances to
+                       define the allowed fields and field attributes.
+        :param strict: If ``True``, it raises
+                       :attr:`Guard.statuscode_unknownfields` when one or more
+                       fields are not in the given ``fields`` argument.
+        """
+        guard = self.bodyguard_factory(fields, strict)
 
         def decorator(handler):
             @functools.wraps(handler)
@@ -420,8 +460,34 @@ class Application(BaseApplication):
 
         return decorator
 
-    def queryguard(self, strict=False, fields=None):
-        guard = Guard(strict, fields)
+    def queryguard(self, fields=None, strict=False):
+        """A decorator factory to validate the URL's query string.
+
+        .. versionadded:: 5.1
+
+        .. code-block::
+
+           from yhttp.core import guard as g
+
+           @app.route()
+           @app.queryguard(fields=(
+               g.String('foo', length=(1, 8), pattern=r'\\d+', optional=True),
+               g.Integer('bar', range=(0, 9), optional=True),
+           ), strict=True)
+           @json()
+           def post(req):
+               ...
+
+        This method calls the :attr:`queryguard_factory` to
+        intantiate a :class:`Guard` class or it's subclasses.
+
+        :param fields: A tuple of :class:`Gurad.Field` subclass instances to
+                       define the allowed fields and field attributes.
+        :param strict: If ``True``, it raises
+                       :attr:`Guard.statuscode_unknownfields` when one or more
+                       fields are not in the given ``fields`` argument.
+        """
+        guard = self.queryguard_factory(fields, strict)
 
         def decorator(handler):
             @functools.wraps(handler)
@@ -430,7 +496,7 @@ class Application(BaseApplication):
                     # Body not allowed
                     raise statuses.badrequest()
 
-                req.form = guard(req, req.query or {})
+                req.query = guard(req, req.query or {})
                 return handler(req, *args, **kwargs)
 
             return _handler

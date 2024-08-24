@@ -78,7 +78,9 @@ intersphinx_mapping = {
     'easycli': ('https://pylover.github.io/easycli', None),
 }
 
-autodoc_default_flags = [
-    # 'members',
+autodoc_default_options = {
+    'members': True,
     # 'show-inheritance',
-]
+}
+
+add_module_names = False

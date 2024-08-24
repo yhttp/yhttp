@@ -65,7 +65,7 @@ class HTTPStatus(Exception):
         response.charset = 'utf-8'
 
 
-#: Alias for :class:`.HTTPStatus`
+#: Alias for :exc:`.HTTPStatus`
 status = HTTPStatus
 
 #: HTTP 200 OK

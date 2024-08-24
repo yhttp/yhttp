@@ -38,7 +38,7 @@ def test_queryguard_strict(app, Given):
 
 def test_queryguard_string(app, Given):
     @app.route()
-    @app.queryguard(fields=(
+    @app.queryguard((
         g.String('foo', optional=True, length=(1, 3), pattern=r'^[a-z]+$'),
     ))
     @json

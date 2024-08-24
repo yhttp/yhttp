@@ -1,4 +1,6 @@
 - query validator
+- doc about path_parameter
 - count validator limit number of identical fields in form
 - helper functions such as req.getjson(force=), getform(...), 
 - dry readme
+- complete http status codes

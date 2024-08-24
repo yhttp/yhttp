@@ -3,8 +3,9 @@ import re
 from . import statuses
 
 
-# TODO: documentation
 class Field:
+    """Base class for all fields such as :class:`String`
+    """
     statuscode_missing = 400
 
     def __init__(self, name, optional=False, callback=None):
@@ -32,6 +33,18 @@ class Field:
 
 
 class String(Field):
+    """Represent the guard for string field.
+
+    :param name: str, the field name.
+    :param length: ``(int, int)``, a tuple of ``(min, max)`` to specify the
+                   minimum and maximum allowed length for the value.
+    :param pattern: A regex pattern to specify the data format for the field.
+    :cvar statuscode_badlength: int, the status code to raise when value length
+                                is not permitted. default: ``400``.
+    :cvar statuscode_badformat: int, the status code to raise when value format
+                                is not match with given pattern.
+                                default: ``400``.
+    """
     statuscode_badlength = 400
     statuscode_badformat = 400
 
@@ -67,6 +80,17 @@ class String(Field):
 
 
 class Integer(Field):
+    """Represent the guard for integer field.
+
+    :param name: str, the field name.
+    :param range: ``(int, int)``, a tuple of ``(min, max)`` to specify the
+                  minimum and maximum allowed value.
+    :cvar statuscode_badtype: int, the status code to raise when the type cast
+                              to integer ``int(value)`` is raises
+                              :exc:`ValueError`. default: ``400``.
+    :cvar statuscode_outofrange: int, the status code to raise when value
+                                 is not in specified range.
+    """
     statuscode_badtype = 400
     statuscode_outofrange = 400
 
@@ -101,7 +125,23 @@ class Integer(Field):
 
 
 class Guard:
-    def __init__(self, strict=False, fields=None):
+    """The :class:`.guard.Guard` class is used to validate the HTTP requests.
+
+    see: :meth:`.Application.bodyguard` for more info.
+
+    .. versionadded:: 5.1
+
+    :param strict: If ``True``, it raises
+                   :attr:`Guard.statuscode_unknownfields` when one or more
+                   fields are not in the given ``fields`` argument.
+    :param fields: A tuple of :class:`Gurad.Field` subclass instances to
+                   define the allowed fields and field attributes.
+    :cvar statuscode_unknownfields: int, the status code to raise when an
+                                    unknown field(s) is/are found.
+    """
+    statuscode_unknownfields = 400
+
+    def __init__(self, fields=None, strict=False):
         assert fields or strict, 'one of fields or strict=True must be given.'
         self.fields = {f.name: f for f in fields} if fields else fields
         self.strict = strict
@@ -111,7 +151,7 @@ class Guard:
             garbages = set(values.keys()) - set((self.fields or {}).keys())
             if garbages:
                 raise statuses.status(
-                    400,
+                    self.statuscode_unknownfields,
                     f'Invalid field(s): {", ".join(garbages)}'
                 )
 

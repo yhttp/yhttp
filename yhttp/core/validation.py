@@ -96,6 +96,9 @@ class Criterion:
     def _validate(self, req, value, container: dict, field):
         """Validate request.
 
+        .. deprecated:: 5.1
+           Use :mod:`.guard` instead.
+
         It must be overridden in the child class.
 
         This method should raise exception if the criterion is not met. there
