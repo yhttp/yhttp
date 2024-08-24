@@ -195,13 +195,13 @@ class Application(BaseApplication):
             if not match:
                 continue
 
-            arguments = [a for a in match.groups() if a is not None]
+            pathparams = [a for a in match.groups() if a is not None]
             query = {
                 k: v for k, v in request.query.items()
                 if k in info['kwonly']
             }
 
-            return handler, arguments, query
+            return handler, pathparams, query
 
         return None, None, None
 
@@ -245,8 +245,8 @@ class Application(BaseApplication):
         request = Request(self, environ, response)
 
         try:
-            handler, arguments, query = self._findhandler(request)
-            body = handler(request, *arguments, **query)
+            handler, pathparams, query = self._findhandler(request)
+            body = handler(request, *pathparams, **query)
 
             if isinstance(body, statuses.HTTPStatus):
                 raise body
@@ -316,6 +316,7 @@ class Application(BaseApplication):
         .. seealso::
 
            :ref:`cookbook-routing`
+           :ref:`cookbook-pathparams`
 
 
         :param pattern: Regular expression to match the request.

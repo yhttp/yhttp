@@ -85,6 +85,10 @@ def test_routing_argument(app, Given):
     def post(req, id_, title='Empty'):
         return f'{id_} {title}'
 
+    @app.route(r'/(\d+)(?:/(\w+))?')
+    def put(req, id_, title='Empty'):
+        return f'{id_} {title}'
+
     with Given('/12/foo', 'post'):
         assert status == 200
         assert response == '12 foo'
@@ -92,6 +96,10 @@ def test_routing_argument(app, Given):
         when('/12')
         assert status == 200
         assert response == '12 Empty'
+
+        when(verb='put', url='/12/foo')
+        assert status == 200
+        assert response == '12 foo'
 
 
 def test_routing_insert(app, Given):

@@ -324,6 +324,34 @@ Handler function's name will be used as HTTP verb. so, the ``get`` in the
 example above stands for the HTTP ``GET`` method. 
 
 
+.. _cookbook-pathparams:
+
+Path Parameters
+^^^^^^^^^^^^^^^
+All un-named and named capture groups ``(...)``, ``(?...)`` and 
+``(?P<name>...)`` in the route expression  are unpacked as positional 
+arguments of the handler.
+
+.. code-block::
+    
+   @app.route(r'/([a-z0-9]+)/bar/([a-z0-9]+)')
+   def get(req, arg1, arg2):
+       ...
+
+   @app.route(r'/(\d+)/?(\w+)?')
+   def post(req, id, title=None):
+       ...
+
+You may use ``non-capturing`` version of reqular parentheses ``(?:...)`` to 
+specify to not capture and pass the group to the handler:
+
+.. code-block::
+
+   @app.route(r'/(\d+)(?:/(\w+))?')
+   def put(req, id, title=None):
+       ...
+
+
 .. _cookbook-anyverb:
 
 Any Verb
