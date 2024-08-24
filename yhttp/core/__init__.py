@@ -1,6 +1,4 @@
 """yhttp micro http framework."""
-
-
 from .application import BaseApplication, Application
 from .validation import validate_form, validate_query
 from .contenttypes import contenttype, binary, utf8, json, text, html
@@ -15,4 +13,4 @@ from .multipart import MultipartError, MultipartParser, MultipartPart, \
 from .multidict import MultiDict
 
 
-__version__ = '5.0.3'
+__version__ = '5.1.0'

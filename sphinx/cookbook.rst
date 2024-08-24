@@ -411,14 +411,57 @@ Test:
        assert counter['max-age'] == '1'
 
 
+.. _cookbook-guard:
+
+Guard
+-----
+
+``yhttp`` has a very flexible request guard system. these are some 
+examples:
+
+.. testsetup:: cookbook/guard
+
+   from yhttp.core import Application
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/guard
+
+   from yhttp.core import guard
+
+
+   @app.route()
+   @app.queryguard((
+       guard.String('foo'),
+   ), strict=True)
+   @app.bodyguard((
+       guard.String('bar'),
+       guard.String('baz', optional=True)
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='post', query=dict(foo='foo'),
+              form=dict(bar='bar', baz='baz')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == '400 bar: Required'
+
+       when(form=given - 'baz', query=given + dict(baz='baz'))
+       assert status == '400 Invalid field(s): baz'
+
+       when(form=given - 'baz')
+       assert status == 200
+
+
 .. _cookbook-validation:
 
 Request Validation
 ------------------
 
-``yhttp`` has a very flexible request validation system. these are some 
-examples:
-
+.. deprecated:: 5.1
+   Use :mod:`.guard` instead.
 
 required
 ^^^^^^^^

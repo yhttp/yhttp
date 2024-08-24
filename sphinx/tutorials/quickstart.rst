@@ -1,6 +1,8 @@
 Quick Start
 ===========
 
+.. currentmodule:: yhttp.core
+
 This is how to serve a simple string using `yhttp`.
 
 
@@ -9,16 +11,11 @@ use virtual environment before that. I use
 `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/>`_.
 
 Create a virtual environment to isolate your hello world application from the 
-rest of the system python packages.
-
-.. code-block:: bash
-
-   mkvirtualenv hello
+rest of the system python packages. see :py:mod:`venv`.
 
 
 .. code-block:: bash
 
-   workon hello
    pip install yhttp
 
 
@@ -77,8 +74,8 @@ Command Line Interface
 ======================
 
 ``yhttp`` has builtin command line interface with auto completion support. 
-to use it, just call :meth:`.Application.climain` as the entry point. We will 
-learn how it works in the rest of this tutorial.
+to use it, just call :meth:`BaseApplication.climain` as the entry point. We 
+will learn how it works in the rest of this tutorial.
 
 Let's edit ``hello.py`` to act as both command line interface and WSGI
 application:
@@ -216,7 +213,6 @@ After this, you can install the module as a reqular python package.
 
 .. code-block:: bash
 
-   workon hello
    pip install -e .
 
 
@@ -240,11 +236,7 @@ Just run:
 
    hello completion install
 
-Then deactivate and re-activate your virtual environment to apply changes:
-
-.. code-block:: bash
-
-   deactivate && workon hello
+Then deactivate and re-activate your virtual environment to apply changes.
 
 
 Write ``hello`` and hit the ``TAB`` key twice to see the avaiable options:

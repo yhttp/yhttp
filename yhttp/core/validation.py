@@ -1,9 +1,17 @@
 import functools
 import re
 import abc
+import warnings
 from _decimal import InvalidOperation
 
 from . import statuses
+
+
+warnings.warn(
+    'yhttp.core.validation module is deprecated, use yhttp.core.guard instead',
+    DeprecationWarning,
+    stacklevel=2
+)
 
 
 class Field:
@@ -87,6 +95,9 @@ class Criterion:
 
     def _validate(self, req, value, container: dict, field):
         """Validate request.
+
+        .. deprecated:: 5.1
+           Use :mod:`.guard` instead.
 
         It must be overridden in the child class.
 

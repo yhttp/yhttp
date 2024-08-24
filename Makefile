@@ -8,7 +8,7 @@ PYDEPS_COMMON += \
 
 
 # Assert the python-makelib version
-PYTHON_MAKELIB_VERSION_REQUIRED = 1.3
+PYTHON_MAKELIB_VERSION_REQUIRED = 1.4.1
 
 
 # Ensure the python-makelib is installed
@@ -19,5 +19,5 @@ ifeq ("", "$(wildcard $(PYTHON_MAKELIB_PATH))")
 endif
 
 
-# Include a suit bundle files.
+# Include a proper bundle rule file.
 include $(PYTHON_MAKELIB_PATH)/venv-lint-test-doc-pypi.mk

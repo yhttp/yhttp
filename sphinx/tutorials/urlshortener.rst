@@ -8,21 +8,13 @@ It's highly recommended to use virtual environment before that. I use
 `virtualenvwrapper <https://virtualenvwrapper.readthedocs.io/en/latest/>`_.
 
 Create a virtual environment to isolate your application from the rest of the 
-system python packages.
-
-.. code-block:: bash
-
-   mkvirtualenv shortener
+system python packages. see :py:mod:`venv`.
 
 
 Rrequirements
 -------------
 
 Activate your virtual environment if you're not activated it yet.
-
-.. code-block:: bash
-
-   workon shortener
 
 
 I use `bddrest <https://github.com/pylover/bddrest>`_ to test python ``WSGI``
@@ -178,7 +170,7 @@ Implement Shortener API
    import random
    
    import redis
-   from yhttp.core import Application, text, statuses, validate_form, statuscode
+   from yhttp.core import Application, text, statuses, statuscode, guard
    
    
    app = Application()
@@ -192,11 +184,8 @@ Implement Shortener API
    
    
    @app.route()
-   @validate_form(fields=dict(
-       url=dict(
-           required='400 Field missing: url',
-           pattern=(r'^http://.*', '400 Invalid URL')
-       )
+   @app.bodyguard(fields=(
+       guard.String('url', pattern=r'^http://.*'),
    ))
    @text
    @statuscode('201 Created')

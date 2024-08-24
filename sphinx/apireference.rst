@@ -5,16 +5,14 @@ API Reference
 .. currentmodule:: yhttp.core
 
 
-Application Class
-^^^^^^^^^^^^^^^^^ 
+Application Classes
+^^^^^^^^^^^^^^^^^^^ 
 
 .. autoclass:: BaseApplication
-   :members:
 
 
 .. autoclass:: Application
    :show-inheritance:
-   :members:
 
 
 Rewrite Class
@@ -22,34 +20,29 @@ Rewrite Class
 
 .. autoclass:: Rewrite
    :show-inheritance:
-   :members:
 
 Request Class
 ^^^^^^^^^^^^^ 
 
 .. autoclass:: Request
-   :members:
 
 
 HeadersMask Class
 ^^^^^^^^^^^^^^^^^
 
 .. autoclass:: HeadersMask
-   :members:
 
 
 Response Class
 ^^^^^^^^^^^^^^ 
 
 .. autoclass:: Response
-   :members:
 
 
 HeaderSet Class
 ^^^^^^^^^^^^^^^
 
 .. autoclass:: HeaderSet
-   :members:
 
 
 MultiDict
@@ -62,7 +55,6 @@ HTTPStatus Class
 ^^^^^^^^^^^^^^^^
 
 .. autoclass:: HTTPStatus
-   :members:
 
 
 contenttype decorators
@@ -75,9 +67,18 @@ contenttype decorators
 .. autofunction:: html
 
 
+gurad Module
+^^^^^^^^^^^^
+
+.. automodule:: yhttp.core.guard
+
+
 validation module
 ^^^^^^^^^^^^^^^^^
+.. currentmodule:: yhttp.core
 
+.. deprecated:: 5.1
+   Use :mod:`.guard` instead.
 
 .. autofunction:: validate_form
 .. autofunction:: validate_query
@@ -89,4 +90,3 @@ statuses Module
 .. currentmodule:: yhttp.core.statuses
 
 .. automodule:: yhttp.core.statuses
-   :members:
