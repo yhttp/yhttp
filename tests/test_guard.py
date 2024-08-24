@@ -34,9 +34,12 @@ def test_guard_default(app, Given):
     with pytest.raises(AssertionError):
         guard.String('foo', default='def')
 
+    def foodef(req, self, values):
+        return 'foodef'
+
     @app.route()
     @app.queryguard((
-        guard.String('foo', optional=True, default='foodef'),
+        guard.String('foo', optional=True, default=foodef),
     ), strict=True)
     @app.bodyguard((
         guard.String('bar', optional=True, default='bardef'),

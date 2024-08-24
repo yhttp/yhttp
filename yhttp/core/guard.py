@@ -9,12 +9,17 @@ class Field:
     :param optional: If ``True``, the :attr:`Field.statuscode_missing` is not
                      raised when the field is not submitted by the client.
                      default: ``False``.
-    :param default: The default value for field if not submitted. this argument
-                    cannot passed alongside the ``optional``.
-                    default: ``None``.
+    :param default: A scalar or ``callable(req, field, valuesdict)`` as the
+                    default value for field if not submitted. this argument
+                    cannot passed with ``optional``. default: ``None``.
     :cvar statuscode_missing: int, the status code to raise when the field is
                               not submitted by the user when ``strict=True``.
                               default: ``400``.
+
+    .. versionadded:: 5.2
+
+       ``default`` argument.
+
     """
     statuscode_missing = 400
 
@@ -27,7 +32,7 @@ class Field:
         self.default = default
         self.callback = callback
 
-    def skip(self, values):
+    def skip(self, req, values):
         if self.name not in values:
             if not self.optional:
                 raise statuses.status(
@@ -36,7 +41,10 @@ class Field:
                 )
 
             if self.default:
-                values.replace(self.name, self.default)
+                if callable(self.default):
+                    values.replace(self.name, self.default(req, self, values))
+                else:
+                    values.replace(self.name, self.default)
 
             return True
 
@@ -46,7 +54,7 @@ class Field:
         if self.callback is None:
             return
 
-        self.callback(req, self, values[self.name])
+        self.callback(req, self, values)
 
 
 class String(Field):
@@ -75,7 +83,7 @@ class String(Field):
         super().__init__(name, **kwargs)
 
     def validate(self, req, values):
-        if super().skip(values):
+        if super().skip(req, values):
             return
 
         for i, v in enumerate(values.dict[self.name]):
@@ -116,7 +124,7 @@ class Integer(Field):
         super().__init__(name, **kwargs)
 
     def validate(self, req, values):
-        if super().skip(values):
+        if super().skip(req, values):
             return
 
         for i, v in enumerate(values.dict[self.name]):

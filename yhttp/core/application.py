@@ -470,11 +470,26 @@ class Application(BaseApplication):
         .. code-block::
 
            from yhttp.core import guard as g
+           from yhttp.core.multidict import MultiDict
+
+           def bar(req, field: g.Field, values: MultiDict):
+               return 'bar default value'
 
            @app.route()
            @app.queryguard(fields=(
-               g.String('foo', length=(1, 8), pattern=r'\\d+', optional=True),
-               g.Integer('bar', range=(0, 9), optional=True),
+               g.String(
+                   'foo',
+                   length=(1, 8),
+                   pattern=r'\\d+',
+                   optional=True,
+                   default='foo default value',
+               ),
+               g.Integer(
+                   'bar',
+                   range=(0, 9),
+                   optional=True,
+                   default=bar
+              ),
            ), strict=True)
            @json()
            def post(req):
