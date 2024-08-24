@@ -1,6 +1,7 @@
-from bddrest import status, given, when
+import pytest
+from bddrest import status, given, when, response
 
-from yhttp.core import guard
+from yhttp.core import guard, json
 
 
 def test_guard(app, Given):
@@ -27,3 +28,38 @@ def test_guard(app, Given):
 
         when(form=given - 'baz')
         assert status == 200
+
+
+def test_guard_default(app, Given):
+    with pytest.raises(AssertionError):
+        guard.String('foo', default='def')
+
+    @app.route()
+    @app.queryguard((
+        guard.String('foo', optional=True, default='foodef'),
+    ), strict=True)
+    @app.bodyguard((
+        guard.String('bar', optional=True, default='bardef'),
+    ))
+    @json
+    def post(req):
+        return dict(
+            foo=req.query['foo'],
+            bar=req.form['bar'],
+        )
+
+    with Given(verb='post'):
+        assert status == 200
+        assert response.json == dict(foo='foodef', bar='bardef')
+
+        when(query=dict(foo='abc'))
+        assert status == 200
+        assert response.json == dict(foo='abc', bar='bardef')
+
+        when(form=dict(bar='cba'))
+        assert status == 200
+        assert response.json == dict(foo='foodef', bar='cba')
+
+        when(query=dict(foo='abc'), form=dict(bar='cba'))
+        assert status == 200
+        assert response.json == dict(foo='abc', bar='cba')

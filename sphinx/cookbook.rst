@@ -464,7 +464,7 @@ examples:
    ), strict=True)
    @app.bodyguard((
        guard.String('bar'),
-       guard.String('baz', optional=True)
+       guard.String('baz', optional=True, default='123')
    ))
    def post(req):
        pass

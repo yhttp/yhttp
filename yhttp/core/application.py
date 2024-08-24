@@ -10,6 +10,7 @@ from .request import Request
 from .response import Response
 from .cli import Main
 from .guard import Guard
+from .multidict import MultiDict
 
 
 class BaseApplication:
@@ -454,7 +455,7 @@ class Application(BaseApplication):
                     # Body not allowed
                     raise statuses.badrequest()
 
-                req.form = guard(req, req.getform(relax=True) or {})
+                req.form = guard(req, req.getform(relax=True) or MultiDict())
                 return handler(req, *args, **kwargs)
 
             return _handler
@@ -497,7 +498,7 @@ class Application(BaseApplication):
                     # Body not allowed
                     raise statuses.badrequest()
 
-                req.query = guard(req, req.query or {})
+                req.query = guard(req, req.query or MultiDict())
                 return handler(req, *args, **kwargs)
 
             return _handler

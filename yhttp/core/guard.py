@@ -5,12 +5,26 @@ from . import statuses
 
 class Field:
     """Base class for all fields such as :class:`String`
+
+    :param optional: If ``True``, the :attr:`Field.statuscode_missing` is not
+                     raised when the field is not submitted by the client.
+                     default: ``False``.
+    :param default: The default value for field if not submitted. this argument
+                    cannot passed alongside the ``optional``.
+                    default: ``None``.
+    :cvar statuscode_missing: int, the status code to raise when the field is
+                              not submitted by the user when ``strict=True``.
+                              default: ``400``.
     """
     statuscode_missing = 400
 
-    def __init__(self, name, optional=False, callback=None):
+    def __init__(self, name, optional=False, default=None, callback=None):
+        assert not (not optional and default), 'default is not accepted ' \
+            'when optional is not set'
+
         self.name = name
         self.optional = optional
+        self.default = default
         self.callback = callback
 
     def skip(self, values):
@@ -20,6 +34,9 @@ class Field:
                     self.statuscode_missing,
                     f'{self.name}: Required'
                 )
+
+            if self.default:
+                values.replace(self.name, self.default)
 
             return True
 
