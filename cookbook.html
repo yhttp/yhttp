@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Cookbook &#8212; yhttp 5.0.3 documentation</title>
+    <title>Cookbook &#8212; yhttp 5.1.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=f98c4cc8"></script>
+    <script src="_static/documentation_options.js?v=1bd908e2"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -237,6 +237,28 @@ code for all requests.</p>
 </div>
 <p>Handler function’s name will be used as HTTP verb. so, the <code class="docutils literal notranslate"><span class="pre">get</span></code> in the
 example above stands for the HTTP <code class="docutils literal notranslate"><span class="pre">GET</span></code> method.</p>
+<section id="path-parameters">
+<span id="cookbook-pathparams"></span><h3>Path Parameters<a class="headerlink" href="#path-parameters" title="Link to this heading">¶</a></h3>
+<p>All un-named and named capture groups <code class="docutils literal notranslate"><span class="pre">(...)</span></code>, <code class="docutils literal notranslate"><span class="pre">(?...)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(?P&lt;name&gt;...)</span></code> in the route expression  are unpacked as positional
+arguments of the handler.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/([a-z0-9]+)/bar/([a-z0-9]+)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/(\d+)/?(\w+)?&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>You may use <code class="docutils literal notranslate"><span class="pre">non-capturing</span></code> version of reqular parentheses <code class="docutils literal notranslate"><span class="pre">(?:...)</span></code> to
+specify to not capture and pass the group to the handler:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/(\d+)(?:/(\w+))?&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
 <section id="any-verb">
 <span id="cookbook-anyverb"></span><h3>Any Verb<a class="headerlink" href="#any-verb" title="Link to this heading">¶</a></h3>
 <p>Another approach is to us a single star <code class="docutils literal notranslate"><span class="pre">*</span></code> to catch any verb.</p>
@@ -302,10 +324,44 @@ and <a class="reference internal" href="apireference.html#yhttp.core.Application
 </pre></div>
 </div>
 </section>
+<section id="guard">
+<span id="cookbook-guard"></span><h2>Guard<a class="headerlink" href="#guard" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> has a very flexible request guard system. these are some
+examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp.core</span> <span class="kn">import</span> <span class="n">guard</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">queryguard</span><span class="p">((</span>
+    <span class="n">guard</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span>
+<span class="p">),</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">bodyguard</span><span class="p">((</span>
+    <span class="n">guard</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">),</span>
+    <span class="n">guard</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">with</span> <span class="n">Given</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span>
+           <span class="n">form</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)):</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 bar: Required&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">given</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">(</span><span class="n">baz</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;400 Invalid field(s): baz&#39;</span>
+
+    <span class="n">when</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">given</span> <span class="o">-</span> <span class="s1">&#39;baz&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</section>
 <section id="request-validation">
 <span id="cookbook-validation"></span><h2>Request Validation<a class="headerlink" href="#request-validation" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">yhttp</span></code> has a very flexible request validation system. these are some
-examples:</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 5.1: </span>Use <a class="reference internal" href="apireference.html#module-yhttp.core.guard" title="yhttp.core.guard"><code class="xref py py-mod docutils literal notranslate"><span class="pre">guard</span></code></a> instead.</p>
+</div>
 <section id="required">
 <h3>required<a class="headerlink" href="#required" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhttp.core</span> <span class="kn">import</span> <span class="n">validate_form</span><span class="p">,</span> <span class="n">validate_query</span><span class="p">,</span> <span class="n">statuses</span>
@@ -575,6 +631,7 @@ value by <code class="docutils literal notranslate"><span class="pre">form[field
 <li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#static-contents">Static Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#http-cookie">HTTP Cookie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#guard">Guard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#request-validation">Request Validation</a></li>
 </ul>
 </li>

@@ -9,9 +9,6 @@ Welcome to yhttp's documentation!
 .. image:: http://img.shields.io/pypi/v/yhttp.svg
      :target: https://pypi.python.org/pypi/yhttp
  
-.. image:: https://github.com/yhttp/yhttp/workflows/Build/badge.svg?branch=master
-   :target: https://github.com/yhttp/yhttp/actions
-
 .. image:: https://github.com/yhttp/yhttp/actions/workflows/build.yml/badge.svg
    :target: https://github.com/yhttp/yhttp/actions/workflows/build.yml
 
@@ -62,7 +59,7 @@ Features
   arguments for query strings.
 - Easy to extend.
 - Builtin extensible CLI.
-- Request :ref:`Validation <cookbook-validation>`
+- Request :ref:`Validation <cookbook-guard>`
 - Simple WSGI Rewrite: :py:class:`yhttp.core.Rewrite`
 
 Contents

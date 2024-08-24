@@ -324,6 +324,34 @@ Handler function's name will be used as HTTP verb. so, the ``get`` in the
 example above stands for the HTTP ``GET`` method. 
 
 
+.. _cookbook-pathparams:
+
+Path Parameters
+^^^^^^^^^^^^^^^
+All un-named and named capture groups ``(...)``, ``(?...)`` and 
+``(?P<name>...)`` in the route expression  are unpacked as positional 
+arguments of the handler.
+
+.. code-block::
+    
+   @app.route(r'/([a-z0-9]+)/bar/([a-z0-9]+)')
+   def get(req, arg1, arg2):
+       ...
+
+   @app.route(r'/(\d+)/?(\w+)?')
+   def post(req, id, title=None):
+       ...
+
+You may use ``non-capturing`` version of reqular parentheses ``(?:...)`` to 
+specify to not capture and pass the group to the handler:
+
+.. code-block::
+
+   @app.route(r'/(\d+)(?:/(\w+))?')
+   def put(req, id, title=None):
+       ...
+
+
 .. _cookbook-anyverb:
 
 Any Verb
@@ -411,14 +439,57 @@ Test:
        assert counter['max-age'] == '1'
 
 
+.. _cookbook-guard:
+
+Guard
+-----
+
+``yhttp`` has a very flexible request guard system. these are some 
+examples:
+
+.. testsetup:: cookbook/guard
+
+   from yhttp.core import Application
+   from bddrest import Given, when, status, given
+   app = Application()
+
+.. testcode:: cookbook/guard
+
+   from yhttp.core import guard
+
+
+   @app.route()
+   @app.queryguard((
+       guard.String('foo'),
+   ), strict=True)
+   @app.bodyguard((
+       guard.String('bar'),
+       guard.String('baz', optional=True)
+   ))
+   def post(req):
+       pass
+
+   with Given(app, verb='post', query=dict(foo='foo'),
+              form=dict(bar='bar', baz='baz')):
+       assert status == 200
+
+       when(form=given - 'bar')
+       assert status == '400 bar: Required'
+
+       when(form=given - 'baz', query=given + dict(baz='baz'))
+       assert status == '400 Invalid field(s): baz'
+
+       when(form=given - 'baz')
+       assert status == 200
+
+
 .. _cookbook-validation:
 
 Request Validation
 ------------------
 
-``yhttp`` has a very flexible request validation system. these are some 
-examples:
-
+.. deprecated:: 5.1
+   Use :mod:`.guard` instead.
 
 required
 ^^^^^^^^
