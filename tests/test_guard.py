@@ -4,6 +4,42 @@ from bddrest import status, given, when, response
 from yhttp.core import guard, json
 
 
+def test_guard_override(app, Given):
+    bar = guard.String('bar', optional=True)
+    qux = guard.Integer('qux', range=(0, 3), optional=True)
+
+    @app.route()
+    @app.bodyguard((
+        bar(length=(3, 5)),
+        bar(name='baz', optional=False),
+        qux(range=(0, 5))
+    ))
+    @json
+    def post(req):
+        return req.form.dict
+
+    with Given(verb='post', form=dict(bar='bar', baz='baz')):
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'])
+
+        when(form=given - 'bar')
+        assert status == 200
+        assert response.json == dict(baz=['baz'])
+
+        when(form=given | dict(bar='12'))
+        assert status == '400 bar: Length must be between 3 and 5 characters'
+
+        when(form=given - 'baz')
+        assert status == '400 baz: Required'
+
+        when(form=given | dict(qux='12'))
+        assert status == '400 qux: Value must be between 0 and 5'
+
+        when(form=given | dict(qux='5'))
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'], qux=[5])
+
+
 def test_guard(app, Given):
     @app.route()
     @app.queryguard((

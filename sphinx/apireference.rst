@@ -71,6 +71,7 @@ gurad Module
 ^^^^^^^^^^^^
 
 .. automodule:: yhttp.core.guard
+   :special-members: __call__
 
 
 validation module

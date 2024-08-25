@@ -32,6 +32,33 @@ class Field:
         self.default = default
         self.callback = callback
 
+    def __call__(self, *, optional=None, default=None, callback=None,
+                 **kwargs):
+        """Copy and override the field.
+
+        .. code-block::
+
+           bar = guard.String('bar')
+
+           @app.route
+           @app.queryguard((
+               bar,
+               bar(name='baz', optional=True)
+           ))
+           def get(req, *, bar=None, baz=None):
+               ...
+
+        """
+
+        kwargs['optional'] = self.optional if optional is None else optional
+        kwargs['default'] = self.default if default is None else default
+        kwargs['callback'] = self.callback if callback is None else callback
+
+        if 'name' not in kwargs:
+            kwargs['name'] = self.name
+
+        return self.__class__(**kwargs)
+
     def skip(self, req, values):
         if self.name not in values:
             if not self.optional:
@@ -82,6 +109,11 @@ class String(Field):
 
         super().__init__(name, **kwargs)
 
+    def __call__(self, *, length=None, pattern=None, **kwargs):
+        kwargs['length'] = self.length if length is None else length
+        kwargs['pattern'] = self.pattern if pattern is None else pattern
+        return super().__call__(**kwargs)
+
     def validate(self, req, values):
         if super().skip(req, values):
             return
@@ -129,6 +161,10 @@ class Integer(Field):
     def __init__(self, name, range=None, **kwargs):
         self.range = range
         super().__init__(name, **kwargs)
+
+    def __call__(self, *, range=None, **kwargs):
+        kwargs['range'] = self.range if range is None else range
+        return super().__call__(**kwargs)
 
     def validate(self, req, values):
         if super().skip(req, values):
@@ -178,7 +214,12 @@ class Guard:
         self.fields = {f.name: f for f in fields} if fields else fields
         self.strict = strict
 
-    def __call__(self, req, values):
+    def validate(self, req, values):
+        """Validates the submitted data
+
+        :param req: Current yhttp :class:`.Request` object.
+        :param values: A :class:`.MultiDict` representing the submitted data.
+        """
         if self.strict:
             garbages = set(values.keys()) - set((self.fields or {}).keys())
             if garbages:

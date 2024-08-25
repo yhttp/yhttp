@@ -455,7 +455,10 @@ class Application(BaseApplication):
                     # Body not allowed
                     raise statuses.badrequest()
 
-                req.form = guard(req, req.getform(relax=True) or MultiDict())
+                req.form = guard.validate(
+                    req,
+                    req.getform(relax=True) or MultiDict()
+                )
                 return handler(req, *args, **kwargs)
 
             return _handler
@@ -513,7 +516,7 @@ class Application(BaseApplication):
                     # Body not allowed
                     raise statuses.badrequest()
 
-                req.query = guard(req, req.query or MultiDict())
+                req.query = guard.validate(req, req.query or MultiDict())
                 return handler(req, *args, **kwargs)
 
             return _handler
