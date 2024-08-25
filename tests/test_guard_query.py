@@ -53,7 +53,7 @@ def test_queryguard_string(app, Given):
         assert status == 200
 
         when(query=dict(foo=''))
-        assert status == '400 foo: Length must be between 1 and 3'
+        assert status == '400 foo: Length must be between 1 and 3 characters'
 
         when(query=dict(foo='12'))
         assert status == '400 foo: Invalid Format'

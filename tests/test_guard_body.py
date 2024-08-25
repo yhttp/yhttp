@@ -40,6 +40,7 @@ def test_bodyguard_string(app, Given):
     @app.route()
     @app.bodyguard(fields=(
         g.String('foo', optional=True, length=(1, 3), pattern=r'^[a-z]+$'),
+        g.String('baz', optional=True, length=(3, 3)),
     ))
     @json
     def post(req):
@@ -54,10 +55,13 @@ def test_bodyguard_string(app, Given):
         assert status == 200
 
         when(form=dict(foo=''))
-        assert status == '400 foo: Length must be between 1 and 3'
+        assert status == '400 foo: Length must be between 1 and 3 characters'
 
         when(form=dict(foo='12'))
         assert status == '400 foo: Invalid Format'
+
+        when(form=given + dict(baz='12'))
+        assert status == '400 baz: Length must be 3 characters'
 
 
 def test_bodyguard_integer(app, Given):

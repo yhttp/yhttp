@@ -89,10 +89,17 @@ class String(Field):
         for i, v in enumerate(values.dict[self.name]):
             if self.length and \
                     not (self.length[0] <= len(v) <= self.length[1]):
+                if self.length[0] == self.length[1]:
+                    raise statuses.status(
+                        self.statuscode_badlength,
+                        f'{self.name}: Length must be {self.length[0]} '
+                        f'characters'
+                    )
+
                 raise statuses.status(
                     self.statuscode_badlength,
                     f'{self.name}: Length must be between {self.length[0]} '
-                    f'and {self.length[1]}'
+                    f'and {self.length[1]} characters'
                 )
 
             if self.pattern and not self.pattern.match(v):
