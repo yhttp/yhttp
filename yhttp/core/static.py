@@ -89,6 +89,8 @@ def directory(rootpath, default=False, autoindex=True, fallback=False):
                     default document.
                     if ``str`` the value will be used instead of
                     ``app.settings.staticdir.default``.
+    :param autoindex: if True, automatically serve an index of available files
+                      within current path.
     :param fallback: if ``True``, the ``app.settings.staticdir.fallback``
                     (which default is ``index.html``) will be used as the
                     fallback document if the requested resource was not found.
@@ -112,15 +114,15 @@ def directory(rootpath, default=False, autoindex=True, fallback=False):
         response = request.response
         target = path.join(rootpath, location)
 
-        if default is True:
-            default = app.settings.staticdir.default
-
         if path.isdir(target):
-            targetdir = target
+            if default is True:
+                default = app.settings.staticdir.default
+
             if not default:
                 raise statuses.forbidden()
 
             # Default document
+            targetdir = target
             target = path.join(target, default)
 
             # Autoindex
