@@ -74,17 +74,6 @@ gurad Module
    :special-members: __call__
 
 
-validation module
-^^^^^^^^^^^^^^^^^
-.. currentmodule:: yhttp.core
-
-.. deprecated:: 5.1
-   Use :mod:`.guard` instead.
-
-.. autofunction:: validate_form
-.. autofunction:: validate_query
-
-
 statuses Module
 ^^^^^^^^^^^^^^^
 

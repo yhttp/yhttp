@@ -358,7 +358,7 @@ class Application(BaseApplication):
         return decorator
 
     def staticfile(self, pattern, filename, **kw):
-        """Register a filename with a regular expression pattern to be served.
+        r"""Register a filename with a regular expression pattern to be served.
 
         .. code-block::
 
@@ -373,7 +373,7 @@ class Application(BaseApplication):
 
     def staticdirectory(self, pattern, directory, default=None, autoindex=True,
                         fallback=None, **kw):
-        """Register a directory with a regular expression pattern.
+        r"""Register a directory with a regular expression pattern.
 
         So the files inside the directory are accessible by their names:
 
