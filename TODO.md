@@ -1,3 +1,4 @@
+- guard for app.ready to just execute once
 - count validator limit number of identical fields in form
 - dry readme
 - complete http status codes

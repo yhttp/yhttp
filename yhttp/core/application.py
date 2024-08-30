@@ -215,7 +215,7 @@ class Application(BaseApplication):
                 return handler, args, query
 
         # Specific verb
-        patterns = self.routes.get(request.verb)
+        patterns = self.routes.get(request.verb.upper())
         if not patterns:
             raise statuses.methodnotallowed()
 
@@ -261,6 +261,23 @@ class Application(BaseApplication):
             ex.setupresponse(response, stacktrace=self.settings.debug)
 
         return response.start()
+
+    def delete_route(self, pattern, verb, flags=0):
+        r"""Delete a route
+
+        :param pattern: Regular expression to match the routing table.
+        :param flags: Regular expression flags. see :func:`re.compile`.
+        :param verb: The HTTP verb to match the routing table.
+        """
+        routes = self.routes[verb.upper()]
+
+        pat = re.compile(f'^{pattern}$', flags)
+        for i, (p, _, _) in enumerate(routes):
+            if p == pat:
+                del routes[i]
+                return
+
+        raise ValueError(f'Route not exists: {pattern}')
 
     def route(self, pattern='/', flags=0, verb=None, insert=None):
         r"""Return a decorator to register a handler for given regex pattern.
@@ -334,22 +351,30 @@ class Application(BaseApplication):
            ``insert``
         """
 
-        def decorator(f):
+        def decorator(handler):
+            nonlocal verb
 
-            methods = verb or f.__name__
+            # FIXME: case insensitive verb
+            verbs = verb or handler.__name__
 
-            if isinstance(methods, str):
-                methods = [methods]
+            if isinstance(verbs, str):
+                verbs = [verbs]
 
-            for method in methods:
-                routes = self.routes.setdefault(method, [])
+            for verb in verbs:
+                routes = self.routes.setdefault(verb.upper(), [])
+                signature = inspect.signature(handler)
                 info = dict(
                     kwonly={
-                        k for k, v in inspect.signature(f).parameters.items()
+                        k for k, v in signature.parameters.items()
                         if v.kind == inspect.Parameter.KEYWORD_ONLY
                     }
                 )
-                route = (re.compile(f'^{pattern}$', flags), f, info)
+                pat = re.compile(f'^{pattern}$', flags)
+                for p, _, _ in routes:
+                    if p == pat:
+                        raise ValueError(f'Route already exists: {pattern}')
+
+                route = (pat, handler, info)
                 if insert is not None:
                     routes.insert(insert, route)
                 else:

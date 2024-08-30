@@ -1,6 +1,7 @@
 import re
 from urllib.parse import quote
 
+import pytest
 from bddrest import status, response, when, given
 
 from yhttp.core import notfound
@@ -172,3 +173,36 @@ def test_routing_encodedurl_route(app, Given):
         when(url_parameters=given | dict(id='foo Bar'))
         assert status == 200
         assert response == 'foo Bar'
+
+
+def test_routing_twice(app, Given):
+    def get(req):
+        pass
+
+    app.route(r'/')(get)
+    with pytest.raises(ValueError):
+        app.route(r'/')(get)
+
+    with Given('/'):
+        assert status == 200
+
+
+def test_routing_delete(app, Given):
+    def get(req):
+        pass
+
+    app.route(r'/')(get)
+    with pytest.raises(ValueError):
+        app.route(r'/')(get)
+
+    app.delete_route(r'/', 'get')
+
+    with Given('/'):
+        assert status == 405
+
+    app.route(r'/')(get)
+    with Given('/'):
+        assert status == 200
+
+    with pytest.raises(ValueError):
+        app.delete_route('/notexists', 'get')
