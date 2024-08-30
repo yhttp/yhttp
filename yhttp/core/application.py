@@ -272,14 +272,15 @@ class Application(BaseApplication):
         routes = self.routes[verb.upper()]
 
         pat = re.compile(f'^{pattern}$', flags)
-        for i, (p, _, _) in enumerate(routes):
-            if p == pat:
-                del routes[i]
+        for r in routes:
+            if r[0] == pat:
+                routes.remove(r)
                 return
 
         raise ValueError(f'Route not exists: {pattern}')
 
-    def route(self, pattern='/', flags=0, verb=None, insert=None):
+    def route(self, pattern='/', flags=0, verb=None, insert=None,
+              exists='error'):
         r"""Return a decorator to register a handler for given regex pattern.
 
         if ``verb`` is ``None`` then the function name will used instead.
@@ -345,16 +346,26 @@ class Application(BaseApplication):
                        :attr:`routes`. Otherwise it must be an
                        integer indicating the place to insert the new route
                        into :attr:`routes` attribute.
+        :param exists: Tell what to do if route already exists, possible
+                       values: ``error``(default) and ``remove`` to remove the
+                       existing route before appending and or inserting the new
+                       one.
 
         .. versionadded:: 2.9
 
            ``insert``
+
+        .. versionadded:: 6.1
+
+           ``exists``
+
         """
+        if exists not in ('error', 'remove'):
+            raise ValueError('Invalid value for exists argument, use one of '
+                             '`error` (the default) and or `remove`.')
 
         def decorator(handler):
-            nonlocal verb
-
-            # FIXME: case insensitive verb
+            nonlocal verb, exists
             verbs = verb or handler.__name__
 
             if isinstance(verbs, str):
@@ -370,9 +381,14 @@ class Application(BaseApplication):
                     }
                 )
                 pat = re.compile(f'^{pattern}$', flags)
-                for p, _, _ in routes:
-                    if p == pat:
-                        raise ValueError(f'Route already exists: {pattern}')
+                for r in routes:
+                    if r[0] == pat:
+                        if exists == 'error':
+                            raise ValueError(
+                                f'Route already exists: {pattern}')
+
+                        routes.remove(r)
+                        break
 
                 route = (pat, handler, info)
                 if insert is not None:
@@ -445,7 +461,7 @@ class Application(BaseApplication):
         ))
 
     def bodyguard(self, fields=None, strict=False):
-        """A decorator factory to validate HTTP request's body.
+        r"""A decorator factory to validate HTTP request's body.
 
         .. versionadded:: 5.1
 
@@ -455,7 +471,7 @@ class Application(BaseApplication):
 
            @app.route()
            @app.bodyguard(fields=(
-               g.String('foo', length=(1, 8), pattern=r'\\d+', optional=True),
+               g.String('foo', length=(1, 8), pattern=r'\d+', optional=True),
                g.Integer('bar', range=(0, 9), optional=True),
            ), strict=True)
            @json()

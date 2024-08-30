@@ -206,3 +206,27 @@ def test_routing_delete(app, Given):
 
     with pytest.raises(ValueError):
         app.delete_route('/notexists', 'get')
+
+
+def test_routing_replace(app, Given):
+    def get(req):
+        return 'foo'
+
+    app.route(r'/')(get)
+    with Given('/'):
+        assert status == 200
+        assert response.text == 'foo'
+
+    def get(req):
+        return 'bar'
+
+    with pytest.raises(ValueError):
+        app.route(r'/')(get)
+
+    with pytest.raises(ValueError):
+        app.route(r'/', exists='invalidvalue')(get)
+
+    app.route(r'/', exists='remove')(get)
+    with Given('/'):
+        assert status == 200
+        assert response.text == 'bar'
