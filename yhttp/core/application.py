@@ -362,7 +362,7 @@ class Application(BaseApplication):
 
         .. code-block::
 
-            app.staticfile('/a.txt', 'physical/path/to/a.txt')
+            app.staticfile(r'/a\.txt', 'physical/path/to/a.txt')
 
         .. seealso::
 
@@ -379,7 +379,7 @@ class Application(BaseApplication):
 
         .. code-block::
 
-            app.staticdirectory('/foo/', 'physical/path/to/foo')
+            app.staticdirectory(r'/foo/', 'physical/path/to/foo')
 
         You you can do:
 
