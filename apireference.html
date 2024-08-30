@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; yhttp 5.3.0 documentation</title>
+    <title>API Reference &#8212; yhttp 6.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=5c0b1849"></script>
+    <script src="_static/documentation_options.js?v=12958129"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -346,7 +346,7 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 <span class="sig-name descname"><span class="pre">staticdirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoindex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.staticdirectory" title="Link to this definition">¶</a></dt>
 <dd><p>Register a directory with a regular expression pattern.</p>
 <p>So the files inside the directory are accessible by their names:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticdirectory</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/foo/&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/foo&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You you can do:</p>
@@ -386,7 +386,7 @@ found. if <code class="docutils literal notranslate"><span class="pre">str</span
 <dt class="sig sig-object py" id="yhttp.core.Application.staticfile">
 <span class="sig-name descname"><span class="pre">staticfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.staticfile" title="Link to this definition">¶</a></dt>
 <dd><p>Register a filename with a regular expression pattern to be served.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="s1">&#39;/a.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">staticfile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/a\.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;physical/path/to/a.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -1139,24 +1139,6 @@ default: <code class="docutils literal notranslate"><span class="pre">400</span>
 </dd></dl>
 
 </section>
-<section id="validation-module">
-<h2>validation module<a class="headerlink" href="#validation-module" title="Link to this heading">¶</a></h2>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 5.1: </span>Use <a class="reference internal" href="#module-yhttp.core.guard" title="yhttp.core.guard"><code class="xref py py-mod docutils literal notranslate"><span class="pre">guard</span></code></a> instead.</p>
-</div>
-<dl class="py function">
-<dt class="sig sig-object py" id="yhttp.core.validate_form">
-<span class="sig-name descname"><span class="pre">validate_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.validate_form" title="Link to this definition">¶</a></dt>
-<dd><p>see <a class="reference internal" href="cookbook.html#cookbook-validation"><span class="std std-ref">Request Validation</span></a></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="yhttp.core.validate_query">
-<span class="sig-name descname"><span class="pre">validate_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.validate_query" title="Link to this definition">¶</a></dt>
-<dd><p>see <a class="reference internal" href="cookbook.html#cookbook-validation"><span class="std std-ref">Request Validation</span></a></p>
-</dd></dl>
-
-</section>
 <section id="module-yhttp.core.statuses">
 <span id="statuses-module"></span><h2>statuses Module<a class="headerlink" href="#module-yhttp.core.statuses" title="Link to this heading">¶</a></h2>
 <dl class="py exception">
@@ -1364,7 +1346,6 @@ when exception is occured.</p></li>
 <li class="toctree-l2"><a class="reference internal" href="#httpstatus-class">HTTPStatus Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contenttype-decorators">contenttype decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-yhttp.core.guard">gurad Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#validation-module">validation module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-yhttp.core.statuses">statuses Module</a></li>
 </ul>
 </li>
