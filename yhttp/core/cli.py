@@ -18,12 +18,6 @@ class Serve(SubCommand):
             metavar='{HOST:}PORT',
             help='Bind Address. default: %s' % DEFAULT_ADDRESS
         ),
-        Argument(
-            '-C',
-            '--directory',
-            default='.',
-            help='Change to this path before starting, default is: `.`'
-        )
     ]
 
     def __call__(self, args):  # pragma: no cover
@@ -33,9 +27,6 @@ class Serve(SubCommand):
         """
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('localhost', args.bind)
-
-        if args.directory != '.':
-            os.chdir(args.directory)
 
         args.application.ready()
         httpd = make_server(host, int(port), args.application)
@@ -56,6 +47,12 @@ class Main(Root):
             dest='configurationfile',
             help='Configuration file',
         ),
+        Argument(
+            '-C',
+            '--directory',
+            default='.',
+            help='Change to this path before starting, default is: `.`'
+        ),
         Serve,
     ]
 
@@ -72,6 +69,10 @@ class Main(Root):
 
     def _execute_subcommand(self, args):
         args.application = self.application
+
+        if args.directory != '.':
+            os.chdir(args.directory)
+
         if args.configurationfile:
             self.application.settings.loadfile(args.configurationfile)
 
