@@ -44,6 +44,6 @@ def test_applicationcli():
             assert status == 73
             assert stdout == 'bar\n.\n'
 
-            when(f'--directory /tmp foo')
+            when('--directory /tmp foo')
             assert status == 0
             assert stdout == 'foo\n/tmp\n'
