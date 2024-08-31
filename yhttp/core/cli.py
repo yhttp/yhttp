@@ -53,6 +53,14 @@ class Main(Root):
             default='.',
             help='Change to this path before starting, default is: `.`'
         ),
+        Argument(
+            '-O',
+            '--option',
+            action='append',
+            default=[],
+            help='Set a configutation entry: -O foo.bar.baz=\'qux\'. this '
+                 'argument can passed multiple times.'
+        ),
         Serve,
     ]
 
@@ -75,6 +83,27 @@ class Main(Root):
 
         if args.configurationfile:
             self.application.settings.loadfile(args.configurationfile)
+
+        for o in args.option:
+            try:
+                key, value = o.split('=')
+            except ValueError:
+                print(f'Invalid option: -O/--option {o}', file=sys.stderr)
+                self._parser.print_help()
+                return 1
+
+            yml = ''
+            indent = 0
+            for k in key.split('.'):
+                if indent:
+                    yml += f'\n{indent * " "}{k}:'
+                else:
+                    yml += f'{k}:'
+
+                indent += 2
+
+            yml += f' {value}'
+            self.application.settings.merge(yml)
 
         return super()._execute_subcommand(args)
 

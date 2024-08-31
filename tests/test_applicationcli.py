@@ -1,7 +1,8 @@
 import os
 import tempfile
 
-from bddcli import Application as CLIApplication, Given, stdout, status, when
+from bddcli import Application as CLIApplication, Given, stdout, status, \
+    when, stderr
 from easycli import SubCommand
 
 from yhttp.core import Application
@@ -23,9 +24,23 @@ class Foo(SubCommand):
         return 0
 
 
+class Bar(SubCommand):
+    __command__ = 'bar'
+
+    def __call__(self, args):
+        print(app.settings.foo.bar.baz)
+        return 0
+
+
 app = Application()
-app.settings.merge('title: foo')
 app.cliarguments.append(Foo)
+app.cliarguments.append(Bar)
+app.settings.merge('title: foo')
+app.settings.merge('''
+foo:
+  bar:
+    baz: qux
+''')
 
 
 def test_applicationcli():
@@ -47,3 +62,32 @@ def test_applicationcli():
             when('--directory /tmp foo')
             assert status == 0
             assert stdout == 'foo\n/tmp\n'
+
+            when('--option title=\'baz\' foo')
+            assert status == 0
+            assert stdout == 'baz\n.\n'
+
+
+def test_applicationcli_option():
+    cliapp = CLIApplication('foo', 'tests.test_applicationcli:app.climain')
+    with Given(cliapp, '--help'):
+        assert status == 0
+
+        when('bar')
+        assert status == 0
+        assert stderr == ''
+        assert stdout == 'qux\n'
+
+        when('--option foo.bar.baz=\'quux\' bar')
+        assert status == 0
+        assert stderr == ''
+        assert stdout == 'quux\n'
+
+        when('--option foo bar')
+        assert status == 1
+        assert stderr == 'Invalid option: -O/--option foo\n'
+        assert stdout.startswith('usage: ')
+
+
+if __name__ == '__main__':
+    app.climain()
