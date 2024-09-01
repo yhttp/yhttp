@@ -98,7 +98,7 @@ def test_routing_argument(app, Given):
         assert status == 200
         assert response == '12 Empty'
 
-        when(verb='put', url='/12/foo')
+        when(verb='put', path='/12/foo')
         assert status == 200
         assert response == '12 foo'
 
@@ -170,7 +170,7 @@ def test_routing_encodedurl_route(app, Given):
         assert status == 200
         assert response == 'foo bar'
 
-        when(url_parameters=given | dict(id='foo Bar'))
+        when(path_parameters=given | dict(id='foo Bar'))
         assert status == 200
         assert response == 'foo Bar'
 
