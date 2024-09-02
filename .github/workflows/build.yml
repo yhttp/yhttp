@@ -43,7 +43,7 @@ jobs:
     - name: Coveralls
       run: coveralls
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   coveralls-finish:
     name: Coveralls finish
@@ -57,7 +57,7 @@ jobs:
     - name: Coveralls Finished
       run: coveralls --finish
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: Github Release
