@@ -1,5 +1,6 @@
 import os
 import tempfile
+import platform
 
 from bddcli import Application as CLIApplication, Given, stdout, status, \
     when, stderr
@@ -14,7 +15,17 @@ class Foo(SubCommand):
     def __call__(self, args):
         assert args.application is app
         print(app.settings.title)
-        if os.path.abspath(os.curdir) == '/tmp':
+
+        if platform.system() == 'Linux':
+            tmpdir = '/tmp'
+        elif platform.system() == 'Darwin':
+            tmpdir = '/private/tmp'
+        else:
+            raise NotImplementedError(
+                f'{platform.system()} is not implemented'
+            )
+
+        if os.path.abspath(os.curdir) == tmpdir:
             print('/tmp')
         else:
             print(os.curdir)
