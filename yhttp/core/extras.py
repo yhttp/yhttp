@@ -12,8 +12,7 @@ def json_reshape(
     omit_queryfield='omit-fields',
     rename=None
 ):
-    """
-    reshapes the json response of the API
+    """reshapes the json response of the API
 
     Handlers must return :class:`jsonable` when this decorator is used.
 
