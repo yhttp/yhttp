@@ -8,8 +8,8 @@ from . import statuses
 def json_reshape(
     keep=None,
     keep_queryfield='keep-fields',
-    ommit=None,
-    ommit_queryfield='ommit-fields',
+    omit=None,
+    omit_queryfield='omit-fields',
     rename=None
 ):
     """
@@ -29,7 +29,7 @@ def json_reshape(
 
 
     keep and keep_query, can be used together and their intersection will be
-    used. Same rule applies for ommit and ommit_query. However, ommit and
+    used. Same rule applies for omit and omit_query. However, omit and
     keep can not be used together.
 
     :param keep: Fields that should be kept in the response. Field names are
@@ -38,11 +38,11 @@ def json_reshape(
     :param keep_query: Query parameter name that specifies the requested
     fields. set this to `None` to restrict caller from using this feature
 
-    :param ommit: Fields that should be excluded from the response, Field names
+    :param omit: Fields that should be excluded from the response, Field names
     are separated by `,`
 
-    :param ommit_query: Query parameter name that specifies the requested
-    fields to be ommited. set this to `None` to restrict caller from using this
+    :param omit_query: Query parameter name that specifies the requested
+    fields to be omited. set this to `None` to restrict caller from using this
     feature
 
     :param rename: A dictionary to determine which fields should be renamed to
@@ -50,19 +50,19 @@ def json_reshape(
     :return: decorator for HTTP handlers
     """
 
-    assert not (ommit and keep), 'Please specify either ommit or keep'
+    assert not (omit and keep), 'Please specify either omit or keep'
 
     def decorator(handler):
         @wraps(handler)
         def wrapper(req, *a, **kw):
-            if keep_queryfield and ommit_queryfield:
+            if keep_queryfield and omit_queryfield:
 
                 if req.query.get(keep_queryfield) is not None \
-                        and req.query.get(ommit_queryfield) is not None:
+                        and req.query.get(omit_queryfield) is not None:
 
                     raise statuses.status(
                         400,
-                        f'Use either {keep_queryfield} or {ommit_queryfield}'
+                        f'Use either {keep_queryfield} or {omit_queryfield}'
                     )
 
             req.response.type = 'application/json'
@@ -76,11 +76,11 @@ def json_reshape(
             field_whitelist = set(response.keys())
             field_blacklist = set()
 
-            if ommit:
-                field_blacklist |= set(ommit.split(','))
+            if omit:
+                field_blacklist |= set(omit.split(','))
 
-            if ommit_query := req.query.get(ommit_queryfield):
-                field_blacklist |= set(ommit_query.split(','))
+            if omit_query := req.query.get(omit_queryfield):
+                field_blacklist |= set(omit_query.split(','))
 
             if keep:
                 field_whitelist &= set(keep.split(','))
