@@ -109,7 +109,7 @@ json = utf8('application/json', dump=ujson.dumps)
 Sets the :attr:`.Response.contenttype` to ``application/json;charset=utf-8``
 and encode the returned value by handler to json byte-string format.
 
-Handlers must return :class:`dict` when this decorator is used.
+Handlers must return :class:`jsonable` when this decorator is used.
 
 .. code-block::
 

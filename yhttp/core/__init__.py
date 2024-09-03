@@ -10,6 +10,7 @@ from .rewrite import Rewrite
 from .multipart import MultipartError, MultipartParser, MultipartPart, \
     parse_form_data
 from .multidict import MultiDict
+from .extras import json_reshape
 
 
 __version__ = '6.3.0'
