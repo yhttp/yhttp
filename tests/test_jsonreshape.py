@@ -4,7 +4,7 @@ from bddrest import response, status, when
 from yhttp.core import json_reshape
 
 
-def test_reshape_json_omit_query(app, Given):
+def test_jsonreshape_omit_query(app, Given):
 
     @app.route()
     @json_reshape(omit_queryfield='qux')
@@ -40,7 +40,7 @@ def test_reshape_json_omit_query(app, Given):
         assert response.json == dict(foo='bar')
 
 
-def test_reshape_json_omit(app, Given):
+def test_jsonreshape_omit(app, Given):
 
     @app.route()
     @json_reshape(omit='foo,bar', omit_queryfield='qux')
@@ -54,9 +54,6 @@ def test_reshape_json_omit(app, Given):
     with Given():
         assert status == 200
         assert response.json == dict(baz='foo')
-        assert response.content_type == 'application/json'
-        assert response.headers['Content-Type'] == \
-            'application/json; charset=utf-8'
 
         when(query=dict(qux='baz'))
         assert status == 200
@@ -71,7 +68,62 @@ def test_reshape_json_omit(app, Given):
         assert response.json == dict(baz='foo')
 
 
-def test_reshape_json_rename(app, Given):
+def test_jsonreshape_keep_query(app, Given):
+
+    @app.route()
+    @json_reshape(keep_queryfield='qux')
+    def get(req):
+        return dict(
+            foo='bar',
+            bar='baz',
+            baz='foo'
+        )
+
+    with Given():
+        assert status == 200
+        assert response.json == dict(foo='bar', bar='baz', baz='foo')
+
+        when(query=dict(qux='baz'))
+        assert status == 200
+        assert response.json == dict(baz='foo')
+
+        when(query=dict(qux=''))
+        assert status == 200
+        assert response.json == dict(foo='bar', bar='baz', baz='foo')
+
+
+def test_jsonreshape_keep(app, Given):
+
+    @app.route()
+    @json_reshape(keep='foo,bar', keep_queryfield='qux')
+    def get(req):
+        return dict(
+            foo='bar',
+            bar='baz',
+            baz='foo'
+        )
+
+    with Given():
+        assert status == 200
+        assert response.json == dict(foo='bar', bar='baz')
+        assert response.content_type == 'application/json'
+        assert response.headers['Content-Type'] == \
+            'application/json; charset=utf-8'
+
+        when(query=dict(qux='baz'))
+        assert status == 200
+        assert response.json == dict()
+
+        when(query=dict(qux='foo'))
+        assert status == 200
+        assert response.json == dict(foo='bar')
+
+        when(query=dict(qux=''))
+        assert status == 200
+        assert response.json == dict(foo='bar', bar='baz')
+
+
+def test_jsonreshape_rename(app, Given):
 
     @app.route()
     @json_reshape(rename=dict(foo='qux', bar='foo'))
@@ -91,7 +143,7 @@ def test_reshape_json_rename(app, Given):
         assert response.json == dict(qux='bar', baz='foo')
 
 
-def test_reshape_json_simultaneous_keep_and_omit(app, Given):
+def test_jsonreshape_simultaneous_keep_and_omit(app, Given):
 
     with pytest.raises(AssertionError):
         @app.route()
