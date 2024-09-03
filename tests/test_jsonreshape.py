@@ -158,3 +158,26 @@ def test_jsonreshape_simultaneous_keep_and_omit(app, Given):
 
     with Given(query=dict(foo='foo', bar='bar')):
         assert status == 400
+
+
+def test_jsonreshape_list_response(app, Given):
+
+    @app.route()
+    @json_reshape(keep='foo', rename=dict(foo='qux', bar='foo'))
+    def get(req):
+        return [
+            dict(
+                foo='bar',
+                bar='baz',
+                baz='foo'
+            ),
+            dict(
+                foo='bar2',
+                bar='baz2',
+                baz='foo2'
+            ),
+        ]
+
+    with Given():
+        assert status == 200
+        assert response.json == [dict(foo='baz'), dict(foo='baz2')]
