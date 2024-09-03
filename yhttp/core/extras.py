@@ -70,6 +70,9 @@ def json_reshape(
 
             response = handler(req, *a, **kw)
 
+            if rename:
+                response = {rename.get(k, k): v for (k, v) in response.items()}
+
             field_whitelist = set(response.keys())
             field_blacklist = set()
 
@@ -87,6 +90,7 @@ def json_reshape(
 
             response = {k: v for (k, v) in response.items()
                         if k in field_whitelist and k not in field_blacklist}
+
             return ujson.dumps(response)
 
         return wrapper
