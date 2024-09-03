@@ -74,10 +74,16 @@ def json_reshape(
             field_blacklist = set()
 
             if ommit:
-                field_blacklist.update(ommit.split(','))
+                field_blacklist |= set(ommit.split(','))
 
             if ommit_query := req.query.get(ommit_queryfield):
-                field_blacklist.update(ommit_query.split(','))
+                field_blacklist |= set(ommit_query.split(','))
+
+            if keep:
+                field_whitelist &= set(keep.split(','))
+
+            if keep_query := req.query.get(keep_queryfield):
+                field_whitelist &= set(keep_query.split(','))
 
             response = {k: v for (k, v) in response.items()
                         if k in field_whitelist and k not in field_blacklist}
