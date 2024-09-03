@@ -1,58 +1,7 @@
-from bddrest import response, status, given, when
+import pytest
+from bddrest import response, status, when
 
 from yhttp.core import json_reshape
-
-
-def test_reshape_json_keep_query(app, Given):
-
-    @app.route()
-    @json_reshape(keep_queryfield='qux')
-    def get(req):
-        return dict(
-            foo='bar',
-            bar='baz',
-            baz='foo'
-        )
-
-    with Given(query=dict(qux='foo,baz')):
-        assert status == 200
-        assert response.json == dict(foo='bar', baz='foo')
-        assert response.content_type == 'application/json'
-        assert response.headers['Content-Type'] == \
-            'application/json; charset=utf-8'
-
-        when(query=given - 'qux')
-        assert response.json == dict(foo='bar', bar='baz', baz='foo')
-
-        when(query=dict(qux=''))
-        assert response.json == dict()
-
-
-def test_reshape_json_keep(app, Given):
-
-    @app.route()
-    @json_reshape(keep='foo,bar', keep_queryfield='qux')
-    def get(req):
-        return dict(
-            foo='bar',
-            bar='baz',
-            baz='foo'
-        )
-
-    with Given():
-        assert status == 200
-        assert response.json == dict(foo='bar', bar='baz')
-        assert response.content_type == 'application/json'
-        assert response.headers['Content-Type'] == \
-            'application/json; charset=utf-8'
-
-        when(query=dict(qux='foo,baz'))
-        assert status == 200
-        assert response.json == dict(foo='bar')
-
-        when(query=dict(qux=''))
-        assert status == 200
-        assert response.json == dict()
 
 
 def test_reshape_json_ommit_query(app, Given):
@@ -80,6 +29,15 @@ def test_reshape_json_ommit_query(app, Given):
         when(query=dict(qux=''))
         assert status == 200
         assert response.json == dict(foo='bar', bar='baz', baz='foo')
+
+    @app.route('/no-ommit')
+    @json_reshape(ommit_queryfield=None)
+    def get(req):
+        return dict(foo='bar')
+
+    with Given('/no-ommit', query={'ommit-fields': 'foo'}):
+        assert status == 200
+        assert response.json == dict(foo='bar')
 
 
 def test_reshape_json_ommit(app, Given):
@@ -127,6 +85,24 @@ def test_reshape_json_rename(app, Given):
     with Given():
         assert status == 200
         assert response.json == dict(qux='bar', foo='baz', baz='foo')
-        assert response.content_type == 'application/json'
-        assert response.headers['Content-Type'] == \
-            'application/json; charset=utf-8'
+
+        when(query={'ommit-fields': 'foo'})
+        assert status == 200
+        assert response.json == dict(qux='bar', baz='foo')
+
+
+def test_reshape_json_simultaneous_keep_and_ommit(app, Given):
+
+    with pytest.raises(AssertionError):
+        @app.route()
+        @json_reshape(ommit='foo', keep='bar')
+        def invalid_api(req):
+            return dict()
+
+    @app.route()
+    @json_reshape(ommit_queryfield='foo', keep_queryfield='bar')
+    def get(req):
+        return dict()
+
+    with Given(query=dict(foo='foo', bar='bar')):
+        assert status == 400
