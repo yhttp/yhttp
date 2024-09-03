@@ -111,3 +111,22 @@ def test_reshape_json_ommit(app, Given):
         when(query=dict(qux=''))
         assert status == 200
         assert response.json == dict(baz='foo')
+
+
+def test_reshape_json_rename(app, Given):
+
+    @app.route()
+    @json_reshape(rename=dict(foo='qux', bar='foo'))
+    def get(req):
+        return dict(
+            foo='bar',
+            bar='baz',
+            baz='foo'
+        )
+
+    with Given():
+        assert status == 200
+        assert response.json == dict(qux='bar', foo='baz', baz='foo')
+        assert response.content_type == 'application/json'
+        assert response.headers['Content-Type'] == \
+            'application/json; charset=utf-8'
