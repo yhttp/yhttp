@@ -181,3 +181,33 @@ def test_jsonreshape_list_response(app, Given):
     with Given():
         assert status == 200
         assert response.json == [dict(foo='baz'), dict(foo='baz2')]
+
+
+def test_incompatible_handlers(app, Given):
+
+    @app.route()
+    @json_reshape()
+    def get(req):
+        return "salam golabi"
+
+    @app.route()
+    @json_reshape()
+    def post(req):
+        return [1, 2, 3]
+
+    @app.route()
+    @json_reshape()
+    def put(req):
+        return [{"foo", "bar"}]
+
+    with pytest.raises(AssertionError):
+        with Given():
+            pass
+
+    with pytest.raises(AssertionError):
+        with Given(verb='post'):
+            pass
+
+    with pytest.raises(AssertionError):
+        with Given(verb='put'):
+            pass

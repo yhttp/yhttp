@@ -8,30 +8,13 @@ from . import statuses
 def _reshape_response_body(
     req,
     body: dict,
-    keep=None,
-    keep_queryfield='keep-fields',
-    omit=None,
-    omit_queryfield='omit-fields',
-    rename=None
+    field_whitelist: set,
+    field_blacklist: set,
+    rename: dict = None
 ) -> dict:
 
     if rename:
         body = {rename.get(k, k): v for (k, v) in body.items()}
-
-    field_whitelist = set(body.keys())
-    field_blacklist = set()
-
-    if omit:
-        field_blacklist |= set(omit.split(','))
-
-    if omit_query := req.query.get(omit_queryfield):
-        field_blacklist |= set(omit_query.split(','))
-
-    if keep:
-        field_whitelist &= set(keep.split(','))
-
-    if keep_query := req.query.get(keep_queryfield):
-        field_whitelist &= set(keep_query.split(','))
 
     body = {k: v for (k, v) in body.items()
             if k in field_whitelist and k not in field_blacklist}
@@ -48,7 +31,7 @@ def json_reshape(
 ):
     """reshapes the json response of the API
 
-    Handlers must return :class:`jsonable` when this decorator is used.
+    Handlers must return a dict or a list of dicts when this decorator is used.
 
     .. code-block::
 
@@ -103,20 +86,44 @@ def json_reshape(
 
             response_body = handler(req, *a, **kw)
 
+            assert type(response_body) in (list, dict), \
+                'Body type not supported'
+            if type(response_body) is list:
+                assert all(type(rb) is dict for rb in response_body)
+
+            if type(response_body) is list:
+                field_whitelist = set(response_body[0].keys())
+            else:
+                field_whitelist = set(response_body.keys())
+
+            if rename:
+                field_whitelist = {rename.get(f, f) for f in field_whitelist}
+
+            field_blacklist = set()
+
+            if omit:
+                field_blacklist |= set(omit.split(','))
+
+            if omit_query := req.query.get(omit_queryfield):
+                field_blacklist |= set(omit_query.split(','))
+
+            if keep:
+                field_whitelist &= set(keep.split(','))
+
+            if keep_query := req.query.get(keep_queryfield):
+                field_whitelist &= set(keep_query.split(','))
+
             if type(response_body) is dict:
                 return ujson.dumps(
-                    _reshape_response_body(req, response_body, keep,
-                                           keep_queryfield, omit,
-                                           omit_queryfield, rename)
+                    _reshape_response_body(req, response_body, field_whitelist,
+                                           field_blacklist, rename)
                 )
-
-            assert type(response_body) is list, 'Body type not supported'
 
             response_list = []
             for body in response_body:
                 response_list.append(
-                    _reshape_response_body(req, body, keep, keep_queryfield,
-                                           omit, omit_queryfield, rename)
+                    _reshape_response_body(req, body, field_whitelist,
+                                           field_blacklist, rename)
                 )
 
             return ujson.dumps(response_list)
