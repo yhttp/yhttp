@@ -101,7 +101,7 @@ def test_bodyguard_integer(app, Given):
         assert status == '400 bar: Zero Not Allowed'
 
 
-def test_bodyguard_json_input(app, Given):
+def test_bodyguard_json(app, Given):
     @app.route()
     @app.bodyguard(fields=(
         g.String('foo', length=(1, 3), pattern=r'^[a-z]+$'),
@@ -133,7 +133,7 @@ def test_bodyguard_json_input(app, Given):
         assert status == '400 bar: Integer Required'
 
 
-def test_nested_json_input(app, Given):
+def test_bodyguard_nested_json(app, Given):
     @app.route()
     @app.bodyguard(fields=(
         g.String('user.name', length=(1, 50)),
