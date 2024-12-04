@@ -131,3 +131,139 @@ def test_bodyguard_json_input(app, Given):
 
         when(json=dict(foo='abc', bar='notaninteger'))
         assert status == '400 bar: Integer Required'
+
+
+def test_nested_json_input(app, Given):
+    @app.route()
+    @app.bodyguard(fields=(
+        g.String('user.name', length=(1, 50)),
+        g.Integer('user.profile.age', optional=True),
+        g.String('user.profile.country', optional=True),
+        g.Integer('items', optional=True),
+        g.String('user.roles', optional=True),
+    ), strict=True)
+    @json
+    def post(req):
+        f = req.getform(relax=True)
+        return f.dict
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': 'John Doe',
+                'profile': {
+                    'age': 30,
+                    'country': 'US'
+                }
+            },
+            'items': [1, 2, 3],
+            'user.roles': 'admin'
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == 200
+        assert response.json == {
+            'user.name': ['John Doe'],
+            'user.profile.age': [30],
+            'user.profile.country': ['US'],
+            'items': [1, 2, 3],
+            'user.roles': ['admin']
+        }
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'profile': {
+                    'age': 30
+                }
+            }
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == '400 user.name: Required'
+
+    with (Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': '',
+                'profile': {
+                    'age': 30
+                }
+            }
+        },
+        headers={'Content-Type': 'application/json'}
+    )):
+        assert status == '400 user.name: Length must be between 1 and 50' \
+               +' characters'
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': 'John Doe',
+                'profile': {
+                    'age': 'notanumber'
+                }
+            }
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == '400 user.profile.age: Integer Required'
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': 'John Doe',
+                'profile': {
+                    'age': 30
+                },
+                'extra_field': 'unexpected'
+            }
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == '400 Invalid field(s): user.extra_field'
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': 'John Doe'
+            },
+            'items': [1, 2, 3]
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == 200
+        assert response.json == {
+            'user.name': ['John Doe'],
+            'items': [1, 2, 3]
+        }
+
+    with Given(
+        verb='POST',
+        json={
+            'user': {
+                'name': 'John Doe',
+                'profile': {
+                    'age': 30,
+                    'country': 'US'
+                }
+            },
+            'items': [10, 20],
+            'user.roles': 'editor'
+        },
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == 200
+        assert response.json == {
+            'user.name': ['John Doe'],
+            'user.profile.age': [30],
+            'user.profile.country': ['US'],
+            'items': [10, 20],
+            'user.roles': ['editor']
+        }

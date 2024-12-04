@@ -6,6 +6,7 @@ import types
 import pymlconf
 
 from . import statuses, static
+from .extra import flatten_json
 from .request import Request
 from .response import Response
 from .cli import Main
@@ -500,8 +501,9 @@ class Application(BaseApplication):
                     req,
                     (
                         MultiDict({
-                            k: [v]
-                            for k, v in (req.getjson(relax=True) or {}).items()
+                            k: [v] if not isinstance(v, list) else v
+                            for k, v in
+                            flatten_json(req.getjson(relax=True) or {}).items()
                         })
                         if req.contenttype == 'application/json' else
                         (req.getform(relax=True) or MultiDict())
