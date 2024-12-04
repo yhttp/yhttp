@@ -99,3 +99,35 @@ def test_bodyguard_integer(app, Given):
 
         when(form=given | dict(bar=0))
         assert status == '400 bar: Zero Not Allowed'
+
+
+def test_bodyguard_json_input(app, Given):
+    @app.route()
+    @app.bodyguard(fields=(
+        g.String('foo', length=(1, 3), pattern=r'^[a-z]+$'),
+        g.Integer('bar', optional=True),
+    ))
+    @json
+    def post(req):
+        f = req.getform(relax=True)
+        return f.dict
+
+    with Given(
+        verb='POST',
+        json=dict(foo='abc', bar=2),
+        headers={'Content-Type': 'application/json'}
+    ):
+        assert status == 200
+        assert response.json == dict(foo=['abc'], bar=[2])
+
+        when(json=given - 'foo')
+        assert status == '400 foo: Required'
+
+        when(json=dict(foo='abcd', bar=2))
+        assert status == '400 foo: Length must be between 1 and 3 characters'
+
+        when(json=dict(foo='123', bar=2))
+        assert status == '400 foo: Invalid Format'
+
+        when(json=dict(foo='abc', bar='notaninteger'))
+        assert status == '400 bar: Integer Required'

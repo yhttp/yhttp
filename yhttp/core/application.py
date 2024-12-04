@@ -498,7 +498,14 @@ class Application(BaseApplication):
 
                 req.form = guard.validate(
                     req,
-                    req.getform(relax=True) or MultiDict()
+                    (
+                        MultiDict({
+                            k: [v]
+                            for k, v in (req.getjson(relax=True) or {}).items()
+                        })
+                        if req.contenttype == 'application/json' else
+                        (req.getform(relax=True) or MultiDict())
+                    )
                 )
                 return handler(req, *args, **kwargs)
 
