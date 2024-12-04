@@ -197,7 +197,7 @@ def test_nested_json_input(app, Given):
         headers={'Content-Type': 'application/json'}
     )):
         assert status == '400 user.name: Length must be between 1 and 50' \
-               +' characters'
+               + ' characters'
 
     with Given(
         verb='POST',
