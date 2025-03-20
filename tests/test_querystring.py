@@ -49,7 +49,10 @@ def test_querystring_empty(app, Given):
         assert req.query['baz'] == ''
         assert baz == ''
 
-    with Given('/?baz='):
+    with Given('/?baz'):
+        assert status == 200
+
+        when('/?baz=')
         assert status == 200
 
 
@@ -66,3 +69,13 @@ def test_querystring_duplicatefields(app, Given):
     ):
         assert status == 200
         assert response.text == 'bar, baz'
+
+
+def test_querystring_malformed(app, Given):
+
+    @app.route()
+    def get(req, *, foo=None):
+        return ', '.join(req.query.getall('foo'))
+
+    with Given(rawurl='/?baz'):
+        assert status == 400

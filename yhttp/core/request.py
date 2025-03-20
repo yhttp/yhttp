@@ -78,11 +78,14 @@ class Request:
         if 'QUERY_STRING' not in self.environ:
             qs = {}
         else:
-            qs = parse_qs(
-                self.environ['QUERY_STRING'],
-                keep_blank_values=True,
-                strict_parsing=True
-            )
+            try:
+                qs = parse_qs(
+                    self.environ['QUERY_STRING'],
+                    keep_blank_values=True,
+                    strict_parsing=True
+                )
+            except ValueError:
+                raise statuses.badrequest()
 
         return multidict.MultiDict(backend=qs)
 
