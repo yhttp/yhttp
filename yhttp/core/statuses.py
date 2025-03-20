@@ -55,6 +55,8 @@ class HTTPStatus(Exception):
             if stacktrace:
                 body.append(traceback.format_exc())
 
+            # trailing newline
+            body.append('')
             response.body = '\r\n'.join(body)
 
         if not self.keepheaders:
