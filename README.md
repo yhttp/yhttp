@@ -15,7 +15,7 @@ Install [python-makelib](https://github.com/pylover/python-makelib).
 
 ### Clone 
 ```bash
-git clone --recurse-submodules git@github.com:yhttp/yhttp.git
+git clone git@github.com:yhttp/yhttp.git
 ```
 
 ### Virtualenv
