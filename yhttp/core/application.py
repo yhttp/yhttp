@@ -29,8 +29,9 @@ class BaseApplication:
     #: A dictionary to hold registered functions to specific hooks.
     events = None
 
-    def __init__(self, version=None):
+    def __init__(self, version=None, name=None):
         self.version = version
+        self.name = name
         self.events = {}
         self.cliarguments = []
         self.settings = pymlconf.Root(self._builtinsettings)
