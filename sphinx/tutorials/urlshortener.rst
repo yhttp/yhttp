@@ -173,7 +173,7 @@ Implement Shortener API
    from yhttp.core import Application, text, statuses, statuscode, guard
    
    
-   app = Application()
+   app = Application('0.1.0', 'url-shortener')
    redis = redis.Redis()
    
    

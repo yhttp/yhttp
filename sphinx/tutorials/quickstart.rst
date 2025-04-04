@@ -30,7 +30,7 @@ Create a file named: ``hello.py``:
    from yhttp.core import Application, text
 
 
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 
    @app.route()
@@ -125,7 +125,7 @@ Lets take a look at ``hello.py``.
    from yhttp.core import Application, text
    
    
-   app = Application()
+   app = Application('0.1.0', 'foo')
    
    
    @app.route()
@@ -351,7 +351,7 @@ hello.py
            print(__version__)
    
    
-   app = Application()
+   app = Application('0.1.0', 'foo')
    app.cliarguments.append(Version)
    
    

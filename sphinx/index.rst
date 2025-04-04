@@ -30,7 +30,7 @@ A lightweight flask-like HTTP framework.
 
    from yhttp.core import Application
 
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
    @app.route()
    def get(req):

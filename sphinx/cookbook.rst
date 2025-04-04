@@ -17,7 +17,7 @@ of-course, all query string will available as a dictionary via
 .. testsetup:: cookbook/qs
 
    from yhttp.core import Application, text
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 .. testcode:: cookbook/qs
 
@@ -71,7 +71,7 @@ submitted fields.
 .. testcode:: cookbook/form
 
    from yhttp.core import Application, text, statuses
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 
    @app.route()
@@ -216,7 +216,7 @@ See the example below for usage:
 .. testsetup:: cookbook/status
 
    from yhttp.core import Application, text
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 .. testcode:: cookbook/status
 
@@ -244,7 +244,7 @@ code for all requests.
 .. testsetup:: cookbook/statuscode
 
    from yhttp.core import Application, statuscode
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 
 .. testcode:: cookbook/statuscode
@@ -399,7 +399,7 @@ This is how to use :attr:`req.cookies <yhttp.core.Request.cookies>`:
 .. testsetup:: cookbook/cookie
 
    from yhttp.core import Application, text
-   app = Application()
+   app = Application('0.1.0', 'foo')
    app.ready()
 
 
@@ -451,7 +451,7 @@ examples:
 
    from yhttp.core import Application
    from bddrest import Given, when, status, given
-   app = Application()
+   app = Application('0.1.0', 'foo')
 
 .. testcode:: cookbook/guard
 
