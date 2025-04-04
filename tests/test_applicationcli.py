@@ -43,7 +43,7 @@ class Bar(SubCommand):
         return 0
 
 
-app = Application()
+app = Application('0.1.0', 'foo')
 app.cliarguments.append(Foo)
 app.cliarguments.append(Bar)
 app.settings.merge('title: foo')

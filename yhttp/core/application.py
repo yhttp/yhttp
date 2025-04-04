@@ -15,6 +15,19 @@ from .multidict import MultiDict
 
 class BaseApplication:
     """Base application for :class:`Application` and :class:`Rewrite`
+
+    :param version: Application version
+    :param name: Application name
+
+    .. versionadded:: 6.4
+
+       ``name`` argument.
+
+    .. versionchanged:: 7.0
+
+       ``version`` and ``name`` arguments must be provided to create an
+       Application.
+
     """
     _builtinsettings = '''
     debug: true
@@ -29,7 +42,7 @@ class BaseApplication:
     #: A dictionary to hold registered functions to specific hooks.
     events = None
 
-    def __init__(self, version=None, name=None):
+    def __init__(self, version, name):
         self.version = version
         self.name = name
         self.events = {}
@@ -173,6 +186,9 @@ class Application(BaseApplication):
                               new guard for a handler.
                               default: :class:`.Guard`.
     :ivar routes: A dictionionary to hold the regext routes handler mappings.
+
+    :param version: Application version
+    :param name: Application name
     """
 
     _builtinsettings = '''
@@ -187,9 +203,9 @@ class Application(BaseApplication):
     bodyguard_factory = Guard
     queryguard_factory = Guard
 
-    def __init__(self, version=None):
+    def __init__(self, version, name):
         self.routes = {}
-        super().__init__(version=version)
+        super().__init__(version=version, name=name)
 
     def _matchrequest(self, patterns, request):
         for pattern, handler, info in patterns:

@@ -41,9 +41,11 @@ class Rewrite(BaseApplication):
     """
 
     def __init__(self, default=None):
+        from yhttp.core import __version__
+
         self.default = default
         self.routes = []
-        super().__init__()
+        super().__init__(__version__, 'yhttp-rewrite')
 
     def route(self, pattern, repl, handler):
         r"""Register an application for specific url.

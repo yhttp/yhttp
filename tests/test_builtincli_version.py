@@ -4,7 +4,7 @@ from bddcli import Application as CLIApplication, Given, stderr, stdout, \
 from yhttp.core import Application, __version__
 
 
-app = Application(version=__version__)
+app = Application(__version__, 'foo')
 
 
 def test_versioncli():

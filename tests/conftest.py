@@ -16,7 +16,7 @@ GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
 
 @pytest.fixture
 def app():
-    return Application()
+    return Application('0.1.0', 'foo')
 
 
 @pytest.fixture

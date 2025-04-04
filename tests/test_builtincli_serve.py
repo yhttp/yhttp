@@ -8,7 +8,7 @@ from yhttp.core import Application, text
 from .conftest import GITHUBACTIONS
 
 
-app = Application()
+app = Application('0.1.0', 'foo')
 
 
 @app.route('/')

@@ -7,8 +7,8 @@ import yhttp.core as y
 
 def test_rewrite_nodefault():
     log = []
-    foo = y.Application()
-    bar = y.Application()
+    foo = y.Application('0.1.0', 'foo')
+    bar = y.Application('0.1.0', 'bar')
     app = y.Rewrite()
     app.route(r'/foo/?', r'/', foo)
     app.route(r'/bar/?', r'/', bar)
@@ -47,8 +47,8 @@ def test_rewrite_nodefault():
 
 
 def test_rewrite_default():
-    root = y.Application()
-    foo = y.Application()
+    root = y.Application('0.1.0', 'root')
+    foo = y.Application('0.1.0', 'foo')
     app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
@@ -88,8 +88,8 @@ def test_rewrite_default():
 
 def test_rewrite_hooks():
     log = []
-    root = y.Application()
-    foo = y.Application()
+    root = y.Application('0.1.0', 'root')
+    foo = y.Application('0.1.0', 'foo')
     app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
@@ -164,8 +164,8 @@ def test_rewrite_hooks():
 
 
 def test_rewrite_encodedurl():
-    root = y.Application()
-    foo = y.Application()
+    root = y.Application('0.1.0', 'root')
+    foo = y.Application('0.1.0', 'foo')
     app = y.Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
