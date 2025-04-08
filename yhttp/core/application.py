@@ -6,6 +6,7 @@ import types
 import pymlconf
 
 from . import statuses, static
+from .extra import flatten_json
 from .request import Request
 from .response import Response
 from .cli import Main
@@ -515,7 +516,15 @@ class Application(BaseApplication):
 
                 req.form = guard.validate(
                     req,
-                    req.getform(relax=True) or MultiDict()
+                    (
+                        MultiDict({
+                            k: [v] if not isinstance(v, list) else v
+                            for k, v in
+                            flatten_json(req.getjson(relax=True) or {}).items()
+                        })
+                        if req.contenttype == 'application/json' else
+                        (req.getform(relax=True) or MultiDict())
+                    )
                 )
                 return handler(req, *args, **kwargs)
 
