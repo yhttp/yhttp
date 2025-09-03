@@ -1,4 +1,5 @@
 """yhttp micro http framework."""
+from .version import __version__
 from .application import BaseApplication, Application
 from .contenttypes import contenttype, binary, utf8, json, text, html
 from .lazyattribute import lazyattribute
@@ -10,6 +11,3 @@ from .rewrite import Rewrite
 from .multipart import MultipartError, MultipartParser, MultipartPart, \
     parse_form_data
 from .multidict import MultiDict
-
-
-__version__ = '7.0.1'

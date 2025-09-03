@@ -41,7 +41,7 @@ class Rewrite(BaseApplication):
     """
 
     def __init__(self, default=None):
-        from yhttp.core import __version__
+        from .version import __version__
 
         self.default = default
         self.routes = []

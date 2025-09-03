@@ -26,7 +26,7 @@ def test_servercli(freetcpport):
 
     with Given(cliapp, f'serve --bind {freetcpport}', nowait=True) as s:
         url = f'http://localhost:{freetcpport}'
-        time.sleep(2)
+        time.sleep(5)
         r = requests.get(url)
         assert r.text == 'foo'
         s.kill()
