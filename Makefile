@@ -2,6 +2,7 @@ PKG_NAMESPACE = yhttp.core
 PKG_NAME = yhttp
 PYDEPS_COMMON += \
 	'coveralls' \
+	'pytest >= 7, < 8' \
 	'bddrest >= 6.2.3, < 7' \
 	'bddcli >= 2.5.1, < 3' \
 	'yhttp-dev >= 3.2.4' \
