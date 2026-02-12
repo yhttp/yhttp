@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; yhttp 7.0.4 documentation</title>
+    <title>API Reference &#8212; yhttp 7.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=1394a4c8"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/documentation_options.js?v=9e30f436"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Cookbook" href="cookbook.html" />
@@ -33,7 +33,7 @@
 <h2>Application Classes<a class="headerlink" href="#application-classes" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.BaseApplication" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BaseApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.BaseApplication" title="Link to this definition">¶</a></dt>
 <dd><p>Base application for <a class="reference internal" href="#yhttp.core.Application" title="yhttp.core.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> and <a class="reference internal" href="#yhttp.core.Rewrite" title="yhttp.core.Rewrite"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rewrite</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -52,7 +52,7 @@ Application.</p>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication.cliarguments">
-<span class="sig-name descname"><span class="pre">cliarguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.BaseApplication.cliarguments" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cliarguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.cliarguments" title="Link to this definition">¶</a></dt>
 <dd><p>A list of <a class="reference external" href="https://pylover.github.io/easycli/apireference.html#easycli.Argument" title="(in easycli)"><code class="xref py py-class docutils literal notranslate"><span class="pre">easycli.Argument</span></code></a> or <a class="reference external" href="https://pylover.github.io/easycli/apireference.html#easycli.SubCommand" title="(in easycli)"><code class="xref py py-class docutils literal notranslate"><span class="pre">easycli.SubCommand</span></code></a>.</p>
 </dd></dl>
 
@@ -92,7 +92,7 @@ Application.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication.events">
-<span class="sig-name descname"><span class="pre">events</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.BaseApplication.events" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">events</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.events" title="Link to this definition">¶</a></dt>
 <dd><p>A dictionary to hold registered functions to specific hooks.</p>
 </dd></dl>
 
@@ -133,7 +133,7 @@ application.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication.settings">
-<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.BaseApplication.settings" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">settings</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.settings" title="Link to this definition">¶</a></dt>
 <dd><p>Instance of <a class="reference external" href="https://pylover.github.io/pymlconf/pymlconf.html#pymlconf.Root" title="(in pymlconf v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymlconf.Root</span></code></a> as the global configuration instance.</p>
 </dd></dl>
 
@@ -175,7 +175,7 @@ aware when <a class="reference internal" href="#yhttp.core.BaseApplication.ready
 
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.Application">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#yhttp.core.BaseApplication" title="yhttp.core.application.BaseApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseApplication</span></code></a></p>
 <p>WSGI Web Application.</p>
 <p>Instance of this class can be used as a WSGI application.</p>
@@ -445,7 +445,7 @@ found. if <code class="docutils literal notranslate"><span class="pre">str</span
 <h2>Rewrite Class<a class="headerlink" href="#rewrite-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.Rewrite">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Rewrite" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Rewrite" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#yhttp.core.BaseApplication" title="yhttp.core.application.BaseApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseApplication</span></code></a></p>
 <p>Useful to route specific requests to other WSGI application.</p>
 <div class="versionadded">
@@ -545,7 +545,7 @@ arguments.</p>
 <h2>Request Class<a class="headerlink" href="#request-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.Request">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an HTTP request.</p>
 <p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.__call__()</span></code> instantiates this class on each call.</p>
 <dl class="py method">
@@ -574,7 +574,7 @@ arguments.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Request.environ">
-<span class="sig-name descname"><span class="pre">environ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Request.environ" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">environ</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Request.environ" title="Link to this definition">¶</a></dt>
 <dd><p>WSIG environ dictionary</p>
 </dd></dl>
 
@@ -711,7 +711,7 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Request.response">
-<span class="sig-name descname"><span class="pre">response</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Request.response" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">response</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Request.response" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#yhttp.core.Response" title="yhttp.core.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code></a> instance associated to this request.</p>
 </dd></dl>
 
@@ -734,7 +734,7 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 <h2>HeadersMask Class<a class="headerlink" href="#headersmask-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.HeadersMask">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HeadersMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HeadersMask" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">HeadersMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HeadersMask" title="Link to this definition">¶</a></dt>
 <dd><p>A simple proxy over <a class="reference internal" href="#yhttp.core.Request.environ" title="yhttp.core.Request.environ"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.environ</span></code></a>.</p>
 <p>Useful to get headers by their original name without the <code class="docutils literal notranslate"><span class="pre">HTTP_</span></code> prefix,
 which is the python’s WSGI servers default behavior.</p>
@@ -755,18 +755,18 @@ which is the python’s WSGI servers default behavior.</p>
 <h2>Response Class<a class="headerlink" href="#response-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.Response">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Response" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startresponse</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Response" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the HTTP response.</p>
 <p>Which accessible by <a class="reference internal" href="#yhttp.core.Request.response" title="yhttp.core.Request.response"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Request.response</span></code></a> inside handlers.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.body">
-<span class="sig-name descname"><span class="pre">body</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Response.body" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">body</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Response.body" title="Link to this definition">¶</a></dt>
 <dd><p>Response body</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.charset">
-<span class="sig-name descname"><span class="pre">charset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Response.charset" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">charset</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Response.charset" title="Link to this definition">¶</a></dt>
 <dd><p>Response encoding, <code class="docutils literal notranslate"><span class="pre">None</span></code> for binary</p>
 </dd></dl>
 
@@ -785,19 +785,19 @@ transfer to the client.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Response.contenttype">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">contenttype</span></span><a class="headerlink" href="#yhttp.core.Response.contenttype" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">contenttype</span></span><a class="headerlink" href="#yhttp.core.Response.contenttype" title="Link to this definition">¶</a></dt>
 <dd><p>Response content type incuding charset.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.headers">
-<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Response.headers" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">headers</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Response.headers" title="Link to this definition">¶</a></dt>
 <dd><p>An instance of <a class="reference internal" href="#yhttp.core.HeaderSet" title="yhttp.core.HeaderSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderSet</span></code></a> class.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.length">
-<span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Response.length" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">length</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Response.length" title="Link to this definition">¶</a></dt>
 <dd><p>Response content length</p>
 </dd></dl>
 
@@ -818,13 +818,13 @@ to transfered to user.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.status">
-<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'200</span> <span class="pre">OK'</span></em><a class="headerlink" href="#yhttp.core.Response.status" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'200</span> <span class="pre">OK'</span></span><a class="headerlink" href="#yhttp.core.Response.status" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP Status code</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Response.type">
-<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#yhttp.core.Response.type" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">type</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.Response.type" title="Link to this definition">¶</a></dt>
 <dd><p>Response content type without charset.</p>
 </dd></dl>
 
@@ -835,7 +835,7 @@ to transfered to user.</p>
 <h2>HeaderSet Class<a class="headerlink" href="#headerset-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.HeaderSet">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HeaderSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HeaderSet" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">HeaderSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HeaderSet" title="Link to this definition">¶</a></dt>
 <dd><p>A mutable case-insensitive ordered dictionary to keep HTTP headers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
@@ -851,7 +851,7 @@ to transfered to user.</p>
 <h2>MultiDict<a class="headerlink" href="#multidict" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.MultiDict">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.MultiDict" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultiDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.MultiDict" title="Link to this definition">¶</a></dt>
 <dd><p>A dict that remembers old values for each key.</p>
 <p>HTTP headers and query strings may repeat with differing values, such as
 Set-Cookie. We need to remember all values.</p>
@@ -872,7 +872,7 @@ Set-Cookie. We need to remember all values.</p>
 <h2>HTTPStatus Class<a class="headerlink" href="#httpstatus-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.HTTPStatus">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HTTPStatus" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.HTTPStatus" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for all HTTP Exceptions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1018,7 +1018,7 @@ and encode the returned value by handler to json byte-string format.</p>
 <span id="gurad-module"></span><h2>gurad Module<a class="headerlink" href="#module-yhttp.core.guard" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.guard.Field">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Field" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Field" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for all fields such as <a class="reference internal" href="#yhttp.core.guard.String" title="yhttp.core.guard.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1061,7 +1061,7 @@ default: <code class="docutils literal notranslate"><span class="pre">400</span>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.guard.Guard">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Guard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Guard" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Guard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Guard" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#yhttp.core.guard.Guard" title="yhttp.core.guard.Guard"><code class="xref py py-class docutils literal notranslate"><span class="pre">guard.Guard</span></code></a> class is used to validate the HTTP requests.</p>
 <p>see: <a class="reference internal" href="#yhttp.core.Application.bodyguard" title="yhttp.core.Application.bodyguard"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.bodyguard()</span></code></a> for more info.</p>
 <div class="versionadded">
@@ -1100,7 +1100,7 @@ unknown field(s) is/are found.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.guard.Integer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Integer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Integer" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Integer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Integer" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the guard for integer field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1141,7 +1141,7 @@ is not in specified range.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.guard.String">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">String</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.String" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">String</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.String" title="Link to this definition">¶</a></dt>
 <dd><p>Represent the guard for string field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1186,7 +1186,7 @@ default: <code class="docutils literal notranslate"><span class="pre">400</span>
 <span id="statuses-module"></span><h2>statuses Module<a class="headerlink" href="#module-yhttp.core.statuses" title="Link to this heading">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="yhttp.core.statuses.HTTPStatus">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.statuses.HTTPStatus" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">HTTPStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nobody</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.statuses.HTTPStatus" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for all HTTP Exceptions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1204,31 +1204,31 @@ when exception is occured.</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.badgateway">
-<span class="sig-name descname"><span class="pre">badgateway</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">502,</span> <span class="pre">'Bad</span> <span class="pre">Gateway')</span></em><a class="headerlink" href="#yhttp.core.statuses.badgateway" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">badgateway</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">502,</span> <span class="pre">'Bad</span> <span class="pre">Gateway')</span></span><a class="headerlink" href="#yhttp.core.statuses.badgateway" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 502 Bad Gateway exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.badrequest">
-<span class="sig-name descname"><span class="pre">badrequest</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">400,</span> <span class="pre">'Bad</span> <span class="pre">Request')</span></em><a class="headerlink" href="#yhttp.core.statuses.badrequest" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">badrequest</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">400,</span> <span class="pre">'Bad</span> <span class="pre">Request')</span></span><a class="headerlink" href="#yhttp.core.statuses.badrequest" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 400 Bad Request exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.conflict">
-<span class="sig-name descname"><span class="pre">conflict</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">409,</span> <span class="pre">'Conflict')</span></em><a class="headerlink" href="#yhttp.core.statuses.conflict" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">conflict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">409,</span> <span class="pre">'Conflict')</span></span><a class="headerlink" href="#yhttp.core.statuses.conflict" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 409 Conflict exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.created">
-<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">201,</span> <span class="pre">'Created',</span> <span class="pre">keepheaders=True)</span></em><a class="headerlink" href="#yhttp.core.statuses.created" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">created</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">201,</span> <span class="pre">'Created',</span> <span class="pre">keepheaders=True)</span></span><a class="headerlink" href="#yhttp.core.statuses.created" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 201 Created exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.forbidden">
-<span class="sig-name descname"><span class="pre">forbidden</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">403,</span> <span class="pre">'Forbidden')</span></em><a class="headerlink" href="#yhttp.core.statuses.forbidden" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">forbidden</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">403,</span> <span class="pre">'Forbidden')</span></span><a class="headerlink" href="#yhttp.core.statuses.forbidden" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 403 Forbidden exception factory</p>
 </dd></dl>
 
@@ -1240,31 +1240,31 @@ when exception is occured.</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.gatewaytimeout">
-<span class="sig-name descname"><span class="pre">gatewaytimeout</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">504,</span> <span class="pre">'Gateway</span> <span class="pre">Timeout')</span></em><a class="headerlink" href="#yhttp.core.statuses.gatewaytimeout" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gatewaytimeout</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">504,</span> <span class="pre">'Gateway</span> <span class="pre">Timeout')</span></span><a class="headerlink" href="#yhttp.core.statuses.gatewaytimeout" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 504 Gateway Timeout exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.gone">
-<span class="sig-name descname"><span class="pre">gone</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">410,</span> <span class="pre">'Gone')</span></em><a class="headerlink" href="#yhttp.core.statuses.gone" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gone</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">410,</span> <span class="pre">'Gone')</span></span><a class="headerlink" href="#yhttp.core.statuses.gone" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 410 Gone exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.internalservererror">
-<span class="sig-name descname"><span class="pre">internalservererror</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">500,</span> <span class="pre">'Internal</span> <span class="pre">Server</span> <span class="pre">Error')</span></em><a class="headerlink" href="#yhttp.core.statuses.internalservererror" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">internalservererror</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">500,</span> <span class="pre">'Internal</span> <span class="pre">Server</span> <span class="pre">Error')</span></span><a class="headerlink" href="#yhttp.core.statuses.internalservererror" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 500 Internal Server Error exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.lengthrequired">
-<span class="sig-name descname"><span class="pre">lengthrequired</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">411,</span> <span class="pre">'Length</span> <span class="pre">Required')</span></em><a class="headerlink" href="#yhttp.core.statuses.lengthrequired" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lengthrequired</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">411,</span> <span class="pre">'Length</span> <span class="pre">Required')</span></span><a class="headerlink" href="#yhttp.core.statuses.lengthrequired" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 411 Length Required</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.methodnotallowed">
-<span class="sig-name descname"><span class="pre">methodnotallowed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">405,</span> <span class="pre">'Method</span> <span class="pre">Not</span> <span class="pre">Allowed')</span></em><a class="headerlink" href="#yhttp.core.statuses.methodnotallowed" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">methodnotallowed</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">405,</span> <span class="pre">'Method</span> <span class="pre">Not</span> <span class="pre">Allowed')</span></span><a class="headerlink" href="#yhttp.core.statuses.methodnotallowed" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 405 Method Not Allowed exception factory</p>
 </dd></dl>
 
@@ -1276,37 +1276,37 @@ when exception is occured.</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.nocontent">
-<span class="sig-name descname"><span class="pre">nocontent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">204,</span> <span class="pre">'No</span> <span class="pre">Content',</span> <span class="pre">keepheaders=True,</span> <span class="pre">nobody=True)</span></em><a class="headerlink" href="#yhttp.core.statuses.nocontent" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">nocontent</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">204,</span> <span class="pre">'No</span> <span class="pre">Content',</span> <span class="pre">keepheaders=True,</span> <span class="pre">nobody=True)</span></span><a class="headerlink" href="#yhttp.core.statuses.nocontent" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 204 No Content exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.notfound">
-<span class="sig-name descname"><span class="pre">notfound</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">404,</span> <span class="pre">'Not</span> <span class="pre">Found')</span></em><a class="headerlink" href="#yhttp.core.statuses.notfound" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">notfound</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">404,</span> <span class="pre">'Not</span> <span class="pre">Found')</span></span><a class="headerlink" href="#yhttp.core.statuses.notfound" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 404 Not Found exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.notmodified">
-<span class="sig-name descname"><span class="pre">notmodified</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">304,</span> <span class="pre">'Not</span> <span class="pre">Modified',</span> <span class="pre">nobody=True)</span></em><a class="headerlink" href="#yhttp.core.statuses.notmodified" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">notmodified</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">304,</span> <span class="pre">'Not</span> <span class="pre">Modified',</span> <span class="pre">nobody=True)</span></span><a class="headerlink" href="#yhttp.core.statuses.notmodified" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 304 Not Modified exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.ok">
-<span class="sig-name descname"><span class="pre">ok</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">200,</span> <span class="pre">'OK',</span> <span class="pre">keepheaders=True)</span></em><a class="headerlink" href="#yhttp.core.statuses.ok" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ok</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">200,</span> <span class="pre">'OK',</span> <span class="pre">keepheaders=True)</span></span><a class="headerlink" href="#yhttp.core.statuses.ok" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 200 OK</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.preconditionfailed">
-<span class="sig-name descname"><span class="pre">preconditionfailed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">412,</span> <span class="pre">'Precondition</span> <span class="pre">Failed')</span></em><a class="headerlink" href="#yhttp.core.statuses.preconditionfailed" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">preconditionfailed</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">412,</span> <span class="pre">'Precondition</span> <span class="pre">Failed')</span></span><a class="headerlink" href="#yhttp.core.statuses.preconditionfailed" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 412 Precondition Failed exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.serviceunavailable">
-<span class="sig-name descname"><span class="pre">serviceunavailable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">503,</span> <span class="pre">'Service</span> <span class="pre">Unavailable')</span></em><a class="headerlink" href="#yhttp.core.statuses.serviceunavailable" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">serviceunavailable</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">503,</span> <span class="pre">'Service</span> <span class="pre">Unavailable')</span></span><a class="headerlink" href="#yhttp.core.statuses.serviceunavailable" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 503 Service Unavailable exception factory</p>
 </dd></dl>
 
@@ -1336,13 +1336,13 @@ when exception is occured.</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.unauthorized">
-<span class="sig-name descname"><span class="pre">unauthorized</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">401,</span> <span class="pre">'Unauthorized')</span></em><a class="headerlink" href="#yhttp.core.statuses.unauthorized" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">unauthorized</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">401,</span> <span class="pre">'Unauthorized')</span></span><a class="headerlink" href="#yhttp.core.statuses.unauthorized" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 401 Unauthorized exception factory</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="yhttp.core.statuses.unprocessablecontent">
-<span class="sig-name descname"><span class="pre">unprocessablecontent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">422,</span> <span class="pre">'Unprocessable</span> <span class="pre">Content')</span></em><a class="headerlink" href="#yhttp.core.statuses.unprocessablecontent" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">unprocessablecontent</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">functools.partial(&lt;class</span> <span class="pre">'yhttp.core.statuses.HTTPStatus'&gt;,</span> <span class="pre">422,</span> <span class="pre">'Unprocessable</span> <span class="pre">Content')</span></span><a class="headerlink" href="#yhttp.core.statuses.unprocessablecontent" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP 422 Unprocessable Content</p>
 </dd></dl>
 
