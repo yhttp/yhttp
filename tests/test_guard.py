@@ -7,24 +7,26 @@ from yhttp.core import guard, json
 def test_guard_override(app, Given):
     bar = guard.String('bar', optional=True)
     qux = guard.Integer('qux', range=(0, 3), optional=True)
+    quux = guard.Boolean('quux', default=False)
 
     @app.route()
     @app.bodyguard((
         bar(length=(3, 5)),
         bar(name='baz', optional=False),
-        qux(range=(0, 5))
+        qux(range=(0, 5)),
+        quux(),
     ))
     @json
     def post(req):
         return req.form.dict
 
-    with Given(verb='post', form=dict(bar='bar', baz='baz')):
+    with Given(verb='post', form=dict(bar='bar', baz='baz', quux='False')):
         assert status == 200
-        assert response.json == dict(bar=['bar'], baz=['baz'])
+        assert response.json == dict(bar=['bar'], baz=['baz'], quux=[False])
 
         when(form=given - 'bar')
         assert status == 200
-        assert response.json == dict(baz=['baz'])
+        assert response.json == dict(baz=['baz'], quux=[False])
 
         when(form=given | dict(bar='12'))
         assert status == '400 bar: Length must be between 3 and 5 characters'
@@ -37,7 +39,27 @@ def test_guard_override(app, Given):
 
         when(form=given | dict(qux='5'))
         assert status == 200
-        assert response.json == dict(bar=['bar'], baz=['baz'], qux=[5])
+        assert response.json == dict(bar=['bar'], baz=['baz'], qux=[5],
+                                     quux=[False])
+
+        when(form=given - 'quux')
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'], quux=[False])
+
+        when(form=given | dict(quux='yes'))
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'], quux=[True])
+
+        when(form=given | dict(quux='true'))
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'], quux=[True])
+
+        when(form=given | dict(quux='ok'))
+        assert status == 200
+        assert response.json == dict(bar=['bar'], baz=['baz'], quux=[True])
+
+        when(form=given | dict(quux=''))
+        assert status == '400 quux: Boolean Required'
 
 
 def test_guard(app, Given):

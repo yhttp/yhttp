@@ -11,7 +11,7 @@ class Field:
                      default: ``False``.
     :param default: A scalar or ``callable(req, field, valuesdict)`` as the
                     default value for field if not submitted. this argument
-                    cannot passed with ``optional``. default: ``None``.
+                    implies the ``optional``. default: ``None``.
     :cvar statuscode_missing: int, the status code to raise when the field is
                               not submitted by the user when ``strict=True``.
                               default: ``400``.
@@ -28,9 +28,12 @@ class Field:
             'when optional is not set'
 
         self.name = name
-        self.optional = optional
         self.default = default
         self.callback = callback
+        if default is not None:
+            self.optional = True
+        else:
+            self.optional = optional
 
     def __call__(self, *, optional=None, default=None, callback=None,
                  **kwargs):
@@ -67,7 +70,7 @@ class Field:
                     f'{self.name}: Required'
                 )
 
-            if self.default:
+            if self.default is not None:
                 if callable(self.default):
                     values.replace(self.name, self.default(req, self, values))
                 else:
@@ -188,6 +191,36 @@ class Integer(Field):
                     f'{self.name}: Value must be between {self.range[0]} and '
                     f'{self.range[1]}'
                 )
+
+        super().validate(req, values)
+
+
+class Boolean(Field):
+    """Represent the guard for boolean field.
+
+    :param name: str, the field name.
+    :cvar statuscode_badtype: int, the status code to raise when the type cast
+                              to integer ``bool(value)`` is raises
+                              :exc:`ValueError`. default: ``400``.
+
+    .. versionadded:: 7.2
+    """
+    statuscode_badtype = 400
+    statuscode_outofrange = 400
+
+    def validate(self, req, values):
+        if super().skip(req, values):
+            return
+
+        for i, v in enumerate(values.dict[self.name]):
+            if not v:
+                raise statuses.status(
+                    self.statuscode_badtype,
+                    f'{self.name}: Boolean Required'
+                )
+
+            v = v.lower() in ('true', 'yes', 'ok')
+            values.dict[self.name][i] = v
 
         super().validate(req, values)
 
