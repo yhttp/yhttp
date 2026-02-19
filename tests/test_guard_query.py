@@ -93,3 +93,21 @@ def test_queryguard_integer(app, Given):
 
         when(query=given | dict(bar=0))
         assert status == '400 bar: Zero Not Allowed'
+
+
+def test_queryguard_boolean_kwargs(app, Given):
+    @app.route()
+    @app.queryguard(fields=(
+        g.Boolean('bar'),
+    ))
+    @json
+    def post(req, *, bar=None):
+        return bar
+
+    with Given(verb='post', path='/?bar=yes'):
+        assert status == 200
+        assert response.json is True
+
+    with Given(verb='post', path='/?bar=false'):
+        assert status == 200
+        assert response.json is False

@@ -2,6 +2,7 @@
 # F824 https://github.com/PyCQA/flake8/pull/1975
 ignore = W503, F811, F824
 exclude = 
+	build
 	tests/test_multipart.py
 per-file-ignores =
 	yhttp/core/__init__.py: F401, F403

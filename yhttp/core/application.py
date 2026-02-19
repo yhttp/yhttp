@@ -575,6 +575,9 @@ class Application(BaseApplication):
                     raise statuses.badrequest()
 
                 req.query = guard.validate(req, req.query or MultiDict())
+                for k in req.query:
+                    if k in kwargs:
+                        kwargs[k] = req.query[k]
                 return handler(req, *args, **kwargs)
 
             return _handler

@@ -219,7 +219,7 @@ class Boolean(Field):
                     f'{self.name}: Boolean Required'
                 )
 
-            v = v.lower() in ('true', 'yes', 'ok')
+            v = v.lower() in ('true', 'yes', 'ok', 'on')
             values.dict[self.name][i] = v
 
         super().validate(req, values)
