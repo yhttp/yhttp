@@ -57,7 +57,12 @@ class BaseApplication:
 
         * ready
         * shutdown
+        * startresponse
         * endresponse
+
+        .. versionadded:: 7.3
+
+           ``startresponse`` hook.
 
         The hook name will be choosed by the func.__name__, so if you need to
         aware when :meth:`ready` is called write something like this:
@@ -70,6 +75,10 @@ class BaseApplication:
 
            @app.when
            def shutdown(app):
+               ...
+
+           @app.when
+           def startresponse(response):
                ...
 
            @app.when

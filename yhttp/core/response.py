@@ -72,6 +72,7 @@ class Response:
 
         self.headers.add('content-length', str(contentlength))
 
+        self.application.hook('startresponse', self)
         self.startresponse(
             self.status,
             list(self.headers.items()),
@@ -89,6 +90,7 @@ class Response:
         if self.length is not None:
             self.headers.add('content-length', str(self.length))
 
+        self.application.hook('startresponse', self)
         self.startresponse(
             self.status,
             list(self.headers.items()),

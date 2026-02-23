@@ -7,6 +7,10 @@ def test_pipeline(app, Given):
     endresponseiscalled = 0
 
     @app.when
+    def startresponse(resp):
+        resp.headers.add('x-qux', 'quux')
+
+    @app.when
     def endresponse(resp):
         nonlocal endresponseiscalled
         endresponseiscalled += 1
@@ -31,6 +35,7 @@ def test_pipeline(app, Given):
         assert response == 'index'
         assert 'content-type' not in response.headers
         assert 'x-foo' in response.headers
+        assert response.headers['x-qux'] == 'quux'
         assert endresponseiscalled == 1
 
         when('/foos')
