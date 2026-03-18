@@ -1,5 +1,6 @@
 [run]
-source=yhttp
+source = yhttp
+patch = subprocess
 omit = 
     yhttp/core/main.py
 	yhttp/core/multipart.py
