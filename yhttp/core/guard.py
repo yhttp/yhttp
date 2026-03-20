@@ -225,6 +225,44 @@ class Boolean(Field):
         super().validate(req, values)
 
 
+class File(Field):
+    """Represent the guard for multipart file field.
+
+    It just checks the field with that name is exists in the request.
+
+    :param name: str, the field name.
+
+    .. versionadded: 7.4
+    """
+
+    def __init__(self, name, length=None, pattern=None, **kwargs):
+        if length:
+            raise NotImplementedError('length argument is not supported')
+
+        if pattern:
+            raise NotImplementedError('pattern argument is not supported')
+
+        super().__init__(name, **kwargs)
+
+    def __call__(self, *, length=None, pattern=None, **kwargs):
+        if length:
+            raise NotImplementedError('length argument is not supported')
+
+        if pattern:
+            raise NotImplementedError('pattern argument is not supported')
+        return super().__call__(**kwargs)
+
+    def validate(self, req, values):
+        if self.optional:
+            return
+
+        if self.name not in req.getfiles():
+            raise statuses.status(
+                self.statuscode_missing,
+                f'{self.name}: Required'
+            )
+
+
 class Guard:
     """The :class:`.guard.Guard` class is used to validate the HTTP requests.
 

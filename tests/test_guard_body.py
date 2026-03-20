@@ -1,6 +1,9 @@
+import io
+
 from bddrest import status, given, when, response
 
 from yhttp.core import statuses, guard as g, json
+from yhttp.core.multidict import MultiDict
 
 
 def test_bodyguard_strict(app, Given):
@@ -99,3 +102,51 @@ def test_bodyguard_integer(app, Given):
 
         when(form=given | dict(bar=0))
         assert status == '400 bar: Zero Not Allowed'
+
+
+def test_bodyguard_multipart(app, Given):
+    app.settings.debug = False
+    bazfile = g.File('baz')
+
+    @app.route()
+    @app.bodyguard(fields=(
+        g.String('foo'),
+        g.Integer('bar'),
+        bazfile,
+    ))
+    def post(req):
+        assert req.contenttype.startswith('multipart/form')
+        assert req.files is not None
+        assert isinstance(req.files, MultiDict)
+        assert req.form['foo'] == 'FOO'
+        assert req.form['bar'] == 73
+        assert req.files['baz']
+
+    @app.route()
+    @app.bodyguard(fields=(
+        g.String('foo'),
+        g.Integer('bar'),
+        bazfile(optional=True),
+    ))
+    def put(req):
+        assert req.contenttype.startswith('multipart/form')
+        assert req.files is not None
+        assert isinstance(req.files, MultiDict)
+        assert req.form['foo'] == 'FOO'
+        assert req.form['bar'] == 73
+        if 'baz' in req.files:
+            assert req.files['baz']
+
+    form = dict(
+        foo='FOO',
+        bar='73',
+        baz=io.BytesIO(b'foobarbaz'),
+    )
+    with Given(verb='post', multipart=form):
+        assert status == 200
+
+        when(multipart=given - 'baz')
+        assert status == 400
+
+        when(verb='PUT', multipart=given - 'baz')
+        assert status == 200
