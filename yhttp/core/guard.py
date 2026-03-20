@@ -1,4 +1,5 @@
 import re
+from os import path
 
 from . import statuses
 
@@ -228,20 +229,34 @@ class Boolean(Field):
 class File(Field):
     """Represent the guard for multipart file field.
 
+    .. versionadded:: 7.4
+
+
     It just checks the field with that name is exists in the request.
 
     :param name: str, the field name.
+    :param extensions: list[str], allowd file extensions
 
-    .. versionadded: 7.4
+    :cvar statuscode_badextension: int, the status code to raise when the
+                                   file extension is not allowed.
+                                   default: ``400``.
+
+    .. versionadded:: 7.5
+       ``extensions`` argument and ``statuscode_badextension`` class attribute.
+
     """
 
-    def __init__(self, name, length=None, pattern=None, **kwargs):
+    statuscode_badextension = 400
+
+    def __init__(self, name, extensions=None, length=None, pattern=None,
+                 **kwargs):
         if length:
             raise NotImplementedError('length argument is not supported')
 
         if pattern:
             raise NotImplementedError('pattern argument is not supported')
 
+        self.extensions = extensions
         super().__init__(name, **kwargs)
 
     def __call__(self, *, length=None, pattern=None, **kwargs):
@@ -252,11 +267,21 @@ class File(Field):
             raise NotImplementedError('pattern argument is not supported')
         return super().__call__(**kwargs)
 
-    def validate(self, req, values):
-        if self.optional:
-            return
+    def _validate_extensions(self, file):
+        _, ext = path.splitext(file.filename)
+        if ext not in self.extensions:
+            raise statuses.status(
+                self.statuscode_badextension,
+                f'{self.name}: invalid extension, allowed extensions: '
+                f'{', '.join(self.extensions)}'
+            )
 
-        if self.name not in req.getfiles():
+    def validate(self, req, values):
+        if self.name in req.getfiles():
+            if self.extensions:
+                self._validate_extensions(req.files[self.name])
+
+        elif not self.optional:
             raise statuses.status(
                 self.statuscode_missing,
                 f'{self.name}: Required'

@@ -126,7 +126,7 @@ def test_bodyguard_multipart(app, Given):
     @app.bodyguard(fields=(
         g.String('foo'),
         g.Integer('bar'),
-        bazfile(optional=True),
+        bazfile(optional=True, extensions=['.jpg']),
     ))
     def put(req):
         assert req.contenttype.startswith('multipart/form')
@@ -137,10 +137,11 @@ def test_bodyguard_multipart(app, Given):
         if 'baz' in req.files:
             assert req.files['baz']
 
+    file = io.BytesIO(b'foobarbaz')
     form = dict(
         foo='FOO',
         bar='73',
-        baz=io.BytesIO(b'foobarbaz'),
+        baz=file,
     )
     with Given(verb='post', multipart=form):
         assert status == 200
@@ -149,4 +150,11 @@ def test_bodyguard_multipart(app, Given):
         assert status == 400
 
         when(verb='PUT', multipart=given - 'baz')
+        assert status == 200
+
+        when(verb='PUT')
+        assert status == 400
+
+        file.name = 'baz.jpg'
+        when(verb='PUT')
         assert status == 200
