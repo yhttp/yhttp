@@ -1,6 +1,8 @@
 import traceback
 from functools import partial, wraps
 
+import ujson
+
 
 __all__ = [
     'HTTPStatus',
@@ -41,16 +43,26 @@ class HTTPStatus(Exception):
     """
 
     def __init__(self, code, text, keepheaders=False, headers=None,
-                 nobody=False):
+                 body='default'):
         self.keepheaders = keepheaders
         self.headers = headers or []
         self.status = f'{code} {text}'
-        self.nobody = nobody
+        self.body = body
         super().__init__(self.status)
 
     def setupresponse(self, response, stacktrace=False):
         response.status = self.status
-        if not self.nobody:
+        response.charset = 'utf-8'
+
+        if not self.keepheaders:
+            response.headers.clear()
+
+        response.headers += self.headers
+
+        if not self.body:
+            return
+
+        if self.body == 'default':
             body = [self.status]
             if stacktrace:
                 body.append(traceback.format_exc())
@@ -58,13 +70,15 @@ class HTTPStatus(Exception):
             # trailing newline
             body.append('')
             response.body = '\r\n'.join(body)
+            response.type = 'text/plain'
 
-        if not self.keepheaders:
-            response.headers.clear()
+        elif isinstance(self.body, str):
+            response.body = self.body
+            response.type = 'text/plain'
 
-        response.headers += self.headers
-        response.type = 'text/plain'
-        response.charset = 'utf-8'
+        else:
+            response.body = ujson.dumps(self.body)
+            response.type = 'application/json'
 
 
 #: Alias for :exc:`.HTTPStatus`
@@ -77,7 +91,7 @@ ok = partial(status, 200, 'OK', keepheaders=True)
 created = partial(status, 201, 'Created', keepheaders=True)
 
 #: HTTP 204 No Content exception factory
-nocontent = partial(status, 204, 'No Content', keepheaders=True, nobody=True)
+nocontent = partial(status, 204, 'No Content', keepheaders=True, body=None)
 
 #: HTTP 400 Bad Request exception factory
 badrequest = partial(status, 400, 'Bad Request')
@@ -110,7 +124,7 @@ preconditionfailed = partial(status, 412, 'Precondition Failed')
 unprocessablecontent = partial(status, 422, 'Unprocessable Content')
 
 #: HTTP 304 Not Modified exception factory
-notmodified = partial(status, 304, 'Not Modified', nobody=True)
+notmodified = partial(status, 304, 'Not Modified', body=None)
 
 #: HTTP 500 Internal Server Error exception factory
 internalservererror = partial(status, 500, 'Internal Server Error')
@@ -127,7 +141,7 @@ gatewaytimeout = partial(status, 504, 'Gateway Timeout')
 
 def redirect(code, text, location, **kw):
     return status(code, text, keepheaders=True,
-                  headers=[('Location', location)], nobody=True, **kw)
+                  headers=[('Location', location)], body=None, **kw)
 
 
 #: HTTP 301 Moved Permanently exception factory

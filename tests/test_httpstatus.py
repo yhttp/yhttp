@@ -28,6 +28,16 @@ def test_httpstatus(app, Given):
         req.response.headers.add('x-qux', 'qux')
         return statuses.badrequest()
 
+    @app.route()
+    @json
+    def quux(req):
+        return statuses.badrequest(body='foobarbaz')
+
+    @app.route()
+    @json
+    def thud(req):
+        return statuses.conflict(body=dict(foo='bar'))
+
     with Given():
         assert status == 200
         assert response.json == dict(foo='bar')
@@ -43,3 +53,13 @@ def test_httpstatus(app, Given):
         when(verb='qux')
         assert status == 400
         assert 'x-qux' not in response.headers
+
+        when(verb='quux')
+        assert status == 400
+        assert response == 'foobarbaz'
+        assert response.content_type == 'text/plain'
+
+        when(verb='thud')
+        assert status == 409
+        assert response.json == dict(foo='bar')
+        assert response.content_type == 'application/json'
