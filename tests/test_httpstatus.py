@@ -1,3 +1,5 @@
+import ujson
+
 from bddrest import response, status, when
 
 from yhttp.core import json, statuses
@@ -36,7 +38,16 @@ def test_httpstatus(app, Given):
     @app.route()
     @json
     def thud(req):
-        return statuses.conflict(body=dict(foo='bar'))
+        return statuses.conflict(body=dict(foo='bar'), encoder='json')
+
+    @app.route()
+    @json
+    def corge(req):
+        def _enc(b, resp):
+            resp.body = ujson.dumps(b)
+            resp.type = 'application/json'
+
+        return statuses.conflict(body=dict(foo='bar'), encoder=_enc)
 
     with Given():
         assert status == 200
@@ -60,6 +71,11 @@ def test_httpstatus(app, Given):
         assert response.content_type == 'text/plain'
 
         when(verb='thud')
+        assert status == 409
+        assert response.json == dict(foo='bar')
+        assert response.content_type == 'application/json'
+
+        when(verb='corge')
         assert status == 409
         assert response.json == dict(foo='bar')
         assert response.content_type == 'application/json'

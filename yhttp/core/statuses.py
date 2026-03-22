@@ -86,7 +86,7 @@ class HTTPStatus(Exception):
 
         response.headers += self.headers
 
-        if not self.body:
+        if self.body is None:
             return
 
         if callable(self.body):
@@ -96,7 +96,7 @@ class HTTPStatus(Exception):
             body = self.body
 
         if not self.encoder:
-            response.body = self.body
+            response.body = body
             response.type = 'text/plain'
             return
 
