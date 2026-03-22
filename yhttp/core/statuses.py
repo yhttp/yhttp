@@ -31,6 +31,16 @@ __all__ = [
 ]
 
 
+def _traceback(s, debug):
+    body = [s.status]
+    if debug:
+        body.append(traceback.format_exc())
+
+    # trailing newline
+    body.append('')
+    return '\r\n'.join(body)
+
+
 class HTTPStatus(Exception):
     """Base class for all HTTP Exceptions.
 
@@ -40,17 +50,34 @@ class HTTPStatus(Exception):
                         when exception is occured.
     :param headers: Some extra HTTP headers to be added to the
                     :attr:`.Response.headers` when exception is raised.
+    :param body: Additional description of what happened which will be rendered
+                 inside the response body when raising this HTTP status.
+                 available options:
+                ``callable(status: HTTPStatus, debug: bool) -> str``,
+                 ``str`` and ``None``.
+                 if ``None`` specified, then no body will be rendered at all.
+                 default behaviour is to render the traceback if
+                 ``app.settings.debug`` is ``True``.
+    :param encoder: Specify how to encode the provided body, available options:
+                    ``None``, ``json`` and or a
+                    ``callable(body: Any, response)`` to encode and set
+                    appropriate ``response.type`` and ``response.body``.
+
+    .. versionadded:: 7.7
+       ``body`` and ``encoder`` arguments.
+
     """
 
     def __init__(self, code, text, keepheaders=False, headers=None,
-                 body='default'):
+                 body=_traceback, encoder=None):
         self.keepheaders = keepheaders
         self.headers = headers or []
         self.status = f'{code} {text}'
         self.body = body
+        self.encoder = encoder
         super().__init__(self.status)
 
-    def setupresponse(self, response, stacktrace=False):
+    def setupresponse(self, response, debug=False):
         response.status = self.status
         response.charset = 'utf-8'
 
@@ -62,23 +89,23 @@ class HTTPStatus(Exception):
         if not self.body:
             return
 
-        if self.body == 'default':
-            body = [self.status]
-            if stacktrace:
-                body.append(traceback.format_exc())
-
-            # trailing newline
-            body.append('')
-            response.body = '\r\n'.join(body)
-            response.type = 'text/plain'
-
-        elif isinstance(self.body, str):
-            response.body = self.body
-            response.type = 'text/plain'
+        if callable(self.body):
+            body = self.body(self, debug)
 
         else:
-            response.body = ujson.dumps(self.body)
+            body = self.body
+
+        if not self.encoder:
+            response.body = self.body
+            response.type = 'text/plain'
+            return
+
+        if self.encoder == 'json':
+            response.body = ujson.dumps(body)
             response.type = 'application/json'
+
+        else:
+            self.encoder(body, response)
 
 
 #: Alias for :exc:`.HTTPStatus`

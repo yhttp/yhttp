@@ -90,7 +90,7 @@ class Rewrite(BaseApplication):
         response = Response(self, environ, startresponse)
         statuses.notfound().setupresponse(
             response,
-            stacktrace=self.settings.debug
+            self.settings.debug
         )
         return response.start()
 

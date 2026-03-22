@@ -284,7 +284,7 @@ class Application(BaseApplication):
             response.body = body
 
         except statuses.HTTPStatus as ex:
-            ex.setupresponse(response, stacktrace=self.settings.debug)
+            ex.setupresponse(response, self.settings.debug)
 
         return response.start()
 
