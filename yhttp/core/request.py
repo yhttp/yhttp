@@ -38,6 +38,37 @@ class Request:
         self.response = response
 
     @lazyattribute
+    def locales(self):
+        """List of agent's locales ordered based on priority.
+
+        It will be ``['*']`` if ``Accept-Languages`` header is not presents in
+        the request.
+
+        .. versionadded:: 7.8
+        """
+        acc = self.environ.get('HTTP_ACCEPT_LANGUAGES', '*')
+        langs = []
+        for locale in acc.split(','):
+            x = locale.split(';')
+            itemlen = len(x)
+            if not itemlen or itemlen > 2:
+                raise statuses.badrequest()
+
+            if itemlen == 1:
+                langs.append((x[0], 1))
+            else:
+                lang, q = x
+                if len(q) < 3:
+                    raise statuses.badrequest()
+
+                try:
+                    langs.append((x[0], float(q[2:])))
+                except ValueError:
+                    raise statuses.badrequest()
+
+        return [i[0] for i in sorted(langs, key=lambda x: x[1], reverse=True)]
+
+    @lazyattribute
     def verb(self):
         """HTTP method."""
         return self.environ['REQUEST_METHOD'].lower()
