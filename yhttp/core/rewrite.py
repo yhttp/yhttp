@@ -7,7 +7,7 @@ from . import statuses
 
 
 class Rewrite(BaseApplication):
-    r"""Useful to route specific requests to other WSGI application.
+    r"""Useful to change URL and route requests to other application(s).
 
     .. versionadded:: 3.2
 
@@ -61,6 +61,7 @@ class Rewrite(BaseApplication):
            app = y.Rewrite(default=root)
            app.route(r'/foo/([a-z]+)/(\d+)', r'/books/\2/\1', foo)
            # Add other applications
+
            app.ready()
 
         See :py:func:`re.sub` for more info about ``pattern`` and ``repl``
