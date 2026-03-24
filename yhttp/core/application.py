@@ -93,7 +93,7 @@ class BaseApplication:
     def hook(self, name, *a, **kw):
         """Only way to fire registered hooks.
 
-        Hooks can registered by :meth:`when()` with the name.
+        Hooks can registered by :meth:`when()` by the function name.
 
         .. code-block::
 
@@ -103,11 +103,10 @@ class BaseApplication:
 
         Normally, users no need to call this method.
         """
-        callbacks = self.events.get(name)
-        if not callbacks:
+        if name not in self.events:
             return
 
-        for c in callbacks:
+        for c in self.events.get(name):
             c(*a, **kw)
 
     def ready(self):
