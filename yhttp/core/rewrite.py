@@ -79,8 +79,8 @@ class Rewrite(BaseApplication):
 
     def _findhandler(self, orig):
         for pattern, repl, handler in self.routes:
-            new, match = pattern.subn(repl, orig)
-            if not match:
+            new, match_ = pattern.subn(repl, orig)
+            if not match_:
                 continue
 
             return handler, new
