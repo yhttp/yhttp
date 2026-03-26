@@ -20,15 +20,17 @@ class BaseApplication:
     :param name: Application name
 
     .. versionadded:: 6.4
-
        ``name`` argument.
 
     .. versionchanged:: 7.0
-
        ``version`` and ``name`` arguments must be provided to create an
        Application.
 
+    .. versionadded:: 7.8
+       ``request_factory`` and ``response_factory``
+
     """
+
     _builtinsettings = '''
     debug: true
     '''
@@ -41,6 +43,12 @@ class BaseApplication:
 
     #: A dictionary to hold registered functions to specific hooks.
     events = None
+
+    #: A ``callable(app, environ, response)`` as the request factory
+    request_factory = Request
+
+    #: A ``callable(app, environ, startresponse)`` as the response factory
+    response_factory = Response
 
     def __init__(self, version, name):
         self.version = version
@@ -268,8 +276,8 @@ class Application(BaseApplication):
         for more info.
 
         """
-        response = Response(self, environ, startresponse)
-        request = Request(self, environ, response)
+        response = self.response_factory(self, environ, startresponse)
+        request = self.request_factory(self, environ, response)
 
         try:
             handler, pathparams, query = self._findhandler(request)
