@@ -50,6 +50,9 @@
 <p><span class="versionmodified changed">Changed in version 7.0: </span><code class="docutils literal notranslate"><span class="pre">version</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> arguments must be provided to create an
 Application.</p>
 </div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 7.8: </span><code class="docutils literal notranslate"><span class="pre">request_factory</span></code> and <code class="docutils literal notranslate"><span class="pre">response_factory</span></code></p>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication.cliarguments">
 <span class="sig-name descname"><span class="pre">cliarguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.cliarguments" title="Link to this definition">¶</a></dt>
@@ -129,6 +132,18 @@ application.</p>
     <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yhttp.core.BaseApplication.request_factory">
+<span class="sig-name descname"><span class="pre">request_factory</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.request_factory" title="Link to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#yhttp.core.Request" title="yhttp.core.request.Request"><code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yhttp.core.BaseApplication.response_factory">
+<span class="sig-name descname"><span class="pre">response_factory</span></span><a class="headerlink" href="#yhttp.core.BaseApplication.response_factory" title="Link to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#yhttp.core.Response" title="yhttp.core.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -702,17 +717,6 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 4.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="yhttp.core.Request.locales">
-<span class="sig-name descname"><span class="pre">locales</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.locales" title="Link to this definition">¶</a></dt>
-<dd><p>List of agent’s locales ordered based on priority.</p>
-<p>It will be <code class="docutils literal notranslate"><span class="pre">['*']</span></code> if <code class="docutils literal notranslate"><span class="pre">Accept-Languages</span></code> header is not presents in
-the request.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 7.8.</span></p>
 </div>
 </dd></dl>
 
