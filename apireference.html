@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; yhttp 7.8.0 documentation</title>
+    <title>API Reference &#8212; yhttp 7.10.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=d7ade025"></script>
+    <script src="_static/documentation_options.js?v=e849c607"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -103,7 +103,7 @@ Application.</p>
 <dt class="sig sig-object py" id="yhttp.core.BaseApplication.hook">
 <span class="sig-name descname"><span class="pre">hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.BaseApplication.hook" title="Link to this definition">¶</a></dt>
 <dd><p>Only way to fire registered hooks.</p>
-<p>Hooks can registered by <a class="reference internal" href="#yhttp.core.BaseApplication.when" title="yhttp.core.BaseApplication.when"><code class="xref py py-meth docutils literal notranslate"><span class="pre">when()</span></code></a> with the name.</p>
+<p>Hooks can registered by <a class="reference internal" href="#yhttp.core.BaseApplication.when" title="yhttp.core.BaseApplication.when"><code class="xref py py-meth docutils literal notranslate"><span class="pre">when()</span></code></a> by the function name.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="s1">&#39;endresponse&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -470,7 +470,7 @@ found. if <code class="docutils literal notranslate"><span class="pre">str</span
 <dt class="sig sig-object py" id="yhttp.core.Rewrite">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Rewrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Rewrite" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#yhttp.core.BaseApplication" title="yhttp.core.application.BaseApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseApplication</span></code></a></p>
-<p>Useful to route specific requests to other WSGI application.</p>
+<p>Useful to change URL and route requests to other application(s).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 3.2.</span></p>
 </div>
@@ -539,6 +539,7 @@ application.</p>
 <span class="n">app</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">Rewrite</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/foo/([a-z]+)/(\d+)&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;/books/\2/\1&#39;</span><span class="p">,</span> <span class="n">foo</span><span class="p">)</span>
 <span class="c1"># Add other applications</span>
+
 <span class="n">app</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -717,6 +718,17 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 4.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.core.Request.locales">
+<span class="sig-name descname"><span class="pre">locales</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.locales" title="Link to this definition">¶</a></dt>
+<dd><p>List of agent’s locales ordered based on priority.</p>
+<p>It will be <code class="docutils literal notranslate"><span class="pre">['*']</span></code> if <code class="docutils literal notranslate"><span class="pre">Accept-Languages</span></code> header is not presents in
+the request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 7.8.</span></p>
 </div>
 </dd></dl>
 
