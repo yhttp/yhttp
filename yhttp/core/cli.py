@@ -30,7 +30,7 @@ class Serve(SubCommand):
 
         args.application.ready()
         httpd = make_server(host, int(port), args.application)
-        print(f'Demo server started http://{host}:{port}')
+        print(f'server started http://{host}:{port}')
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
