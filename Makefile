@@ -5,7 +5,8 @@ PYDEPS_COMMON += \
 	'pytest >= 7, < 8' \
 	'bddrest >= 6.2.3, < 7' \
 	'bddcli >= 2.5.1, < 3' \
-	'yhttp-dev >= 3.2.4' \
+	'yhttp-dev >= 3.6.1' \
+	'inotify-simple' \
 	'requests'
 
 
@@ -20,6 +21,9 @@ ifeq ("", "$(wildcard $(PYTHON_MAKELIB_PATH))")
   $(error python-makelib is not installed. see "$(MAKELIB_URL)")
 endif
 
+
+# disable warning summary during tests
+PYTEST_FLAGS += --disable-warnings
 
 # Include a proper bundle rule file.
 include $(PYTHON_MAKELIB_PATH)/venv-lint-test-doc-pypi.mk

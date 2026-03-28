@@ -1,3 +1,4 @@
+- check all `pragma: no cover`s
 - guard for app.ready to just execute once
 - count validator limit number of identical fields in form
 - dry readme

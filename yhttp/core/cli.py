@@ -1,14 +1,16 @@
 import os
 import sys
+import multiprocessing
 from wsgiref.simple_server import make_server
 
+from .fswatcher import FSWatcher
 from easycli import Root, Argument, SubCommand
 
 
 DEFAULT_ADDRESS = '8080'
 
 
-class Serve(SubCommand):
+class Serve(SubCommand):  # pragma: no cover
     __command__ = 'serve'
     __aliases__ = ['s']
     __arguments__ = [
@@ -18,24 +20,104 @@ class Serve(SubCommand):
             metavar='{HOST:}PORT',
             help='Bind Address. default: %s' % DEFAULT_ADDRESS
         ),
+        Argument(
+            '-W', '--watch-directories',
+            metavar='PATTERN',
+            action='append',
+            default=[],
+            dest='watching_directories',
+            help='Wildcard pattern to watch directories for changes and '
+                 'restart the server. this option can be specified multiple '
+                 'times.'
+        ),
+        Argument(
+            '-w', '--watch-files',
+            metavar='PATTERN',
+            action='append',
+            default=[],
+            dest='watching_files',
+            help='Wildcard pattern to watch files for changes and restart the '
+                  'server. this option can be specified multiple times.'
+        ),
+        Argument(
+            '--watch-excludedirectory',
+            metavar='PATTERN',
+            action='append',
+            default=[],
+            dest='exclude_watchingdirectories',
+            help='Wildcard pattern to exclude directori(es) from being '
+                 'watched. this option can be specified multiple times.'
+        ),
+        Argument(
+            '--watch-excludefile',
+            metavar='PATTERN',
+            action='append',
+            default=[],
+            dest='exclude_watchingfiles',
+            help='Wildcard pattern to exclude file(s) from being watched. '
+                 'this option can be specified multiple times.'
+        ),
+        Argument(
+            '--watch-timeout',
+            metavar='MILISECONDS',
+            default=1000,
+            type=int,
+            help='Watcher timeout, default: 1000'
+        )
     ]
 
-    def __call__(self, args):  # pragma: no cover
-        """the no cover pragma was set, because the coverae meassurement in
-        subprocess is so complicated, but this function is covered by
-        test_builtincli.py.
-        """
-        host, port = args.bind.split(':')\
-            if ':' in args.bind else ('localhost', args.bind)
-
-        args.application.ready()
-        httpd = make_server(host, int(port), args.application)
-        print(f'server started http://{host}:{port}')
+    def _start(self, app, host, port):  # pragma: no cover
+        app.ready()
+        httpd = make_server(host, port, app)
+        print(f'Development server started: http://{host}:{port}')
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("CTRL+C pressed.")
-            args.application.shutdown()
+        finally:
+            app.shutdown()
+
+    def _fork(self, app, host, port):
+        server = multiprocessing.Process(
+            target=self._start,
+            args=(app, host, port),
+            daemon=True
+        )
+        server.start()
+        return server
+
+    def __call__(self, args):  # pragma: no cover
+        host, port = args.bind.split(':')\
+            if ':' in args.bind else ('localhost', args.bind)
+
+        port = int(port)
+
+        if (not args.watching_directories) and (not args.watching_files):
+            # simply start the server in the main process
+            return self._start(args.application, host, port)
+
+        watcher = FSWatcher(
+            directories=args.watching_directories,
+            files=args.watching_files,
+            excludefiles=args.exclude_watchingfiles,
+            excludedirectories=args.exclude_watchingdirectories,
+        )
+        server = self._fork(args.application, host, port)
+        watcher.start()
+        try:
+            while True:
+                changes = watcher.wait(args.watch_timeout)
+                if not changes:
+                    continue
+
+                print(f'Filesystem has been changed: {",".join(changes)}, '
+                      'restarting...')
+                server.terminate()
+                server.join()
+                server = self._fork(args.application, host, port)
+        finally:
+            watcher.stop()
+            watcher.close()
 
 
 class Main(Root):
