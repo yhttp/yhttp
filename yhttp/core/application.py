@@ -486,7 +486,7 @@ class Application(BaseApplication):
            The *autoindex* keyword argument.
 
         """
-        return self.route(f'{pattern}(.*)', **kw)(static.directory(
+        return self.route(f'{pattern}/?(.*)', **kw)(static.directory(
             directory,
             default,
             autoindex,

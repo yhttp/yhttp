@@ -25,6 +25,47 @@ def test_staticdirectory(app, Given, mockupfs):
         'index.txt': 'foo',
     })
 
+    app.staticdirectory('/static', temproot)
+
+    with Given('/static'):
+        assert status == 403
+
+        when('/static/')
+        assert status == 403
+
+        when('/static/index.txt')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'foo'
+
+        when('/static/bar')
+        assert status == 403
+
+        when('/static/bar/index.txt')
+        assert status == 200
+        assert response.headers['content-type'] == 'text/plain'
+        assert response.headers['content-length'] == '3'
+        assert response == 'bar'
+
+        when('/static/invalidfile')
+        assert status == 404
+
+        when('/invalid/file')
+        assert status == 404
+
+        when('/invalid/file.html')
+        assert status == 404
+
+
+def test_staticdirectory_root(app, Given, mockupfs):
+    temproot = mockupfs(**{
+        'bar': {
+            'index.txt': 'bar',
+        },
+        'index.txt': 'foo',
+    })
+
     app.staticdirectory('/', temproot)
 
     with Given(''):
