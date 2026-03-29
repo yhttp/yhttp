@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 import multiprocessing
 from wsgiref.simple_server import make_server
 
@@ -19,6 +20,16 @@ class Serve(SubCommand):  # pragma: no cover
             default=DEFAULT_ADDRESS,
             metavar='{HOST:}PORT',
             help='Bind Address. default: %s' % DEFAULT_ADDRESS
+        ),
+        Argument(
+            '-s', '--subprocess',
+            metavar='CMD',
+            default=[],
+            action='append',
+            dest='subprocesses',
+            help='Command to execute as a subprocess, this option can be '
+                 'specified multiple times. Note: this options is independent '
+                 'from `--watch-*` options.'
         ),
         Argument(
             '-W', '--watch-directories',
@@ -63,8 +74,12 @@ class Serve(SubCommand):  # pragma: no cover
             default=1000,
             type=int,
             help='Watcher timeout, default: 1000'
-        )
+        ),
     ]
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.subprocesses = []
 
     def _start(self, app, host, port):  # pragma: no cover
         app.ready()
@@ -86,7 +101,7 @@ class Serve(SubCommand):  # pragma: no cover
         server.start()
         return server
 
-    def __call__(self, args):  # pragma: no cover
+    def _serve(self, args):
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('localhost', args.bind)
 
@@ -118,6 +133,22 @@ class Serve(SubCommand):  # pragma: no cover
         finally:
             watcher.stop()
             watcher.close()
+
+    def _subprocess_run(self, command):
+        sp = subprocess.Popen(command, shell=True)
+        self.subprocesses.append(sp)
+
+    def _subprocess_killall(self):
+        for sp in self.subprocesses:
+            sp.terminate()
+
+    def __call__(self, args):  # pragma: no cover
+        try:
+            for sp in args.subprocesses:
+                self._subprocess_run(sp)
+            self._serve(args)
+        finally:
+            self._subprocess_killall()
 
 
 class Main(Root):
