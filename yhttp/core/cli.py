@@ -161,14 +161,12 @@ class Main(Root):
             help='Configuration file',
         ),
         Argument(
-            '-C',
-            '--directory',
+            '-C', '--directory',
             default='.',
             help='Change to this path before starting, default is: `.`'
         ),
         Argument(
-            '-O',
-            '--option',
+            '-O', '--option',
             action='append',
             default=[],
             help='Set a configutation entry: -O foo.bar.baz=\'qux\'. this '
