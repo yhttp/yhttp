@@ -1,4 +1,5 @@
 import os
+import time
 import sys
 import subprocess
 import multiprocessing
@@ -20,6 +21,15 @@ class Serve(SubCommand):  # pragma: no cover
             default=DEFAULT_ADDRESS,
             metavar='{HOST:}PORT',
             help='Bind Address. default: %s' % DEFAULT_ADDRESS
+        ),
+        Argument(
+            '-d', '--delay',
+            metavar='MILISECONDS',
+            default=1000,
+            type=int,
+            help='Delay before starting the server in miliseconds. this '
+                 'option is only effective when `--subprocess` is specified. '
+                 'default: 1000.'
         ),
         Argument(
             '-s', '--subprocess',
@@ -144,8 +154,13 @@ class Serve(SubCommand):  # pragma: no cover
 
     def __call__(self, args):  # pragma: no cover
         try:
-            for sp in args.subprocesses:
-                self._subprocess_run(sp)
+            if args.subprocesses:
+                for sp in args.subprocesses:
+                    self._subprocess_run(sp)
+
+                if args.delay:
+                    time.sleep(args.delay / 1000)
+
             self._serve(args)
         finally:
             self._subprocess_killall()
