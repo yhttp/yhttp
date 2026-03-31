@@ -10,6 +10,7 @@ from yhttp.core import notfound
 def test_routing_basic(app, Given):
 
     @app.route()
+    @app.route('/index')
     def get(req):
         return 'get index'
 
@@ -22,6 +23,10 @@ def test_routing_basic(app, Given):
         return 'delete remove'
 
     with Given():
+        assert status == 200
+        assert response == 'get index'
+
+        when('/index')
         assert status == 200
         assert response == 'get index'
 

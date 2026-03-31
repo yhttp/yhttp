@@ -429,6 +429,8 @@ class Application(BaseApplication):
                 else:
                     routes.append(route)
 
+            return handler
+
         return decorator
 
     def staticfile(self, pattern, filename, **kw):
