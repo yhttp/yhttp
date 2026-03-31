@@ -162,6 +162,9 @@ class Serve(SubCommand):  # pragma: no cover
                     time.sleep(args.delay / 1000)
 
             self._serve(args)
+        except KeyboardInterrupt:
+            print('\nInterrupted by user: (CTRL+C)', file=sys.stdout)
+
         finally:
             self._subprocess_killall()
 
