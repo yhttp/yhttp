@@ -8,6 +8,8 @@ from inotify_simple import INotify, flags
 
 DEFAULT_EXCLUDEDIRECTORIES = [
     '**/__pycache__',
+    '**/.*',
+    '**/~*',
 ]
 DEFAULT_EXCLUDEFILES = [
     '**/.*',
