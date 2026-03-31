@@ -215,7 +215,6 @@ class Application(BaseApplication):
         fallback: index.html
     '''
 
-    routes = None
     bodyguard_factory = Guard
     queryguard_factory = Guard
 
