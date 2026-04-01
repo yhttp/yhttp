@@ -2,7 +2,6 @@ import os
 import time
 import sys
 import subprocess
-import multiprocessing
 from wsgiref.simple_server import make_server
 
 from .fswatcher import FSWatcher
@@ -102,24 +101,18 @@ class Serve(SubCommand):  # pragma: no cover
         finally:
             app.shutdown()
 
-    def _fork(self, app, host, port):
-        server = multiprocessing.Process(
-            target=self._start,
-            args=(app, host, port),
-            daemon=True
-        )
-        server.start()
-        return server
+    def _subprocess_serve(self, host, port):
+        cmd = [sys.argv[0], 'serve', '--bind', f'{host}:{port}']
+        return subprocess.Popen(cmd)
 
     def _serve(self, args):
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('localhost', args.bind)
 
-        port = int(port)
-
         if (not args.watching_directories) and (not args.watching_files):
             # simply start the server in the main process
-            return self._start(args.application, host, port)
+            print('simple starting')
+            return self._start(args.application, host, int(port))
 
         watcher = FSWatcher(
             directories=args.watching_directories,
@@ -127,9 +120,9 @@ class Serve(SubCommand):  # pragma: no cover
             excludefiles=args.exclude_watchingfiles,
             excludedirectories=args.exclude_watchingdirectories,
         )
-        server = self._fork(args.application, host, port)
-        watcher.start()
         try:
+            sp = self._subprocess_serve(host, port)
+            watcher.start()
             while True:
                 changes = watcher.wait(args.watch_timeout)
                 if not changes:
@@ -137,12 +130,15 @@ class Serve(SubCommand):  # pragma: no cover
 
                 print(f'Filesystem has been changed: {",".join(changes)}, '
                       'restarting...')
-                server.terminate()
-                server.join()
-                server = self._fork(args.application, host, port)
+                sp.terminate()
+                sp.wait()
+                sp = self._subprocess_serve(host, port)
         finally:
             watcher.stop()
             watcher.close()
+            if sp and sp.returncode:
+                sp.kill()
+                sp.wait()
 
     def _subprocess_run(self, command):
         sp = subprocess.Popen(command, shell=True)
@@ -151,6 +147,7 @@ class Serve(SubCommand):  # pragma: no cover
     def _subprocess_killall(self):
         for sp in self.subprocesses:
             sp.terminate()
+            sp.wait()
 
     def __call__(self, args):  # pragma: no cover
         try:
