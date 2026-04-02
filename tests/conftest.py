@@ -9,10 +9,6 @@ import pytest
 from yhttp.core import Application
 
 
-# GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
-#     and 'GITHUB_RUN_ID' in os.environ
-
-
 @pytest.fixture
 def app():
     return Application('0.1.0', 'foo')
