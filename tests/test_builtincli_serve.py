@@ -1,11 +1,11 @@
 import time
 
 import requests
-import pytest
+# import pytest
 from bddcli import Application as CLIApplication, Given
 
 from yhttp.core import Application, text
-from .conftest import GITHUBACTIONS
+# from .conftest import GITHUBACTIONS
 
 
 app = Application('0.1.0', 'foo')
@@ -19,7 +19,7 @@ def get(req):
 
 # @pytest.mark.skipif(
 #     GITHUBACTIONS,
-#     reason='no way of currently testing this by GH, due the Github actions bug'
+#     reason='no way of currently testing this by GH, due the GH bug'
 # )
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
