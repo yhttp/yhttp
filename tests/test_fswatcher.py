@@ -6,20 +6,22 @@ def _modify(fn):
         f.write('\n')
 
 
-def test_watcher(mockupfs, changedir):
-    fs = mockupfs(foo={
-        'bar.txt': 'bar bar bar',
-        'baz': {
-            'qux.txt': 'qux',
-            'quux.txt': 'quux',
-            'thud': {
-                'corge.txt': 'corge',
-                'foo.md': 'foo',
+def test_watcher(mktmptree, chdir):
+    fs = mktmptree({
+        'foo': {
+            'bar.txt': 'bar bar bar',
+            'baz': {
+                'qux.txt': 'qux',
+                'quux.txt': 'quux',
+                'thud': {
+                    'corge.txt': 'corge',
+                    'foo.md': 'foo',
+                },
             },
-        },
+        }
     })
 
-    with changedir(fs):
+    with chdir(fs):
         w = FSWatcher(
             directories=['foo/**', 'notexists'],
             files=['**/thud/*.md'],

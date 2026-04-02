@@ -17,10 +17,10 @@ def get(req):
     return 'foo'
 
 
-@pytest.mark.skipif(
-    GITHUBACTIONS,
-    reason='no way of currently testing this by GH, due the Github actions bug'
-)
+# @pytest.mark.skipif(
+#     GITHUBACTIONS,
+#     reason='no way of currently testing this by GH, due the Github actions bug'
+# )
 def test_servercli(freetcpport):
     cliapp = CLIApplication('foo', 'tests.test_builtincli_serve:app.climain')
 
@@ -30,7 +30,3 @@ def test_servercli(freetcpport):
         r = requests.get(url)
         assert r.text == 'foo'
         s.kill()
-
-
-if __name__ == '__main__':
-    app.climain(['serve'])

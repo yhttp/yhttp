@@ -7,11 +7,10 @@ import bddrest
 import pytest
 
 from yhttp.core import Application
-from yhttp.dev.fixtures import mockupfs, freetcpport, changedir
 
 
-GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
-    and 'GITHUB_RUN_ID' in os.environ
+# GITHUBACTIONS = 'CI' in os.environ and os.environ['CI'] \
+#     and 'GITHUB_RUN_ID' in os.environ
 
 
 @pytest.fixture

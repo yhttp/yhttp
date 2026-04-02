@@ -1,16 +1,17 @@
 PKG_NAMESPACE = yhttp.core
 PKG_NAME = yhttp
 PYDEPS_COMMON += \
-	'coveralls' \
-	'pytest >= 7, < 8' \
+	'coveralls >= 4.1.0' \
+	'pytest >= 7.4.4, < 8' \
 	'bddrest >= 6.2.3, < 7' \
-	'bddcli >= 2.5.1, < 3' \
-	'yhttp-dev >= 3.6.1' \
-	'requests'
+	'bddcli >= 2.10.1, < 3' \
+	'requests' \
+	'pytest-fixkit >= 1.0.3'
+
 
 
 # Assert the python-makelib version
-PYTHON_MAKELIB_VERSION_REQUIRED = 2.2
+PYTHON_MAKELIB_VERSION_REQUIRED = 2.5.2
 
 
 # Ensure the python-makelib is installed

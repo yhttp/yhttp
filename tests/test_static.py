@@ -17,8 +17,8 @@ def test_staticfile(app, Given, tmpdir):
         assert response == 'foo'
 
 
-def test_staticdirectory(app, Given, mockupfs):
-    temproot = mockupfs(**{
+def test_staticdirectory(app, Given, mktmptree):
+    temproot = mktmptree({
         'bar': {
             'index.txt': 'bar',
         },
@@ -58,8 +58,8 @@ def test_staticdirectory(app, Given, mockupfs):
         assert status == 404
 
 
-def test_staticdirectory_root(app, Given, mockupfs):
-    temproot = mockupfs(**{
+def test_staticdirectory_root(app, Given, mktmptree):
+    temproot = mktmptree({
         'bar': {
             'index.txt': 'bar',
         },
@@ -99,8 +99,8 @@ def test_staticdirectory_root(app, Given, mockupfs):
         assert status == 404
 
 
-def test_staticdirectory_default_true(app, Given, mockupfs):
-    temproot = mockupfs(**{
+def test_staticdirectory_default_true(app, Given, mktmptree):
+    temproot = mktmptree({
         'bar': {
             'index.html': 'bar',
         },
@@ -256,8 +256,8 @@ def test_staticdirectory_fallback_notexistancefile(app, Given, tmpdir):
         assert status == 404
 
 
-def test_staticdirectory_autoindex(app, Given, mockupfs):
-    temproot = mockupfs(**{
+def test_staticdirectory_autoindex(app, Given, mktmptree):
+    temproot = mktmptree({
         'foo': {
             'foo.txt': 'foo'
         },
