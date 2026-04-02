@@ -111,7 +111,6 @@ class Serve(SubCommand):  # pragma: no cover
 
         if (not args.watching_directories) and (not args.watching_files):
             # simply start the server in the main process
-            print('simple starting')
             return self._start(args.application, host, int(port))
 
         watcher = FSWatcher(
