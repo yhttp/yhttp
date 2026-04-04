@@ -236,22 +236,28 @@ class TestFormParser(unittest.TestCase):
 
     def test_urlencoded(self):
         for ctype in ('application/x-www-form-urlencoded', 'application/x-url-encoded'):
+            raw = 'a=b&c=d'
             self.env['CONTENT_TYPE'] = ctype
-            forms, files = self.parse('a=b&c=d')
+            self.env['CONTENT_LENGTH'] = len(raw)
+            forms, files = self.parse(raw)
             self.assertEqual(forms['a'], 'b')
             self.assertEqual(forms['c'], 'd')
 
     def test_urlencoded_latin1(self):
         for ctype in ('application/x-www-form-urlencoded', 'application/x-url-encoded'):
+            raw = b'a=\xe0\xe1&e=%E8%E9'
             self.env['CONTENT_TYPE'] = ctype
-            forms, files = self.parse(b'a=\xe0\xe1&e=%E8%E9', charset='iso-8859-1')
+            self.env['CONTENT_LENGTH'] = len(raw)
+            forms, files = self.parse(raw, charset='iso-8859-1')
             self.assertEqual(forms['a'], 'àá')
             self.assertEqual(forms['e'], 'èé')
 
     def test_urlencoded_utf8(self):
         for ctype in ('application/x-www-form-urlencoded', 'application/x-url-encoded'):
+            raw = b'a=\xc6\x80\xe2\x99\xad&e=%E1%B8%9F%E2%99%AE'
             self.env['CONTENT_TYPE'] = ctype
-            forms, files = self.parse(b'a=\xc6\x80\xe2\x99\xad&e=%E1%B8%9F%E2%99%AE')
+            self.env['CONTENT_LENGTH'] = len(raw)
+            forms, files = self.parse(raw)
             self.assertEqual(forms['a'], 'ƀ♭')
             self.assertEqual(forms['e'], 'ḟ♮')
 

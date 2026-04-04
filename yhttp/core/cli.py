@@ -129,7 +129,7 @@ class Serve(SubCommand):  # pragma: no cover
 
                 print(f'Filesystem has been changed: {",".join(changes)}, '
                       'restarting...')
-                sp.terminate()
+                sp.kill()
                 sp.wait()
                 sp = self._subprocess_serve(host, port)
         finally:
