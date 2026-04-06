@@ -130,20 +130,45 @@ class Response:
 
         return self.conclude()
 
-    def setcookie(self, key, value, **kw):
-        self.cookies[key] = value
-
-        if kw.get('secure') is True:
+    def setcookie(self, key, value, expires=None, path=None, comment=None,
+                  domain=None, maxage=None, secure=None, httponly=None,
+                  samesite=None, partitioned=None):
+        if secure is True:
             if guess_scheme(self.environ) != 'https':
                 raise AssertionError(
                     'Cannot set secure cookie when environ[\'scheme\'] is not'
                     ' https'
                 )
-        if 'maxage' in kw:
-            kw['max-age'] = kw['maxage']
-            del kw['maxage']
 
-        for k, v in kw.items():
-            self.cookies[key][k] = v
+        self.cookies[key] = value
+        entry = self.cookies[key]
 
-        return self.cookies[key]
+        if expires:
+            entry['expires'] = expires
+
+        if path:
+            entry['path'] = path
+
+        if comment:
+            entry['comment'] = comment
+
+        if domain:
+            entry['domain'] = domain
+
+        if maxage:
+            entry['max-age'] = maxage
+
+        if secure:
+            entry['secure'] = secure
+
+        if httponly:
+            entry['httponly'] = httponly
+
+        if samesite:
+            entry['samesite'] = samesite
+
+        # TODO: will be added on python 3.14
+        # if partitioned:
+        #     entry['partitioned'] = partitioned
+
+        return entry

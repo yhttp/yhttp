@@ -16,7 +16,11 @@ def test_cookie(app, Given):
             str(int(counter.value) + 1),
             maxage=1,
             path='/a',
-            domain='example.com'
+            domain='example.com',
+            comment='Lorem ipsum',
+            httponly=True,
+            samesite='Lax',
+            expires='Thu, 01 Jan 2030 00:00:00 GMT',
         )
 
     headers = {'Cookie': 'counter=1;'}
@@ -24,7 +28,9 @@ def test_cookie(app, Given):
         assert status == 200
         assert 'Set-cookie' in response.headers
         assert response.headers['Set-cookie'] == \
-            'counter=2; Domain=example.com; Max-Age=1; Path=/a'
+            'counter=2; Comment="Lorem ipsum"; Domain=example.com; ' \
+            'expires=Thu, 01 Jan 2030 00:00:00 GMT; HttpOnly; Max-Age=1; ' \
+            'Path=/a; SameSite=Lax'
 
         cookie = cookies.SimpleCookie(response.headers['Set-cookie'])
         counter = cookie['counter']
