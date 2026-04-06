@@ -22,6 +22,10 @@ def test_cookie(app, Given):
             samesite='Lax',
             expires='Thu, 01 Jan 2030 00:00:00 GMT',
         )
+        # resp.setcookie(
+        #     'foo',
+        #     'bar',
+        # )
 
     headers = {'Cookie': 'counter=1;'}
     with Given(headers=headers):

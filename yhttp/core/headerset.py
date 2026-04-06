@@ -23,7 +23,7 @@ class HeaderSet(OrderedDict):
             values = []
             if ':' in k:
                 k, v = k.split(':', 1)
-                values += [i.strip() for i in v.split(';')]
+                values += [i.strip() for i in v.split(',')]
 
         else:
             k, v = k
@@ -32,7 +32,7 @@ class HeaderSet(OrderedDict):
         if args:
             values += args
 
-        self[k] = '; '.join(values)
+        self[k] = ', '.join(values)
 
     def __getitem__(self, k):
         return super().__getitem__(k.lower())

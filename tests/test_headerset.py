@@ -9,7 +9,7 @@ def test_headerset():
     assert headers['foo'] == 'foo value'
 
     headers.add('Bar', 'bar 1nd', 'bar 2nd')
-    assert headers['bar'] == 'bar 1nd; bar 2nd'
+    assert headers['bar'] == 'bar 1nd, bar 2nd'
 
     headers['Baz'] = 'baz value'
     assert headers['baz'] == 'baz value'
@@ -17,7 +17,7 @@ def test_headerset():
     del headers['baz']
     assert len(headers) == 2
 
-    assert str(headers) == '''foo: foo value\r\nbar: bar 1nd; bar 2nd'''
+    assert str(headers) == '''foo: foo value\r\nbar: bar 1nd, bar 2nd'''
 
     headers += [
         ('qux', 'quux'),
