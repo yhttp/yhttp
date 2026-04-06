@@ -45,6 +45,12 @@ HeaderSet Class
 .. autoclass:: HeaderSet
 
 
+CookieSet Class
+^^^^^^^^^^^^^^^
+
+.. autoclass:: CookieSet
+
+
 MultiDict
 ^^^^^^^^^
 

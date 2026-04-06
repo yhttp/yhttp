@@ -1,7 +1,7 @@
 from wsgiref.util import guess_scheme
-from http import cookies
 
 from .headerset import HeaderSet
+from .cookieset import CookieSet
 
 
 class Response:
@@ -25,6 +25,9 @@ class Response:
     #: An instance of :class:`HeaderSet` class.
     headers = None
 
+    #: An instance of :class:`CookieSet` class
+    cookies = None
+
     #: Response content type without charset.
     type = None
 
@@ -35,7 +38,7 @@ class Response:
         self.environ = environ
         self.startresponse = startresponse
         self.headers = HeaderSet()
-        self.cookies = cookies.SimpleCookie()
+        self.cookies = CookieSet()
 
     @property
     def contenttype(self):
@@ -48,6 +51,13 @@ class Response:
             result += f'; charset={self.charset}'
 
         return result
+
+    def _compileheaders(self):
+        headers = list(self.headers.items())
+        if self.cookies:
+            headers += self.cookies.tolist()
+
+        return headers
 
     def conclude(self):
         """Conclude the response.
@@ -71,12 +81,9 @@ class Response:
             else sum(len(i) for i in body)
 
         self.headers.add('content-length', str(contentlength))
-
         self.application.hook('startresponse', self)
-        self.startresponse(
-            self.status,
-            list(self.headers.items()),
-        )
+
+        self.startresponse(self.status, self._compileheaders())
         self.application.hook('endresponse', self)
         return body
 
@@ -91,10 +98,7 @@ class Response:
             self.headers.add('content-length', str(self.length))
 
         self.application.hook('startresponse', self)
-        self.startresponse(
-            self.status,
-            list(self.headers.items()),
-        )
+        self.startresponse(self.status, self._compileheaders())
 
         # encode if required
         if self.charset and not isinstance(self._firstchunk, bytes):
@@ -120,11 +124,6 @@ class Response:
             self.headers.add('content-type', contenttype)
 
         # Setting cookies in response headers, if any
-        cookie = self.cookies.output()
-        if cookie:
-            for line in cookie.split('\r\n'):
-                self.headers.add(line)
-
         if self._firstchunk is not None:
             return self.startstream()
 
