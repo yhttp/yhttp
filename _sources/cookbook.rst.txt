@@ -421,22 +421,20 @@ Test:
            str(int(counter.value) + 1),
            maxage=1,
            path='/a',
-           domain='example.com'
+           domain='example.com',
+           comment='Lorem ipsum',
+           httponly=True,
+           samesite='Lax',
+           expires='Thu, 01 Jan 2030 00:00:00 GMT',
        )
 
-   headers = {'Cookie': 'counter=1;'}
-   with Given(app, headers=headers):
+   cookie = {'counter': '1;'}
+   with Given(app, cookies=cookie):
        assert status == 200
-       assert 'Set-cookie' in response.headers
-       assert response.headers['Set-cookie'] == \
-           'counter=2; Domain=example.com; Max-Age=1; Path=/a'
-
-       cookie = cookies.SimpleCookie(response.headers['Set-cookie'])
-       counter = cookie['counter']
-       assert counter.value == '2'
-       assert counter['path'] == '/a'
-       assert counter['domain'] == 'example.com'
-       assert counter['max-age'] == '1'
+       assert response.cookies['counter'] == \
+           '2; Comment="Lorem ipsum"; Domain=example.com; ' \
+           'expires=Thu, 01 Jan 2030 00:00:00 GMT; HttpOnly; Max-Age=1; ' \
+           'Path=/a; SameSite=Lax'
 
 
 .. _cookbook-guard:
