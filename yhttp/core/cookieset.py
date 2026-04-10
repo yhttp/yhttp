@@ -14,7 +14,8 @@ class CookieSet(SimpleCookie):
     def tolist(self, attrs=None, header='Set-Cookie:'):
         """Return a header list suitable for WSGI start_response function."""
         result = []
-        for key, value in sorted(self.items()):
-            result.append(value.output(attrs, header))
+        for _, value in sorted(self.items()):
+            k, v = value.output(attrs, header).split(':', 1)
+            result.append((k.strip(), v.strip()))
 
         return result

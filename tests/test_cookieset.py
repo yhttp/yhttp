@@ -8,6 +8,6 @@ def test_cookieset():
     cookies['bar'] = 'Bar'
 
     assert cookies.tolist() == [
-        'Set-Cookie: bar=Bar',
-        'Set-Cookie: foo=Foo',
+        ('Set-Cookie', 'bar=Bar'),
+        ('Set-Cookie', 'foo=Foo'),
     ]
