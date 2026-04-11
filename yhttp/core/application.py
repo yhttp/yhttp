@@ -275,9 +275,10 @@ class Application(BaseApplication):
 
         """
         response = self.response_factory(self, environ, startresponse)
-        request = self.request_factory(self, environ, response)
 
         try:
+            request = self.request_factory(self, environ, response)
+
             handler, pathparams, query = self._findhandler(request)
             body = handler(request, *pathparams, **query)
 
