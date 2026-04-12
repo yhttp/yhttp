@@ -3,21 +3,21 @@ from os import path
 from bddrest import status, response, when
 
 
-def test_staticfile(app, Given, tmpdir):
+def test_staticfile(app, httpreq, tmpdir):
     indexfilename = path.join(tmpdir, 'index.txt')
     with open(indexfilename, 'w') as f:
         f.write('foo')
 
     app.staticfile(r'/a\.txt', indexfilename)
 
-    with Given('/a.txt'):
+    with httpreq('/a.txt'):
         assert status == 200
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
         assert response == 'foo'
 
 
-def test_staticdirectory(app, Given, mktmptree):
+def test_staticdirectory(app, httpreq, mktmptree):
     temproot = mktmptree({
         'bar': {
             'index.txt': 'bar',
@@ -27,7 +27,7 @@ def test_staticdirectory(app, Given, mktmptree):
 
     app.staticdirectory('/static', temproot)
 
-    with Given('/static'):
+    with httpreq('/static'):
         assert status == 403
 
         when('/static/')
@@ -58,7 +58,7 @@ def test_staticdirectory(app, Given, mktmptree):
         assert status == 404
 
 
-def test_staticdirectory_root(app, Given, mktmptree):
+def test_staticdirectory_root(app, httpreq, mktmptree):
     temproot = mktmptree({
         'bar': {
             'index.txt': 'bar',
@@ -68,7 +68,7 @@ def test_staticdirectory_root(app, Given, mktmptree):
 
     app.staticdirectory('/', temproot)
 
-    with Given(''):
+    with httpreq(''):
         assert status == 403
 
         when('/')
@@ -99,7 +99,7 @@ def test_staticdirectory_root(app, Given, mktmptree):
         assert status == 404
 
 
-def test_staticdirectory_default_true(app, Given, mktmptree):
+def test_staticdirectory_default_true(app, httpreq, mktmptree):
     temproot = mktmptree({
         'bar': {
             'index.html': 'bar',
@@ -110,7 +110,7 @@ def test_staticdirectory_default_true(app, Given, mktmptree):
 
     app.staticdirectory('/', temproot, default=True)
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
         assert response.headers['content-length'] == '7'
@@ -150,7 +150,7 @@ def test_staticdirectory_default_true(app, Given, mktmptree):
         assert status == 404
 
 
-def test_staticdirectory_default_filename(app, Given, tmpdir):
+def test_staticdirectory_default_filename(app, httpreq, tmpdir):
     indextxtfilename = path.join(tmpdir, 'index.txt')
     with open(indextxtfilename, 'w') as f:
         f.write('foo')
@@ -161,7 +161,7 @@ def test_staticdirectory_default_filename(app, Given, tmpdir):
 
     app.staticdirectory('/', tmpdir, default='index.txt')
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
@@ -195,14 +195,14 @@ def test_staticdirectory_default_filename(app, Given, tmpdir):
         assert status == 404
 
 
-def test_staticdirectory_fallback_true(app, Given, tmpdir):
+def test_staticdirectory_fallback_true(app, httpreq, tmpdir):
     indexhtmlfilename = path.join(tmpdir, 'index.html')
     with open(indexhtmlfilename, 'w') as f:
         f.write('foo bar')
 
     app.staticdirectory('/', tmpdir, default=True, fallback=True)
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
         assert response.headers['content-length'] == '7'
@@ -215,7 +215,7 @@ def test_staticdirectory_fallback_true(app, Given, tmpdir):
         assert response == 'foo bar'
 
 
-def test_staticdirectory_fallback_file(app, Given, tmpdir):
+def test_staticdirectory_fallback_file(app, httpreq, tmpdir):
     indexhtmlfilename = path.join(tmpdir, 'index.html')
     with open(indexhtmlfilename, 'w') as f:
         f.write('foo bar')
@@ -226,7 +226,7 @@ def test_staticdirectory_fallback_file(app, Given, tmpdir):
 
     app.staticdirectory('/', tmpdir, default=True, fallback='fallback.html')
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
         assert response.headers['content-length'] == '7'
@@ -239,14 +239,14 @@ def test_staticdirectory_fallback_file(app, Given, tmpdir):
         assert response == 'baz'
 
 
-def test_staticdirectory_fallback_notexistancefile(app, Given, tmpdir):
+def test_staticdirectory_fallback_notexistancefile(app, httpreq, tmpdir):
     indexhtmlfilename = path.join(tmpdir, 'index.html')
     with open(indexhtmlfilename, 'w') as f:
         f.write('foo bar')
 
     app.staticdirectory('/', tmpdir, default=True, fallback='notexists.html')
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
         assert response.headers['content-length'] == '7'
@@ -256,7 +256,7 @@ def test_staticdirectory_fallback_notexistancefile(app, Given, tmpdir):
         assert status == 404
 
 
-def test_staticdirectory_autoindex(app, Given, mktmptree):
+def test_staticdirectory_autoindex(app, httpreq, mktmptree):
     temproot = mktmptree({
         'foo': {
             'foo.txt': 'foo'
@@ -268,7 +268,7 @@ def test_staticdirectory_autoindex(app, Given, mktmptree):
 
     app.staticdirectory('/', temproot, default=True)
 
-    with Given(''):
+    with httpreq(''):
         assert status == 200
         assert response.headers['content-type'] == 'text/html'
 

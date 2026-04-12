@@ -3,7 +3,7 @@ from bddrest import status, given, when, response
 from yhttp.core import statuses, guard as g, json
 
 
-def test_queryguard_strict(app, Given):
+def test_queryguard_strict(app, httpreq):
     @app.route()
     @app.queryguard(strict=True)
     def get(req):
@@ -17,13 +17,13 @@ def test_queryguard_strict(app, Given):
     def post(req):
         pass
 
-    with Given():
+    with httpreq():
         assert status == 200
 
         when(query=dict(foo='bar'))
         assert status == '400 Bad Request'
 
-    with Given(verb='post', query=dict(foo='bar')):
+    with httpreq(verb='post', query=dict(foo='bar')):
         assert status == 200
 
         when(query=given - 'foo')
@@ -36,7 +36,7 @@ def test_queryguard_strict(app, Given):
         assert status == '400 bar: Integer Required'
 
 
-def test_queryguard_string(app, Given):
+def test_queryguard_string(app, httpreq):
     @app.route()
     @app.queryguard((
         g.String('foo', optional=True, length=(1, 3), pattern=r'^[a-z]+$'),
@@ -45,7 +45,7 @@ def test_queryguard_string(app, Given):
     def post(req):
         return req.query.dict
 
-    with Given(verb='post', query=dict(foo='abc', bar='2')):
+    with httpreq(verb='post', query=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=['2'])
 
@@ -59,7 +59,7 @@ def test_queryguard_string(app, Given):
         assert status == '400 foo: Invalid Format'
 
 
-def test_queryguard_integer(app, Given):
+def test_queryguard_integer(app, httpreq):
     def nozero(req, field, values):
         if values[field.name] == 0:
             raise statuses.status(400, f'{field.name}: Zero Not Allowed')
@@ -74,7 +74,7 @@ def test_queryguard_integer(app, Given):
     def post(req):
         return req.query.dict
 
-    with Given(verb='post', query=dict(foo='abc', bar='2')):
+    with httpreq(verb='post', query=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=[2])
 
@@ -95,7 +95,7 @@ def test_queryguard_integer(app, Given):
         assert status == '400 bar: Zero Not Allowed'
 
 
-def test_queryguard_boolean_kwargs(app, Given):
+def test_queryguard_boolean_kwargs(app, httpreq):
     @app.route()
     @app.queryguard(fields=(
         g.Boolean('bar'),
@@ -104,10 +104,10 @@ def test_queryguard_boolean_kwargs(app, Given):
     def post(req, *, bar=None):
         return bar
 
-    with Given(verb='post', path='/?bar=yes'):
+    with httpreq(verb='post', path='/?bar=yes'):
         assert status == 200
         assert response.json is True
 
-    with Given(verb='post', path='/?bar=false'):
+    with httpreq(verb='post', path='/?bar=false'):
         assert status == 200
         assert response.json is False

@@ -4,7 +4,7 @@ from yhttp.core import statuscode
 from yhttp.core.statuses import nocontent, ok
 
 
-def test_status(app, Given):
+def test_status(app, httpreq):
 
     @app.route()
     @statuscode('201 Created')
@@ -26,7 +26,7 @@ def test_status(app, Given):
     def get(req):
         return b''
 
-    with Given(verb='POST'):
+    with httpreq(verb='POST'):
         assert status == '201 Created'
 
         when(verb='PUT')

@@ -4,7 +4,7 @@ from bddrest import status, given, when, response
 from yhttp.core import guard, json
 
 
-def test_guard_override(app, Given):
+def test_guard_override(app, httpreq):
     bar = guard.String('bar', optional=True)
     qux = guard.Integer('qux', range=(0, 3), optional=True)
     quux = guard.Boolean('quux', default=False)
@@ -20,7 +20,7 @@ def test_guard_override(app, Given):
     def post(req):
         return req.form.dict
 
-    with Given(verb='post', form=dict(bar='bar', baz='baz', quux='False')):
+    with httpreq(verb='post', form=dict(bar='bar', baz='baz', quux='False')):
         assert status == 200
         assert response.json == dict(bar=['bar'], baz=['baz'], quux=[False])
 
@@ -62,7 +62,7 @@ def test_guard_override(app, Given):
         assert status == '400 quux: Boolean Required'
 
 
-def test_guard(app, Given):
+def test_guard(app, httpreq):
     @app.route()
     @app.queryguard((
         guard.String('foo'),
@@ -74,8 +74,10 @@ def test_guard(app, Given):
     def post(req):
         pass
 
-    with Given(verb='post', query=dict(foo='foo'),
-               form=dict(bar='bar', baz='baz')):
+    with httpreq(verb='post',
+                 query=dict(foo='foo'),
+                 form=dict(bar='bar', baz='baz')
+                 ):
         assert status == 200
 
         when(form=given - 'bar')
@@ -88,7 +90,7 @@ def test_guard(app, Given):
         assert status == 200
 
 
-def test_guard_default(app, Given):
+def test_guard_default(app, httpreq):
     with pytest.raises(AssertionError):
         guard.String('foo', default='def')
 
@@ -109,7 +111,7 @@ def test_guard_default(app, Given):
             bar=req.form['bar'],
         )
 
-    with Given(verb='post'):
+    with httpreq(verb='post'):
         assert status == 200
         assert response.json == dict(foo='foodef', bar='bardef')
 

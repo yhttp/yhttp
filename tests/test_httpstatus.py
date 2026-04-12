@@ -5,7 +5,7 @@ from bddrest import response, status, when
 from yhttp.core import json, statuses
 
 
-def test_httpstatus(app, Given):
+def test_httpstatus(app, httpreq):
 
     @app.route()
     @json
@@ -49,7 +49,7 @@ def test_httpstatus(app, Given):
 
         return statuses.conflict(body=dict(foo='bar'), encoder=_enc)
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response.json == dict(foo='bar')
 

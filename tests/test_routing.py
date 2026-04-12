@@ -7,7 +7,7 @@ from bddrest import status, response, when, given
 from yhttp.core import notfound
 
 
-def test_routing_basic(app, Given):
+def test_routing_basic(app, httpreq):
 
     @app.route()
     @app.route('/index')
@@ -22,7 +22,7 @@ def test_routing_basic(app, Given):
     def delete_remove(req):
         return 'delete remove'
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response == 'get index'
 
@@ -49,7 +49,7 @@ def test_routing_basic(app, Given):
         assert response == 'delete remove'
 
 
-def test_routing_order(app, Given):
+def test_routing_order(app, httpreq):
 
     @app.route(r'/([a-z0-9]+)')
     def get(req, arg1):
@@ -59,7 +59,7 @@ def test_routing_order(app, Given):
     def get(req, arg1, arg2):
         return f'foo {arg1} {arg2}'
 
-    with Given('/1'):
+    with httpreq('/1'):
         assert status == 200
         assert response == 'index 1'
 
@@ -68,13 +68,13 @@ def test_routing_order(app, Given):
         assert response == 'foo foo baz'
 
 
-def test_routing_argument(app, Given):
+def test_routing_argument(app, httpreq):
 
     @app.route(r'/(\d+)')
     def get(req, id_):
         return id_
 
-    with Given('/12'):
+    with httpreq('/12'):
         assert status == 200
         assert response == '12'
 
@@ -95,7 +95,7 @@ def test_routing_argument(app, Given):
     def put(req, id_, title='Empty'):
         return f'{id_} {title}'
 
-    with Given('/12/foo', 'post'):
+    with httpreq('/12/foo', 'post'):
         assert status == 200
         assert response == '12 foo'
 
@@ -108,7 +108,7 @@ def test_routing_argument(app, Given):
         assert response == '12 foo'
 
 
-def test_routing_insert(app, Given):
+def test_routing_insert(app, httpreq):
 
     @app.route(r'/(.*)')
     def get(req, id_):
@@ -118,18 +118,18 @@ def test_routing_insert(app, Given):
     def get(req):  # noqa: W0404
         return b'foo'
 
-    with Given('/foo'):
+    with httpreq('/foo'):
         assert status == 200
         assert response == 'foo'
 
 
-def test_routing_allverbs(app, Given):
+def test_routing_allverbs(app, httpreq):
 
     @app.route(verb='*')
     def all(req):
         return 'all'
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response == 'all'
 
@@ -142,13 +142,13 @@ def test_routing_allverbs(app, Given):
         assert response == 'all'
 
 
-def test_routing_encodedurl(app, Given):
+def test_routing_encodedurl(app, httpreq):
 
     @app.route(r'/(.+)')
     def get(req, id_):
         return id_
 
-    with Given('/12'):
+    with httpreq('/12'):
         assert status == 200
         assert response == '12'
 
@@ -165,13 +165,13 @@ def test_routing_encodedurl(app, Given):
         assert response == 'foo bar'
 
 
-def test_routing_encodedurl_route(app, Given):
+def test_routing_encodedurl_route(app, httpreq):
 
     @app.route(r'/([ a-z]+)', re.I)
     def get(req, id_):
         return id_
 
-    with Given('/id: foo%20bar'):
+    with httpreq('/id: foo%20bar'):
         assert status == 200
         assert response == 'foo bar'
 
@@ -180,7 +180,7 @@ def test_routing_encodedurl_route(app, Given):
         assert response == 'foo Bar'
 
 
-def test_routing_twice(app, Given):
+def test_routing_twice(app, httpreq):
     def get(req):
         pass
 
@@ -188,11 +188,11 @@ def test_routing_twice(app, Given):
     with pytest.raises(ValueError):
         app.route(r'/')(get)
 
-    with Given('/'):
+    with httpreq('/'):
         assert status == 200
 
 
-def test_routing_delete(app, Given):
+def test_routing_delete(app, httpreq):
     def get(req):
         pass
 
@@ -202,23 +202,23 @@ def test_routing_delete(app, Given):
 
     app.delete_route(r'/', 'get')
 
-    with Given('/'):
+    with httpreq('/'):
         assert status == 405
 
     app.route(r'/')(get)
-    with Given('/'):
+    with httpreq('/'):
         assert status == 200
 
     with pytest.raises(ValueError):
         app.delete_route('/notexists', 'get')
 
 
-def test_routing_replace(app, Given):
+def test_routing_replace(app, httpreq):
     def get(req):
         return 'foo'
 
     app.route(r'/')(get)
-    with Given('/'):
+    with httpreq('/'):
         assert status == 200
         assert response.text == 'foo'
 
@@ -232,6 +232,6 @@ def test_routing_replace(app, Given):
         app.route(r'/', exists='invalidvalue')(get)
 
     app.route(r'/', exists='remove')(get)
-    with Given('/'):
+    with httpreq('/'):
         assert status == 200
         assert response.text == 'bar'

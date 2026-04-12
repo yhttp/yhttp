@@ -1,19 +1,21 @@
 from bddrest import status, response, when
 
 
-def test_form_urlencoded_malformed(app, Given):
+def test_form_urlencoded_malformed(app, httpreq):
     @app.route()
     def post(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
         assert 'foobarbaz' in req.form
         assert len(req.form) == 1
 
-    with Given(verb='post', content_type='application/x-www-form-urlencoded',
-               body='foobarbaz'):
+    with httpreq(verb='post',
+                 content_type='application/x-www-form-urlencoded',
+                 body='foobarbaz'
+                 ):
         assert status == 200
 
 
-def test_form_urlencoded(app, Given):
+def test_form_urlencoded(app, httpreq):
 
     @app.route()
     def post(req):
@@ -24,7 +26,7 @@ def test_form_urlencoded(app, Given):
     def patch(req):
         assert req.contenttype == 'application/x-www-form-urlencoded'
 
-    with Given(verb='post', form=dict(foo='bar')):
+    with httpreq(verb='post', form=dict(foo='bar')):
         assert status == 200
 
         when(
@@ -36,13 +38,13 @@ def test_form_urlencoded(app, Given):
         assert response == ''
 
 
-def test_form_urlencoded_duplicatefields(app, Given):
+def test_form_urlencoded_duplicatefields(app, httpreq):
 
     @app.route()
     def post(req):
         assert req.form.getall('foo') == ['bar', 'baz']
 
-    with Given(
+    with httpreq(
             verb='post',
             body='foo=bar&foo=baz',
             content_type='application/x-www-form-urlencoded'

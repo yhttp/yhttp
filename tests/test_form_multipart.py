@@ -5,7 +5,7 @@ from bddrest import status, when
 from yhttp.core.multidict import MultiDict
 
 
-def test_form_multipart(app, Given):
+def test_form_multipart(app, httpreq):
     app.settings.debug = False
 
     @app.route()
@@ -44,7 +44,7 @@ def test_form_multipart(app, Given):
         assert req.contenttype.startswith('text/plain')
         assert req.getfiles(relax=True) is None
 
-    with Given(verb='post', multipart=dict(foo='bar')):
+    with httpreq(verb='post', multipart=dict(foo='bar')):
         assert status == 200
 
         when(verb='patch')
@@ -72,5 +72,5 @@ def test_form_multipart(app, Given):
              content_type='multipart/form-data; boundary=')
         assert status == 411
 
-    with Given(verb='delete', content_type='text/plain'):
+    with httpreq(verb='delete', content_type='text/plain'):
         assert status == 200

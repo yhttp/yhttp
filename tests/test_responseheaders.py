@@ -1,7 +1,7 @@
 from bddrest import status, response
 
 
-def test_responseheader(app, Given):
+def test_responseheader(app, httpreq):
 
     @app.route()
     def get(req):
@@ -9,6 +9,6 @@ def test_responseheader(app, Given):
         req.response.headers.add('x-foo', 'a', 'b')
         return 'index'
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response.headers['x-foo'] == 'a, b'

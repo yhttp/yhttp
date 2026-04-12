@@ -3,7 +3,7 @@ from bddrest import status, response, when
 import yhttp.core as y
 
 
-def test_pipeline(app, Given):
+def test_pipeline(app, httpreq):
     endresponseiscalled = 0
 
     @app.when
@@ -30,7 +30,7 @@ def test_pipeline(app, Given):
     def post(req):
         return
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response == 'index'
         assert 'content-type' not in response.headers
@@ -49,7 +49,7 @@ def test_pipeline(app, Given):
         assert endresponseiscalled == 3
 
 
-def test_stream(app, Given):
+def test_stream(app, httpreq):
     endresponseiscalled = 0
 
     @app.when
@@ -71,7 +71,7 @@ def test_stream(app, Given):
         yield b'bar'
         yield b'baz'
 
-    with Given():
+    with httpreq():
         assert status == 200
         assert response.text == 'foobarbaz'
         assert endresponseiscalled == 1

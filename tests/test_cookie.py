@@ -3,7 +3,7 @@ from bddrest import status, response, when
 from yhttp.core import statuses
 
 
-def test_cookie(app, Given):
+def test_cookie(app, httpreq):
     @app.route()
     def get(req):
         resp = req.response
@@ -26,7 +26,7 @@ def test_cookie(app, Given):
             )
 
     cookie = {'counter': '1;'}
-    with Given(cookies=cookie):
+    with httpreq(cookies=cookie):
         assert status == 200
         assert 'counter' in response.cookies
         assert 'foo' in response.cookies
@@ -47,7 +47,7 @@ def test_cookie(app, Given):
         assert 'foo' not in response.cookies
 
 
-def test_secure_cookie(app, Given):
+def test_secure_cookie(app, httpreq):
     @app.route()
     def get(req):
         resp = req.response
@@ -60,7 +60,7 @@ def test_secure_cookie(app, Given):
         except AssertionError:
             raise statuses.forbidden()
 
-    with Given():
+    with httpreq():
         assert status == 403
 
         when(https=True)

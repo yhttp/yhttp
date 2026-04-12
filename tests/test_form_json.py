@@ -3,7 +3,7 @@ from yhttp.core import statuses
 from bddrest import status, response, when
 
 
-def test_form_json(app, Given):
+def test_form_json(app, httpreq):
 
     @app.route()
     def post(req):
@@ -20,7 +20,7 @@ def test_form_json(app, Given):
     def get(req):
         assert req.json is None
 
-    with Given(verb='post', json=dict(foo='bar')):
+    with httpreq(verb='post', json=dict(foo='bar')):
         assert status == 200
 
         # No content length
@@ -36,7 +36,7 @@ def test_form_json(app, Given):
         assert status == 200
 
 
-def test_form_getjson_force(app, Given):
+def test_form_getjson_force(app, httpreq):
 
     @app.route()
     def post(req):
@@ -47,7 +47,7 @@ def test_form_getjson_force(app, Given):
     def get(req):
         assert req.json is None
 
-    with Given(verb='post', json=dict(foo='bar')):
+    with httpreq(verb='post', json=dict(foo='bar')):
         assert status == 200
 
         # No content length
@@ -63,7 +63,7 @@ def test_form_getjson_force(app, Given):
         assert status == 200
 
 
-def test_form_getjson_relax(app, Given):
+def test_form_getjson_relax(app, httpreq):
 
     @app.route()
     def post(req):
@@ -77,7 +77,7 @@ def test_form_getjson_relax(app, Given):
     def get(req):
         assert req.json is None
 
-    with Given(verb='post', json=dict(foo='bar')):
+    with httpreq(verb='post', json=dict(foo='bar')):
         assert status == 200
         assert response.text == 'bar'
 

@@ -6,7 +6,7 @@ from yhttp.core import statuses, guard as g, json
 from yhttp.core.multidict import MultiDict
 
 
-def test_bodyguard_strict(app, Given):
+def test_bodyguard_strict(app, httpreq):
     @app.route()
     @app.bodyguard(strict=True)
     def get(req):
@@ -20,13 +20,13 @@ def test_bodyguard_strict(app, Given):
     def post(req):
         pass
 
-    with Given():
+    with httpreq():
         assert status == 200
 
         when(form=dict(foo='bar'))
         assert status == '400 Bad Request'
 
-    with Given(verb='post', form=dict(foo='bar')):
+    with httpreq(verb='post', form=dict(foo='bar')):
         assert status == 200
 
         when(form=given - 'foo')
@@ -39,7 +39,7 @@ def test_bodyguard_strict(app, Given):
         assert status == '400 bar: Integer Required'
 
 
-def test_bodyguard_string(app, Given):
+def test_bodyguard_string(app, httpreq):
     @app.route()
     @app.bodyguard(fields=(
         g.String('foo', optional=True, length=(1, 3), pattern=r'^[a-z]+$'),
@@ -50,7 +50,7 @@ def test_bodyguard_string(app, Given):
         f = req.getform(relax=True)
         return f.dict
 
-    with Given(verb='post', form=dict(foo='abc', bar='2')):
+    with httpreq(verb='post', form=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=['2'])
 
@@ -67,7 +67,7 @@ def test_bodyguard_string(app, Given):
         assert status == '400 baz: Length must be 3 characters'
 
 
-def test_bodyguard_integer(app, Given):
+def test_bodyguard_integer(app, httpreq):
     def nozero(req, field, values):
         if values[field.name] == 0:
             raise statuses.status(400, f'{field.name}: Zero Not Allowed')
@@ -83,7 +83,7 @@ def test_bodyguard_integer(app, Given):
         f = req.getform(relax=True)
         return f.dict
 
-    with Given(verb='post', form=dict(foo='abc', bar='2')):
+    with httpreq(verb='post', form=dict(foo='abc', bar='2')):
         assert status == 200
         assert response.json == dict(foo=['abc'], bar=[2])
 
@@ -104,7 +104,7 @@ def test_bodyguard_integer(app, Given):
         assert status == '400 bar: Zero Not Allowed'
 
 
-def test_bodyguard_multipart(app, Given):
+def test_bodyguard_multipart(app, httpreq):
     app.settings.debug = False
     bazfile = g.File('baz')
 
@@ -143,7 +143,7 @@ def test_bodyguard_multipart(app, Given):
         bar='73',
         baz=file,
     )
-    with Given(verb='post', multipart=form):
+    with httpreq(verb='post', multipart=form):
         assert status == 200
 
         when(multipart=given - 'baz')

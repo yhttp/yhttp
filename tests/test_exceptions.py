@@ -4,7 +4,7 @@ from bddrest import status, response, when
 from yhttp.core import statuses
 
 
-def test_httpstatus(app, Given):
+def test_httpstatus(app, httpreq):
 
     @app.route()
     def get(req):
@@ -14,7 +14,7 @@ def test_httpstatus(app, Given):
     def get(req):
         return statuses.badrequest()
 
-    with Given():
+    with httpreq():
         assert status == '400 Bad Request'
         assert response.text.startswith('400 Bad Request\r\n')
         assert response.headers['content-type'] == 'text/plain; charset=utf-8'
@@ -29,7 +29,7 @@ def test_httpstatus(app, Given):
         assert status == 400
 
 
-def test_unhandledexception(app, Given):
+def test_unhandledexception(app, httpreq):
 
     class MyException(Exception):
         pass
@@ -38,39 +38,39 @@ def test_unhandledexception(app, Given):
     def get(req):
         raise MyException()
 
-    with pytest.raises(MyException), Given():
+    with pytest.raises(MyException), httpreq():
         pass
 
 
-def test_redirect(app, Given):
+def test_redirect(app, httpreq):
 
     @app.route()
     def get(req):
         raise statuses.found('http://example.com')
 
-    with Given():
+    with httpreq():
         assert status == 302
         assert response.headers['location'] == 'http://example.com'
         assert response.text == ''
 
 
-def test_modified(app, Given):
+def test_modified(app, httpreq):
 
     @app.route()
     def get(req):
         raise statuses.notmodified()
 
-    with Given():
+    with httpreq():
         assert status == 304
         assert response.text == ''
 
 
-def test_nocontent(app, Given):
+def test_nocontent(app, httpreq):
 
     @app.route()
     def remove(req):
         raise statuses.nocontent()
 
-    with Given(verb='REMOVE'):
+    with httpreq(verb='REMOVE'):
         assert status == 204
         assert response == ''

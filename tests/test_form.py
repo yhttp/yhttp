@@ -3,7 +3,7 @@ from yhttp.core import text, statuses
 from bddrest import response, when, given, status
 
 
-def test_from(app, Given):
+def test_from(app, httpreq):
     @app.route()
     @text
     def post(req):
@@ -16,29 +16,29 @@ def test_from(app, Given):
         except KeyError:
             raise statuses.badrequest()
 
-    with Given(verb='POST', form={'foo': 'bar'}):
+    with httpreq(verb='POST', form={'foo': 'bar'}):
         assert status == 200
         assert response.text == 'bar'
 
         when(form=given - 'foo')
         assert status == 400
 
-    with Given(verb='POST', form={'foo': 'bar'}):
+    with httpreq(verb='POST', form={'foo': 'bar'}):
         assert status == 200
         assert response.text == 'bar'
 
-    with Given(verb='POST', multipart={'foo': 'bar'}):
+    with httpreq(verb='POST', multipart={'foo': 'bar'}):
         assert status == 200
         assert response.text == 'bar'
 
 
-def test_getform_force(app, Given):
+def test_getform_force(app, httpreq):
     @app.route()
     @text
     def post(req):
         return req.getform()['foo']
 
-    with Given(verb='POST', form={'foo': 'bar'}):
+    with httpreq(verb='POST', form={'foo': 'bar'}):
         assert status == 200
         assert response.text == 'bar'
 
