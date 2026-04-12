@@ -72,10 +72,15 @@ class HTTPStatus(Exception):
                  body=_traceback, encoder=None):
         self.keepheaders = keepheaders
         self.headers = headers or []
-        self.status = f'{code} {text}'
+        self.code = code
+        self.text = text
         self.body = body
         self.encoder = encoder
         super().__init__(self.status)
+
+    @property
+    def status(self):
+        return f'{self.code} {self.text}'
 
     def setupresponse(self, response, debug=False):
         response.status = self.status
