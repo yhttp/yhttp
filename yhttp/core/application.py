@@ -29,6 +29,9 @@ class BaseApplication:
     .. versionadded:: 7.8
        ``request_factory`` and ``response_factory``
 
+    .. versionadded:: 7.17
+       ``statushandler``
+
     """
 
     _builtinsettings = '''
@@ -49,6 +52,9 @@ class BaseApplication:
 
     #: A ``callable(app, environ, startresponse)`` as the response factory
     response_factory = Response
+
+    #: A ``callable(req, status, debug)`` to override the status response
+    statushandler = None
 
     def __init__(self, version, name):
         self.version = version
@@ -290,10 +296,13 @@ class Application(BaseApplication):
 
             response.body = body
 
-        except statuses.HTTPStatus as ex:
-            ex.setupresponse(response, self.settings.debug)
+        except statuses.HTTPStatus as exc:
+            if not self.statushandler or \
+                    not self.statushandler(request, exc, self.settings.debug):
+                exc.setupresponse(response, self.settings.debug)
 
         return response.start()
+
 
     def delete_route(self, pattern, verb, flags=0):
         r"""Delete a route
