@@ -303,7 +303,6 @@ class Application(BaseApplication):
 
         return response.start()
 
-
     def delete_route(self, pattern, verb, flags=0):
         r"""Delete a route
 
