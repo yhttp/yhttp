@@ -286,7 +286,7 @@ class Application(BaseApplication):
                 raise body
 
             if isinstance(body, types.GeneratorType):
-                response._firstchunk = next(body)
+                response.stream_firstchunk = next(body)
 
             response.body = body
 

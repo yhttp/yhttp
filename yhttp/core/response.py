@@ -31,7 +31,7 @@ class Response:
     #: Response content type without charset.
     type = None
 
-    _firstchunk = None
+    stream_firstchunk = None
 
     def __init__(self, app, environ, startresponse):
         self.application = app
@@ -101,13 +101,13 @@ class Response:
         self.startresponse(self.status, self._compileheaders())
 
         # encode if required
-        if self.charset and not isinstance(self._firstchunk, bytes):
-            yield self._firstchunk.encode(self.charset)
+        if self.charset and not isinstance(self.stream_firstchunk, bytes):
+            yield self.stream_firstchunk.encode(self.charset)
             for chunk in body:
                 yield chunk.encode(self.charset)
 
         else:
-            yield self._firstchunk
+            yield self.stream_firstchunk
             for chunk in body:
                 yield chunk
 
@@ -124,7 +124,7 @@ class Response:
             self.headers.add('content-type', contenttype)
 
         # Setting cookies in response headers, if any
-        if self._firstchunk is not None:
+        if self.stream_firstchunk is not None:
             return self.startstream()
 
         return self.conclude()
