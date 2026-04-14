@@ -48,7 +48,7 @@ jobs:
         sudo git clone https://github.com/pylover/python-makelib.git /usr/local/lib/python-makelib
         make install-common editable-install
     - name: Create distributions
-      run: make dist
+      run: make sdist wheel
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
