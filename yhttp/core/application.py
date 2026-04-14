@@ -69,19 +69,26 @@ class BaseApplication:
 
         Currently these hooks are suuported:
 
+        * configure
         * ready
         * shutdown
         * startresponse
         * endresponse
 
         .. versionadded:: 7.3
-
            ``startresponse`` hook.
+
+        .. versionadded:: 7.18
+           ``configure`` hook.
 
         The hook name will be choosed by the func.__name__, so if you need to
         aware when :meth:`ready` is called write something like this:
 
         .. code-block::
+
+           @app.when
+           def configure(app):
+               ...
 
            @app.when
            def ready(app):
@@ -124,7 +131,7 @@ class BaseApplication:
             c(*a, **kw)
 
     def ready(self):
-        """Call the ``ready`` :meth:`hook`.
+        """Call the ``configure`` and then ``ready`` application hooks.
 
         You need to call this method before using the instance as the WSGI
         application.
@@ -146,6 +153,7 @@ class BaseApplication:
            if __name__ != '__main__':
                app.ready()
         """
+        self.hook('configure', self)
         self.hook('ready', self)
 
     def shutdown(self):
