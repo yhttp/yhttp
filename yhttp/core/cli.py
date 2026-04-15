@@ -208,6 +208,17 @@ class Main(Root):
 
         if args.configurationfile:
             self.application.settings.loadfile(args.configurationfile)
+        else:  # pragma: no cover
+            # try to find user specific config file
+            appname = os.path.basename(sys.argv[0])
+            user = os.getlogin()
+            filename = f'/home/{user}/.config/{appname}.yml'
+            if not os.path.exists(filename):
+                filename = f'/home/{user}/.config/{appname}/{appname}.yml'
+
+            if os.path.exists(filename):
+                print(f'loading config file: {filename}')
+                self.application.settings.loadfile(filename)
 
         for o in args.option:
             try:
