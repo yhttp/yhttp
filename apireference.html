@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; yhttp 7.19.1 documentation</title>
+    <title>API Reference &#8212; yhttp 7.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=05ac560d"></script>
+    <script src="_static/documentation_options.js?v=df038229"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -243,7 +243,7 @@ default: <a class="reference internal" href="#yhttp.core.guard.Guard" title="yht
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="yhttp.core.Application.bodyguard">
-<span class="sig-name descname"><span class="pre">bodyguard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.bodyguard" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">bodyguard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.bodyguard" title="Link to this definition">¶</a></dt>
 <dd><p>A decorator factory to validate HTTP request’s body.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 5.1.</span></p>
@@ -261,24 +261,14 @@ default: <a class="reference internal" href="#yhttp.core.guard.Guard" title="yht
 </pre></div>
 </div>
 <p>This method calls the <a class="reference internal" href="#yhttp.core.Application.bodyguard_factory" title="yhttp.core.Application.bodyguard_factory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bodyguard_factory</span></code></a> to
-intantiate a <code class="xref py py-class docutils literal notranslate"><span class="pre">Guard</span></code> class or it’s subclasses.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fields</strong> – A tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">Gurad.Field</span></code> subclass instances to
-define the allowed fields and field attributes.</p></li>
-<li><p><strong>strict</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it raises
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">Guard.statuscode_unknownfields</span></code> when one or more
-fields are not in the given <code class="docutils literal notranslate"><span class="pre">fields</span></code> argument.</p></li>
-</ul>
-</dd>
-</dl>
+intantiate a <code class="xref py py-class docutils literal notranslate"><span class="pre">BodyGuard</span></code> class or it’s subclasses.</p>
+<p>For list of arguments please refer to <code class="xref py py-class docutils literal notranslate"><span class="pre">BodyGuard</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.Application.bodyguard_factory">
 <span class="sig-name descname"><span class="pre">bodyguard_factory</span></span><a class="headerlink" href="#yhttp.core.Application.bodyguard_factory" title="Link to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#yhttp.core.guard.Guard" title="yhttp.core.guard.Guard"><code class="xref py py-class docutils literal notranslate"><span class="pre">Guard</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#yhttp.core.guard.BodyGuard" title="yhttp.core.guard.BodyGuard"><code class="xref py py-class docutils literal notranslate"><span class="pre">BodyGuard</span></code></a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -298,7 +288,7 @@ fields are not in the given <code class="docutils literal notranslate"><span cla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yhttp.core.Application.queryguard">
-<span class="sig-name descname"><span class="pre">queryguard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.queryguard" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">queryguard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.queryguard" title="Link to this definition">¶</a></dt>
 <dd><p>A decorator factory to validate the URL’s query string.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 5.1.</span></p>
@@ -332,17 +322,7 @@ fields are not in the given <code class="docutils literal notranslate"><span cla
 </div>
 <p>This method calls the <a class="reference internal" href="#yhttp.core.Application.queryguard_factory" title="yhttp.core.Application.queryguard_factory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">queryguard_factory</span></code></a> to
 intantiate a <code class="xref py py-class docutils literal notranslate"><span class="pre">Guard</span></code> class or it’s subclasses.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fields</strong> – A tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">Gurad.Field</span></code> subclass instances to
-define the allowed fields and field attributes.</p></li>
-<li><p><strong>strict</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it raises
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">Guard.statuscode_unknownfields</span></code> when one or more
-fields are not in the given <code class="docutils literal notranslate"><span class="pre">fields</span></code> argument.</p></li>
-</ul>
-</dd>
-</dl>
+<p>For list of arguments please refer to <code class="xref py py-class docutils literal notranslate"><span class="pre">Guard</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -589,27 +569,27 @@ arguments.</p>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request" title="Link to this definition">¶</a></dt>
 <dd><p>Represent an HTTP request.</p>
 <p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.__call__()</span></code> instantiates this class on each call.</p>
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.body">
-<span class="sig-name descname"><span class="pre">body</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.body" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#yhttp.core.Request.body" title="Link to this definition">¶</a></dt>
 <dd><p>Reads the request body.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.contentlength">
-<span class="sig-name descname"><span class="pre">contentlength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.contentlength" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">contentlength</span></span><a class="headerlink" href="#yhttp.core.Request.contentlength" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> header value.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.contenttype">
-<span class="sig-name descname"><span class="pre">contenttype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.contenttype" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">contenttype</span></span><a class="headerlink" href="#yhttp.core.Request.contenttype" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP Request <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code> header value without encoding.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.cookies">
-<span class="sig-name descname"><span class="pre">cookies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.cookies" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cookies</span></span><a class="headerlink" href="#yhttp.core.Request.cookies" title="Link to this definition">¶</a></dt>
 <dd><p>Return a dictionary representing the HTTP cookie data.</p>
 </dd></dl>
 
@@ -619,9 +599,9 @@ arguments.</p>
 <dd><p>WSIG environ dictionary</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.files">
-<span class="sig-name descname"><span class="pre">files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.files" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">files</span></span><a class="headerlink" href="#yhttp.core.Request.files" title="Link to this definition">¶</a></dt>
 <dd><p>Return a dictionary representing the submitted files.</p>
 <p>Parse multipart form data from the environ dict and return a
 dictionary with the form-field name as a key(unicode) and
@@ -638,9 +618,9 @@ attribute will be initialized if any not-file fields are submitted.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.form">
-<span class="sig-name descname"><span class="pre">form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.form" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#yhttp.core.Request.form" title="Link to this definition">¶</a></dt>
 <dd><p>Return a <a class="reference internal" href="#yhttp.core.MultiDict" title="yhttp.core.MultiDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiDict</span></code></a> representing the submitted HTTP from.</p>
 <p>Parse form data from the environ dict and return a dictionary with the
 form-field name as a key(unicode) and lists as values (multiple values
@@ -679,9 +659,9 @@ be accessible by <a class="reference internal" href="#yhttp.core.Request.files" 
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.fullpath">
-<span class="sig-name descname"><span class="pre">fullpath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.fullpath" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fullpath</span></span><a class="headerlink" href="#yhttp.core.Request.fullpath" title="Link to this definition">¶</a></dt>
 <dd><p>Request full URI including query string.</p>
 </dd></dl>
 
@@ -718,16 +698,16 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 <p>if <code class="docutils literal notranslate"><span class="pre">relax=True</span></code>, it returns <code class="docutils literal notranslate"><span class="pre">None</span></code> on any failure.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.headers">
-<span class="sig-name descname"><span class="pre">headers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.headers" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">headers</span></span><a class="headerlink" href="#yhttp.core.Request.headers" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP Request headers set.</p>
 <p>see <a class="reference internal" href="#yhttp.core.HeadersMask" title="yhttp.core.HeadersMask"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeadersMask</span></code></a> class to figure out how it works.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.json">
-<span class="sig-name descname"><span class="pre">json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.json" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">json</span></span><a class="headerlink" href="#yhttp.core.Request.json" title="Link to this definition">¶</a></dt>
 <dd><p>Return a dictionary representing the submitted JSON document.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -738,9 +718,9 @@ exceptions if <code class="docutils literal notranslate"><span class="pre">relax
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.locales">
-<span class="sig-name descname"><span class="pre">locales</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.locales" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">locales</span></span><a class="headerlink" href="#yhttp.core.Request.locales" title="Link to this definition">¶</a></dt>
 <dd><p>List of agent’s locales ordered based on priority.</p>
 <p>It will be <code class="docutils literal notranslate"><span class="pre">['*']</span></code> if <code class="docutils literal notranslate"><span class="pre">Accept-Languages</span></code> header is not presents in
 the request.</p>
@@ -749,15 +729,15 @@ the request.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.path">
-<span class="sig-name descname"><span class="pre">path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.path" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#yhttp.core.Request.path" title="Link to this definition">¶</a></dt>
 <dd><p>Request URL without query string and <code class="docutils literal notranslate"><span class="pre">scheme://domain.ext</span></code>.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.query">
-<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.query" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">query</span></span><a class="headerlink" href="#yhttp.core.Request.query" title="Link to this definition">¶</a></dt>
 <dd><p>Return A dictionary representing the submitted query string.</p>
 </dd></dl>
 
@@ -767,15 +747,15 @@ the request.</p>
 <dd><p>The <a class="reference internal" href="#yhttp.core.Response" title="yhttp.core.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code></a> instance associated to this request.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.scheme">
-<span class="sig-name descname"><span class="pre">scheme</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.scheme" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">scheme</span></span><a class="headerlink" href="#yhttp.core.Request.scheme" title="Link to this definition">¶</a></dt>
 <dd><p>Return HTTP Request Scheme (http|https).</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="yhttp.core.Request.verb">
-<span class="sig-name descname"><span class="pre">verb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Request.verb" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">verb</span></span><a class="headerlink" href="#yhttp.core.Request.verb" title="Link to this definition">¶</a></dt>
 <dd><p>HTTP method.</p>
 </dd></dl>
 
@@ -1113,6 +1093,47 @@ and encode the returned value by handler to json byte-string format.</p>
 </section>
 <section id="module-yhttp.core.guard">
 <span id="gurad-module"></span><h2>gurad Module<a class="headerlink" href="#module-yhttp.core.guard" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="yhttp.core.guard.BodyGuard">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">BodyGuard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contenttypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.BodyGuard" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The <a class="reference internal" href="#yhttp.core.guard.BodyGuard" title="yhttp.core.guard.BodyGuard"><code class="xref py py-class docutils literal notranslate"><span class="pre">guard.BodyGuard</span></code></a> class is used to validate the HTTP</dt><dd><p>request’s body.</p>
+</dd>
+</dl>
+<p>see: <a class="reference internal" href="#yhttp.core.Application.bodyguard" title="yhttp.core.Application.bodyguard"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Application.bodyguard()</span></code></a> for more info.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 7.20.</span></p>
+</div>
+<p>for other parameters and class attributes refer to <a class="reference internal" href="#yhttp.core.guard.Guard" title="yhttp.core.guard.Guard"><code class="xref py py-class docutils literal notranslate"><span class="pre">guard.Guard</span></code></a>
+class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>contenttypes</strong> – A tuple of strings to specify allowed
+<code class="docutils literal notranslate"><span class="pre">content-types</span></code>.</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>statuscode_contenttype</strong> – int, the status code to raise when the
+request’s <code class="docutils literal notranslate"><span class="pre">content-type</span></code> is not starts with
+one of <code class="docutils literal notranslate"><span class="pre">content-types</span></code> specified within
+<code class="docutils literal notranslate"><span class="pre">contenttypes</span></code> argument.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yhttp.core.guard.BodyGuard.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.BodyGuard.validate" title="Link to this definition">¶</a></dt>
+<dd><p>Validates the submitted request</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>req</strong> – Current yhttp <a class="reference internal" href="#yhttp.core.Request" title="yhttp.core.Request"><code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code></a> object.</p></li>
+<li><p><strong>values</strong> – A <a class="reference internal" href="#yhttp.core.MultiDict" title="yhttp.core.MultiDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiDict</span></code></a> representing the submitted data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="yhttp.core.guard.Boolean">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Boolean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.guard.Boolean" title="Link to this definition">¶</a></dt>
