@@ -1,3 +1,4 @@
+- use python builtin property cache instead of lazy attribute
 - check all `pragma: no cover`s
 - guard for app.ready to just execute once
 - count validator limit number of identical fields in form

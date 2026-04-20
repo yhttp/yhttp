@@ -304,11 +304,13 @@ class Guard:
                                     unknown field(s) is/are found.
     """
     statuscode_unknownfields = 400
+    statuscode_contenttype = 400
 
-    def __init__(self, fields=None, strict=False):
+    def __init__(self, fields=None, strict=False, contenttypes=None):
         assert fields or strict, 'one of fields or strict=True must be given.'
         self.fields = {f.name: f for f in fields} if fields else fields
         self.strict = strict
+        self.contenttypes = contenttypes or []
 
     def validate(self, req, values):
         """Validates the submitted data
@@ -316,6 +318,13 @@ class Guard:
         :param req: Current yhttp :class:`.Request` object.
         :param values: A :class:`.MultiDict` representing the submitted data.
         """
+        for ctype in self.contenttypes:
+            if not req.contenttype or not req.contenttype.startwwith(ctype):
+                raise statuses.status(
+                    self.statuscode_contenttype,
+                    f'Invalid content-type: {req.contenttype}'
+                )
+
         if self.strict:
             garbages = set(values.keys()) - set((self.fields or {}).keys())
             if garbages:
