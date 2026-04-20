@@ -1,17 +1,16 @@
 import wsgiref.util as wsgiutil
 from http import cookies
-import functools
+from functools import partial, cached_property
 from urllib.parse import parse_qs, unquote, quote
 
 import ujson
 
-from .lazyattribute import lazyattribute
 from . import statuses
 from . import multipart
 from . import multidict
 
 
-multipart_parse = functools.partial(
+multipart_parse = partial(
     multipart.parse_form_data,
     charset="utf8",
     strict=True
@@ -37,7 +36,7 @@ class Request:
         self.environ = environ
         self.response = response
 
-    @lazyattribute
+    @cached_property
     def locales(self):
         """List of agent's locales ordered based on priority.
 
@@ -68,12 +67,12 @@ class Request:
 
         return [i[0] for i in sorted(langs, key=lambda x: x[1], reverse=True)]
 
-    @lazyattribute
+    @cached_property
     def verb(self):
         """HTTP method."""
         return self.environ['REQUEST_METHOD'].lower()
 
-    @lazyattribute
+    @cached_property
     def path(self):
         """Request URL without query string and ``scheme://domain.ext``."""
         p = self.environ.get('PATH_INFO', '')
@@ -84,18 +83,18 @@ class Request:
 
         return p
 
-    @lazyattribute
+    @cached_property
     def fullpath(self):
         """Request full URI including query string."""
         return wsgiutil.request_uri(self.environ, include_query=True)
 
-    @lazyattribute
+    @cached_property
     def contentlength(self):
         """HTTP Request ``Content-Length`` header value."""
         v = self.environ.get('CONTENT_LENGTH')
         return None if not v or not v.strip() else int(v)
 
-    @lazyattribute
+    @cached_property
     def contenttype(self):
         """HTTP Request ``Content-Type`` header value without encoding."""
         contenttype = self.environ.get('CONTENT_TYPE')
@@ -103,7 +102,7 @@ class Request:
             return contenttype.split(';')[0]
         return None
 
-    @lazyattribute
+    @cached_property
     def query(self):
         """Return A dictionary representing the submitted query string."""
         if 'QUERY_STRING' not in self.environ:
@@ -120,7 +119,7 @@ class Request:
 
         return multidict.MultiDict(backend=qs)
 
-    @lazyattribute
+    @cached_property
     def body(self):
         """Reads the request body.
         """
@@ -129,7 +128,7 @@ class Request:
 
         return self.environ.get('wsgi.input').read(self.contentlength)
 
-    @lazyattribute
+    @cached_property
     def json(self):
         """Return a dictionary representing the submitted JSON document.
 
@@ -172,7 +171,7 @@ class Request:
 
         return self.json
 
-    @lazyattribute
+    @cached_property
     def form(self):
         """Return a :class:`MultiDict` representing the submitted HTTP from.
 
@@ -243,7 +242,7 @@ class Request:
 
             raise statuses.unprocessablecontent()
 
-    @lazyattribute
+    @cached_property
     def files(self):
         """Return a dictionary representing the submitted files.
 
@@ -292,7 +291,7 @@ class Request:
 
         return self.files
 
-    @lazyattribute
+    @cached_property
     def cookies(self):
         """Return a dictionary representing the HTTP cookie data."""
         result = cookies.SimpleCookie()
@@ -300,12 +299,12 @@ class Request:
             result.load(self.headers['COOKIE'])
         return result
 
-    @lazyattribute
+    @cached_property
     def scheme(self):
         """Return HTTP Request Scheme (http|https)."""
         return wsgiutil.guess_scheme(self.environ)
 
-    @lazyattribute
+    @cached_property
     def headers(self):
         """HTTP Request headers set.
 
