@@ -12,3 +12,4 @@ from .multipart import MultipartError, MultipartParser, MultipartPart, \
     parse_form_data
 from .multidict import MultiDict
 from .cookieset import CookieSet
+from .guard import Guard, BodyGuard

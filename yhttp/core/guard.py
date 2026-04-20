@@ -306,11 +306,9 @@ class Guard:
     statuscode_unknownfields = 400
     statuscode_contenttype = 400
 
-    def __init__(self, fields=None, strict=False, contenttypes=None):
-        assert fields or strict, 'one of fields or strict=True must be given.'
+    def __init__(self, fields=None, strict=False):
         self.fields = {f.name: f for f in fields} if fields else fields
         self.strict = strict
-        self.contenttypes = contenttypes or []
 
     def validate(self, req, values):
         """Validates the submitted data
@@ -318,13 +316,6 @@ class Guard:
         :param req: Current yhttp :class:`.Request` object.
         :param values: A :class:`.MultiDict` representing the submitted data.
         """
-        for ctype in self.contenttypes:
-            if not req.contenttype or not req.contenttype.startwwith(ctype):
-                raise statuses.status(
-                    self.statuscode_contenttype,
-                    f'Invalid content-type: {req.contenttype}'
-                )
-
         if self.strict:
             garbages = set(values.keys()) - set((self.fields or {}).keys())
             if garbages:
@@ -340,3 +331,52 @@ class Guard:
             f.validate(req, values)
 
         return values
+
+
+class BodyGuard(Guard):
+    """The :class:`.guard.BodyGuard` class is used to validate the HTTP
+       request's body.
+
+    see: :meth:`.Application.bodyguard` for more info.
+
+    .. versionadded:: 7.20
+
+    for other parameters and class attributes refer to :class:`.guard.Guard`
+    class.
+
+    :param contenttypes: A tuple of strings to specify allowed
+                         ``content-types``.
+    :cvar statuscode_contenttype: int, the status code to raise when the
+                                  request's ``content-type`` is not starts with
+                                  one of ``content-types`` specified within
+                                  ``contenttypes`` argument.
+
+    """
+    statuscode_contenttype = 400
+
+    def __init__(self, *args, contenttypes=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if contenttypes is None:
+            self.contenttypes = []
+        elif isinstance(contenttypes, str):
+            self.contenttypes = [contenttypes]
+        else:
+            self.contenttypes = contenttypes
+
+    def validate(self, req, values):
+        """Validates the submitted request
+
+        :param req: Current yhttp :class:`.Request` object.
+        :param values: A :class:`.MultiDict` representing the submitted data.
+        """
+        for ctype in self.contenttypes:
+            if req.contenttype and req.contenttype.startswith(ctype):
+                break
+
+            raise statuses.status(
+                self.statuscode_contenttype,
+                f'Invalid content-type: {req.contenttype}' if
+                req.contenttype else 'No content-type specified'
+            )
+
+        return super().validate(req, values)

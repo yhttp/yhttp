@@ -9,7 +9,7 @@ from . import statuses, static
 from .request import Request
 from .response import Response
 from .cli import Main
-from .guard import Guard
+from .guard import Guard, BodyGuard
 from .multidict import MultiDict
 
 
@@ -229,7 +229,7 @@ class Application(BaseApplication):
         fallback: index.html
     '''
 
-    bodyguard_factory = Guard
+    bodyguard_factory = BodyGuard
     queryguard_factory = Guard
 
     def __init__(self, version, name):
@@ -511,7 +511,7 @@ class Application(BaseApplication):
             fallback
         ))
 
-    def bodyguard(self, fields=None, strict=False):
+    def bodyguard(self, fields=None, strict=False, **kwargs):
         r"""A decorator factory to validate HTTP request's body.
 
         .. versionadded:: 5.1
@@ -530,15 +530,11 @@ class Application(BaseApplication):
                ...
 
         This method calls the :attr:`bodyguard_factory` to
-        intantiate a :class:`Guard` class or it's subclasses.
+        intantiate a :class:`BodyGuard` class or it's subclasses.
 
-        :param fields: A tuple of :class:`Gurad.Field` subclass instances to
-                       define the allowed fields and field attributes.
-        :param strict: If ``True``, it raises
-                       :attr:`Guard.statuscode_unknownfields` when one or more
-                       fields are not in the given ``fields`` argument.
+        For list of arguments please refer to :class:`BodyGuard`.
         """
-        guard = self.bodyguard_factory(fields, strict)
+        guard = self.bodyguard_factory(fields=fields, strict=strict, **kwargs)
 
         def decorator(handler):
             @functools.wraps(handler)
@@ -557,7 +553,7 @@ class Application(BaseApplication):
 
         return decorator
 
-    def queryguard(self, fields=None, strict=False):
+    def queryguard(self, fields=None, strict=False, **kwargs):
         """A decorator factory to validate the URL's query string.
 
         .. versionadded:: 5.1
@@ -593,13 +589,9 @@ class Application(BaseApplication):
         This method calls the :attr:`queryguard_factory` to
         intantiate a :class:`Guard` class or it's subclasses.
 
-        :param fields: A tuple of :class:`Gurad.Field` subclass instances to
-                       define the allowed fields and field attributes.
-        :param strict: If ``True``, it raises
-                       :attr:`Guard.statuscode_unknownfields` when one or more
-                       fields are not in the given ``fields`` argument.
+        For list of arguments please refer to :class:`Guard`.
         """
-        guard = self.queryguard_factory(fields, strict)
+        guard = self.queryguard_factory(fields=fields, strict=strict, **kwargs)
 
         def decorator(handler):
             @functools.wraps(handler)
