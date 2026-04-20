@@ -29,7 +29,7 @@ def test_querystring_none(app, httpreq):
 def test_querystring(app, httpreq):
 
     @app.route()
-    def get(req, *, baz=None):
+    def get(req, *, baz='baz'):
         return f'{req.query["foo"]} ' \
             f'{baz if baz else "None"}'
 
@@ -39,7 +39,7 @@ def test_querystring(app, httpreq):
 
         when(query=given - 'baz')
         assert status == 200
-        assert response.text == 'bar None'
+        assert response.text == 'bar baz'
 
 
 def test_querystring_empty(app, httpreq):

@@ -243,12 +243,12 @@ class Application(BaseApplication):
                 continue
 
             pathparams = [a for a in match.groups() if a is not None]
-            query = {
-                k: v for k, v in request.query.items()
-                if k in info['kwonly']
-            }
+            kwonly = info['kwonly'].copy()
+            for k in kwonly:
+                if k in request.query:
+                    kwonly[k] = request.query[k]
 
-            return handler, pathparams, query
+            return handler, pathparams, kwonly
 
         return None, None, None
 
@@ -256,20 +256,20 @@ class Application(BaseApplication):
         # All verbs
         patterns = self.routes.get('*', [])
         if patterns:
-            handler, args, query = self._matchrequest(patterns, request)
+            handler, args, kwonly = self._matchrequest(patterns, request)
             if handler is not None:
-                return handler, args, query
+                return handler, args, kwonly
 
         # Specific verb
         patterns = self.routes.get(request.verb.upper())
         if not patterns:
             raise statuses.methodnotallowed()
 
-        handler, args, query = self._matchrequest(patterns, request)
+        handler, args, kwonly = self._matchrequest(patterns, request)
         if handler is None:
             raise statuses.notfound()
 
-        return handler, args, query
+        return handler, args, kwonly
 
     def __call__(self, environ, startresponse):
         """Actual WSGI Application.
@@ -293,8 +293,8 @@ class Application(BaseApplication):
         try:
             request = self.request_factory(self, environ, response)
 
-            handler, pathparams, query = self._findhandler(request)
-            body = handler(request, *pathparams, **query)
+            handler, pathparams, kwonly = self._findhandler(request)
+            body = handler(request, *pathparams, **kwonly)
 
             if isinstance(body, statuses.HTTPStatus):
                 raise body
@@ -425,7 +425,7 @@ class Application(BaseApplication):
                 signature = inspect.signature(handler)
                 info = dict(
                     kwonly={
-                        k for k, v in signature.parameters.items()
+                        k: v.default for k, v in signature.parameters.items()
                         if v.kind == inspect.Parameter.KEYWORD_ONLY
                     }
                 )
