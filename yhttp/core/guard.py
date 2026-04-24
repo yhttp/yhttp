@@ -66,7 +66,7 @@ class Field:
     def skip(self, req, values):
         if self.name not in values:
             if not self.optional:
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_missing,
                     f'{self.name}: Required'
                 )
@@ -126,20 +126,20 @@ class String(Field):
             if self.length and \
                     not (self.length[0] <= len(v) <= self.length[1]):
                 if self.length[0] == self.length[1]:
-                    raise statuses.status(
+                    raise statuses.HTTPStatus(
                         self.statuscode_badlength,
                         f'{self.name}: Length must be {self.length[0]} '
                         f'characters'
                     )
 
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_badlength,
                     f'{self.name}: Length must be between {self.length[0]} '
                     f'and {self.length[1]} characters'
                 )
 
             if self.pattern and not self.pattern.match(v):
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_badformat,
                     f'{self.name}: Invalid Format'
                 )
@@ -178,7 +178,7 @@ class Integer(Field):
             try:
                 v = int(v)
             except ValueError:
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_badtype,
                     f'{self.name}: Integer Required'
                 )
@@ -187,7 +187,7 @@ class Integer(Field):
 
             if self.range and \
                     not (self.range[0] <= v <= self.range[1]):
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_outofrange,
                     f'{self.name}: Value must be between {self.range[0]} and '
                     f'{self.range[1]}'
@@ -215,7 +215,7 @@ class Boolean(Field):
 
         for i, v in enumerate(values.dict[self.name]):
             if not v:
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_badtype,
                     f'{self.name}: Boolean Required'
                 )
@@ -270,7 +270,7 @@ class File(Field):
     def _validate_extensions(self, file):
         _, ext = path.splitext(file.filename)
         if ext not in self.extensions:
-            raise statuses.status(
+            raise statuses.HTTPStatus(
                 self.statuscode_badextension,
                 f'{self.name}: invalid extension, allowed extensions: '
                 f'{', '.join(self.extensions)}'
@@ -282,7 +282,7 @@ class File(Field):
                 self._validate_extensions(req.files[self.name])
 
         elif not self.optional:
-            raise statuses.status(
+            raise statuses.HTTPStatus(
                 self.statuscode_missing,
                 f'{self.name}: Required'
             )
@@ -319,7 +319,7 @@ class Guard:
         if self.strict:
             garbages = set(values.keys()) - set((self.fields or {}).keys())
             if garbages:
-                raise statuses.status(
+                raise statuses.HTTPStatus(
                     self.statuscode_unknownfields,
                     f'Invalid field(s): {", ".join(garbages)}'
                 )
@@ -373,7 +373,7 @@ class BodyGuard(Guard):
             if req.contenttype and req.contenttype.startswith(ctype):
                 break
 
-            raise statuses.status(
+            raise statuses.HTTPStatus(
                 self.statuscode_contenttype,
                 f'Invalid content-type: {req.contenttype}' if
                 req.contenttype else 'No content-type specified'

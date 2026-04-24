@@ -1,28 +1,27 @@
 from bddrest import status, when, response
 
-from yhttp.core import statuscode
-from yhttp.core.statuses import nocontent, ok
+from yhttp.core.statuses import nocontent, ok, created, HTTPStatus
 
 
 def test_status(app, httpreq):
 
     @app.route()
-    @statuscode('201 Created')
+    @created()
     def post(req):
         return b''
 
     @app.route()
-    @statuscode('205 Reset Content')
+    @HTTPStatus(205, 'Reset Content')
     def put(req):
         return b''
 
     @app.route()
-    @statuscode(nocontent)  # 204 No Content
+    @nocontent()
     def delete(req):
         return b''
 
     @app.route()
-    @statuscode(ok)
+    @ok()
     def get(req):
         return b''
 

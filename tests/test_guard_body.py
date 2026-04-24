@@ -70,7 +70,7 @@ def test_bodyguard_string(app, httpreq):
 def test_bodyguard_integer(app, httpreq):
     def nozero(req, field, values):
         if values[field.name] == 0:
-            raise statuses.status(400, f'{field.name}: Zero Not Allowed')
+            raise statuses.HTTPStatus(400, f'{field.name}: Zero Not Allowed')
 
         return 0
 

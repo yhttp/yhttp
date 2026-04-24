@@ -2,14 +2,14 @@ from urllib.parse import quote
 
 from bddrest import status, response, when, Given
 
-import yhttp.core as y
+from yhttp.core import Application, statuses, Rewrite
 
 
 def test_rewrite_nodefault():
     log = []
-    foo = y.Application('0.1.0', 'foo')
-    bar = y.Application('0.1.0', 'bar')
-    app = y.Rewrite()
+    foo = Application('0.1.0', 'foo')
+    bar = Application('0.1.0', 'bar')
+    app = Rewrite()
     app.route(r'/foo/?', r'/', foo)
     app.route(r'/bar/?', r'/', bar)
 
@@ -18,7 +18,7 @@ def test_rewrite_nodefault():
         log.append('app endresponse')
 
     @foo.route()
-    @y.statuscode('201 Created')
+    @statuses.created()
     def get(req):
         return 'foo'
 
@@ -47,9 +47,9 @@ def test_rewrite_nodefault():
 
 
 def test_rewrite_default():
-    root = y.Application('0.1.0', 'root')
-    foo = y.Application('0.1.0', 'foo')
-    app = y.Rewrite(default=root)
+    root = Application('0.1.0', 'root')
+    foo = Application('0.1.0', 'foo')
+    app = Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @root.route()
@@ -57,7 +57,7 @@ def test_rewrite_default():
         return 'root'
 
     @foo.route()
-    @y.statuscode('201 Created')
+    @statuses.created()
     def get(req):
         resp = 'foo'
         if req.query:
@@ -88,9 +88,9 @@ def test_rewrite_default():
 
 def test_rewrite_hooks():
     log = []
-    root = y.Application('0.1.0', 'root')
-    foo = y.Application('0.1.0', 'foo')
-    app = y.Rewrite(default=root)
+    root = Application('0.1.0', 'root')
+    foo = Application('0.1.0', 'foo')
+    app = Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @app.when
@@ -130,7 +130,7 @@ def test_rewrite_hooks():
         return 'root'
 
     @foo.route()
-    @y.statuscode('201 Created')
+    @statuses.created()
     def get(req):
         return 'foo'
 
@@ -164,9 +164,9 @@ def test_rewrite_hooks():
 
 
 def test_rewrite_encodedurl():
-    root = y.Application('0.1.0', 'root')
-    foo = y.Application('0.1.0', 'foo')
-    app = y.Rewrite(default=root)
+    root = Application('0.1.0', 'root')
+    foo = Application('0.1.0', 'foo')
+    app = Rewrite(default=root)
     app.route(r'/foo/?(.*)', r'/\1', foo)
 
     @root.route()
@@ -174,7 +174,7 @@ def test_rewrite_encodedurl():
         return 'root'
 
     @foo.route(r'/(.+)')
-    @y.statuscode('201 Created')
+    @statuses.created()
     def get(req, arg):
         resp = f'foo: {arg}'
         if req.query:
