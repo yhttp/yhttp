@@ -176,7 +176,7 @@ HTTP Status
 
 There are tree ways to set HTTP status code for response: 
 
-* use :func:`.statuscode` decorator.
+* use the instance of :class:`.HTTPStatus` as a decorator.
 * raise an instance of :class:`.statuses.HTTPStatus` class
 * set :attr:`req.response.status <yhttp.core.Response.status>` directly.
 
@@ -238,21 +238,21 @@ See the example below for usage:
        assert status == '404 Not Found'
 
 
-This is how to use :func:`.statuscode` decorator to specify response status 
+This is how to use :class:`.HTTPStatus` decorator to specify response status 
 code for all requests.
 
 .. testsetup:: cookbook/statuscode
 
-   from yhttp.core import Application, statuscode
+   from yhttp.core import Application, created
    app = Application('0.1.0', 'foo')
 
 
 .. testcode:: cookbook/statuscode
 
-   from yhttp.core import statuscode
+   from yhttp.core import created
 
    @app.route()
-   @statuscode('201 Created')
+   @created()
    def get(req):
        return b'Hello'
     
