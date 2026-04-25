@@ -305,11 +305,18 @@ class Application(BaseApplication):
             response.body = body
 
         except statuses.HTTPStatus as exc:
-            if not self.statushandler or \
-                    not self.statushandler(request, exc, self.settings.debug):
-                exc.setupresponse(response, self.settings.debug)
+            self.handlestatus(request, exc)
+        except Exception as exc:
+            self.handlestatus(request, statuses.internalservererror(
+                error=exc if self.settings.debug else None
+            ))
 
         return response.start()
+
+    def handlestatus(self, request, status):
+        if not self.statushandler or \
+                not self.statushandler(request, status, self.settings.debug):
+            status.setupresponse(request.response, self.settings.debug)
 
     def delete_route(self, pattern, verb, flags=0):
         r"""Delete a route

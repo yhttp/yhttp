@@ -57,7 +57,7 @@ def contenttype(contenttype=None, charset=None, dump=None):
         @wraps(handler)
         def wrapper(req, *a, **kw):
             if contenttype:
-                req.response.type = contenttype
+                req.response.contenttype = contenttype
 
             if charset:
                 req.response.charset = charset

@@ -11,7 +11,7 @@ PYDEPS_COMMON += \
 
 
 # Assert the python-makelib version
-PYTHON_MAKELIB_VERSION_REQUIRED = 4
+PYTHON_MAKELIB_VERSION_REQUIRED = 4.0.1
 
 
 # Ensure the python-makelib is installed

@@ -8,6 +8,10 @@ class Response:
     """Represent the HTTP response.
 
     Which accessible by :attr:`.Request.response` inside handlers.
+
+    .. versionchanged:: 9
+       ``type`` attribute renamed to ``contenttype``
+
     """
 
     #: HTTP Status code
@@ -29,7 +33,7 @@ class Response:
     cookies = None
 
     #: Response content type without charset.
-    type = None
+    contenttype = None
 
     stream_firstchunk = None
 
@@ -39,18 +43,6 @@ class Response:
         self.startresponse = startresponse
         self.headers = HeaderSet()
         self.cookies = CookieSet()
-
-    @property
-    def contenttype(self):
-        """Response content type incuding charset."""
-        if not self.type:
-            return None
-
-        result = self.type
-        if self.charset:
-            result += f'; charset={self.charset}'
-
-        return result
 
     def _compileheaders(self):
         headers = list(self.headers.items())
@@ -119,8 +111,12 @@ class Response:
         Usualy :class:`.Application` calls this method when response is ready
         to transfered to user.
         """
-        contenttype = self.contenttype
-        if contenttype:
+
+        if self.contenttype:
+            contenttype = self.contenttype
+            if self.charset:
+                contenttype += f'; charset={self.charset}'
+
             self.headers.add('content-type', contenttype)
 
         # Setting cookies in response headers, if any

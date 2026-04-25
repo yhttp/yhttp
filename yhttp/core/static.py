@@ -15,7 +15,7 @@ def file(filename):
     def get(request):
         response = request.response
         response.length = length
-        response.type = type_
+        response.contenttype = type_
         with open(filename, 'rb') as f:
             while True:
                 chunk = f.read(CHUNKSIZE)
@@ -129,7 +129,7 @@ def directory(rootpath, default=False, autoindex=True, fallback=False):
             if not path.exists(target) and autoindex:
                 resp = index(targetdir)
                 response.length = len(resp)
-                response.type = 'text/html'
+                response.contenttype = 'text/html'
                 yield resp.encode()
                 return
 
@@ -146,7 +146,7 @@ def directory(rootpath, default=False, autoindex=True, fallback=False):
                 raise statuses.notfound()
 
         response.length = path.getsize(target)
-        response.type = guess_type(path.split(target)[1])[0]
+        response.contenttype = guess_type(path.split(target)[1])[0]
         with open(target, 'rb') as f:
             while True:
                 chunk = f.read(CHUNKSIZE)
