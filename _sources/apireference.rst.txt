@@ -57,12 +57,6 @@ MultiDict
 .. autoclass:: MultiDict
 
 
-HTTPStatus Class
-^^^^^^^^^^^^^^^^
-
-.. autoclass:: HTTPStatus
-
-
 contenttype decorators
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -82,6 +76,9 @@ gurad Module
 
 statuses Module
 ^^^^^^^^^^^^^^^
+
+HTTPStatus Class
+^^^^^^^^^^^^^^^^
 
 .. currentmodule:: yhttp.core.statuses
 
