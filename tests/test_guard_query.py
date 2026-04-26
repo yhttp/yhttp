@@ -22,6 +22,7 @@ def test_queryguard_strict(app, httpreq):
 
         when(query=dict(foo='bar'))
         assert status == '400 Bad Request'
+        assert response.text.startswith('400 Bad Request\r\n')
 
     with httpreq(verb='post', query=dict(foo='bar')):
         assert status == 200
@@ -30,10 +31,12 @@ def test_queryguard_strict(app, httpreq):
         assert status == 200
 
         when(query=given | dict(baz='baz'))
-        assert status == '400 Invalid field(s): baz'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 Invalid field(s): baz\r\n')
 
         when(query=given | dict(bar='bar'))
-        assert status == '400 bar: Integer Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Integer Required\r\n')
 
 
 def test_queryguard_string(app, httpreq):
@@ -53,10 +56,14 @@ def test_queryguard_string(app, httpreq):
         assert status == 200
 
         when(query=dict(foo=''))
-        assert status == '400 foo: Length must be between 1 and 3 characters'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 foo: Length must be between 1 and 3 characters\r\n'
+        )
 
         when(query=dict(foo='12'))
-        assert status == '400 foo: Invalid Format'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 foo: Invalid Format\r\n')
 
 
 def test_queryguard_integer(app, httpreq):
@@ -83,13 +90,18 @@ def test_queryguard_integer(app, httpreq):
         assert response.json == dict(bar=[-2])
 
         when(query=dict(bar='-3'))
-        assert status == '400 bar: Value must be between -2 and 5'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 bar: Value must be between -2 and 5\r\n'
+        )
 
         when(query=given - 'bar')
-        assert status == '400 bar: Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Required\r\n')
 
         when(query=dict(bar='bar'))
-        assert status == '400 bar: Integer Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Integer Required\r\n')
 
         when(query=given | dict(bar=0))
         assert status == '400 bar: Zero Not Allowed'
