@@ -448,7 +448,7 @@ examples:
 .. testsetup:: cookbook/guard
 
    from yhttp.core import Application
-   from bddrest import Given, when, status, given
+   from bddrest import Given, when, status, given, response
    app = Application('0.1.0', 'foo')
 
 .. testcode:: cookbook/guard
@@ -472,10 +472,12 @@ examples:
        assert status == 200
 
        when(form=given - 'bar')
-       assert status == '400 bar: Required'
+       assert status == '400 Bad Request'
+       assert response.text.startswith('400 bar: Required\r\n')
 
        when(form=given - 'baz', query=given + dict(baz='baz'))
-       assert status == '400 Invalid field(s): baz'
+       assert status == '400 Bad Request'
+       assert response.text.startswith('400 Invalid field(s): baz\r\n')
 
        when(form=given - 'baz')
        assert status == 200
