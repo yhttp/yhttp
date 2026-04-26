@@ -292,7 +292,6 @@ class Application(BaseApplication):
 
         try:
             request = self.request_factory(self, environ, response)
-
             handler, pathparams, kwonly = self._findhandler(request)
             body = handler(request, *pathparams, **kwonly)
 
