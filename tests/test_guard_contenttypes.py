@@ -1,4 +1,4 @@
-from bddrest import status, when
+from bddrest import status, when, response
 
 
 def test_bodyguard_contenttypes(app, httpreq):
@@ -16,10 +16,14 @@ def test_bodyguard_contenttypes(app, httpreq):
         pass
 
     with httpreq(verb='POST'):
-        assert status == '400 No content-type specified'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 No content-type specified\r\n')
 
         when(content_type='application/json')
-        assert status == '400 Invalid content-type: application/json'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 Invalid or unsupported Content-Type: application/json\r\n'
+        )
 
         when(content_type='application/x-www-form-urlencoded')
         assert status == 200

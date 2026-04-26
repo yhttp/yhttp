@@ -29,13 +29,20 @@ def test_guard_override(app, httpreq):
         assert response.json == dict(baz=['baz'], quux=[False])
 
         when(form=given | dict(bar='12'))
-        assert status == '400 bar: Length must be between 3 and 5 characters'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 bar: Length must be between 3 and 5 characters\r\n'
+        )
 
         when(form=given - 'baz')
-        assert status == '400 baz: Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 baz: Required\r\n')
 
         when(form=given | dict(qux='12'))
-        assert status == '400 qux: Value must be between 0 and 5'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 qux: Value must be between 0 and 5\r\n'
+        )
 
         when(form=given | dict(qux='5'))
         assert status == 200
@@ -59,7 +66,8 @@ def test_guard_override(app, httpreq):
         assert response.json == dict(bar=['bar'], baz=['baz'], quux=[True])
 
         when(form=given | dict(quux=''))
-        assert status == '400 quux: Boolean Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 quux: Boolean Required\r\n')
 
 
 def test_guard(app, httpreq):
@@ -81,10 +89,12 @@ def test_guard(app, httpreq):
         assert status == 200
 
         when(form=given - 'bar')
-        assert status == '400 bar: Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Required\r\n')
 
         when(form=given - 'baz', query=given + dict(baz='baz'))
-        assert status == '400 Invalid field(s): baz'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 Invalid field(s): baz\r\n')
 
         when(form=given - 'baz')
         assert status == 200

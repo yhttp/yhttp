@@ -33,10 +33,12 @@ def test_bodyguard_strict(app, httpreq):
         assert status == 200
 
         when(form=given | dict(baz='baz'))
-        assert status == '400 Invalid field(s): baz'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 Invalid field(s): baz\r\n')
 
         when(form=given | dict(bar='bar'))
-        assert status == '400 bar: Integer Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Integer Required\r\n')
 
 
 def test_bodyguard_string(app, httpreq):
@@ -58,19 +60,28 @@ def test_bodyguard_string(app, httpreq):
         assert status == 200
 
         when(form=dict(foo=''))
-        assert status == '400 foo: Length must be between 1 and 3 characters'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 foo: Length must be between 1 and 3 characters\r\n'
+        )
 
         when(form=dict(foo='12'))
-        assert status == '400 foo: Invalid Format'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 foo: Invalid Format\r\n')
 
         when(form=given + dict(baz='12'))
-        assert status == '400 baz: Length must be 3 characters'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 baz: Length must be 3 characters\r\n'
+        )
 
 
 def test_bodyguard_integer(app, httpreq):
     def nozero(req, field, values):
         if values[field.name] == 0:
-            raise statuses.HTTPStatus(400, f'{field.name}: Zero Not Allowed')
+            raise statuses.badrequest(
+                message=f'{field.name}: Zero Not Allowed'
+            )
 
         return 0
 
@@ -92,16 +103,22 @@ def test_bodyguard_integer(app, httpreq):
         assert response.json == dict(bar=[-2])
 
         when(form=dict(bar='-3'))
-        assert status == '400 bar: Value must be between -2 and 5'
+        assert status == '400 Bad Request'
+        assert response.text.startswith(
+            '400 bar: Value must be between -2 and 5\r\n'
+        )
 
         when(form=given - 'bar')
-        assert status == '400 bar: Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Required\r\n')
 
         when(form=dict(bar='bar'))
-        assert status == '400 bar: Integer Required'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Integer Required\r\n')
 
         when(form=given | dict(bar=0))
-        assert status == '400 bar: Zero Not Allowed'
+        assert status == '400 Bad Request'
+        assert response.text.startswith('400 bar: Zero Not Allowed\r\n')
 
 
 def test_bodyguard_multipart(app, httpreq):
