@@ -245,8 +245,7 @@ class Application(BaseApplication):
             pathparams = [a for a in match.groups() if a is not None]
             info = info_.copy()
             info['kwonly'] = {
-                k: request.query[k] for k in info_['kwonly']
-                if k in request.query
+                k: request.query.get(k, v) for k, v in info_['kwonly'].items()
             }
 
             return handler, pathparams, info
