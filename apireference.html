@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; yhttp 8.1.1 documentation</title>
+    <title>API Reference &#8212; yhttp 8.2.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=23ce250a"></script>
+    <script src="_static/documentation_options.js?v=15c97ff8"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -333,7 +333,7 @@ intantiate a <code class="xref py py-class docutils literal notranslate"><span c
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yhttp.core.Application.route">
-<span class="sig-name descname"><span class="pre">route</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'error'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.route" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">route</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'error'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trailingslash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yhttp.core.Application.route" title="Link to this definition">¶</a></dt>
 <dd><p>Return a decorator to register a handler for given regex pattern.</p>
 <p>if <code class="docutils literal notranslate"><span class="pre">verb</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> then the function name will used instead.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/.*&#39;</span><span class="p">)</span>
@@ -393,6 +393,13 @@ into <code class="xref py py-attr docutils literal notranslate"><span class="pre
 values: <code class="docutils literal notranslate"><span class="pre">error``(default)</span> <span class="pre">and</span> <span class="pre">``remove</span></code> to remove the
 existing route before appending and or inserting the new
 one.</p></li>
+<li><p><strong>trailingslash</strong> – String to determine the path trailing slash
+behaviour, if <code class="docutils literal notranslate"><span class="pre">remove</span></code>, trailing slash will be
+removed before calling the handler.
+if <code class="docutils literal notranslate"><span class="pre">redirect</span></code>, handler will not called and
+instead response with <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> with the
+current path wihtout the trailing slash and
+finally if <code class="docutils literal notranslate"><span class="pre">None</span></code>, do nothonig.</p></li>
 </ul>
 </dd>
 </dl>
@@ -401,6 +408,9 @@ one.</p></li>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 6.1: </span><code class="docutils literal notranslate"><span class="pre">exists</span></code></p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 8.2: </span><code class="docutils literal notranslate"><span class="pre">trailingslash</span></code></p>
 </div>
 </dd></dl>
 
@@ -1369,7 +1379,7 @@ propper status text from the Python’s builtin <code class="xref py py-class do
 enum. The rest of arguments are the same as the parent class:
 <code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPSTatus</span></code>.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">Added in version 9.</span></p>
+<p><span class="versionmodified added">Added in version 8.1.</span></p>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="yhttp.core.statuses.HTTPStandardStatus.statustexts">
@@ -1399,7 +1409,7 @@ regardless of the <code class="docutils literal notranslate"><span class="pre">k
 </dd>
 </dl>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 9.</span></p>
+<p><span class="versionmodified changed">Changed in version 8.1.</span></p>
 </div>
 </dd></dl>
 
