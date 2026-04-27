@@ -68,6 +68,13 @@ class Request:
 
         return [i[0] for i in sorted(langs, key=lambda x: x[1], reverse=True)]
 
+    @property
+    def language(self):
+        if self.locales == ['*']:
+            return None
+
+        return self.locales[0].split('-', 1)[0]
+
     @cached_property
     def verb(self):
         """HTTP method."""

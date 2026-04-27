@@ -8,6 +8,10 @@ def test_request(app, httpreq):
         assert req.scheme == 'http'
         assert req.headers.get('foo-bar') == 'baz'
         assert req.contenttype is None
+        assert req.language == 'fa'
 
-    with httpreq('/foo?bar=baz', headers={'Foo-Bar': 'baz'}):
+    with httpreq('/foo?bar=baz', headers={
+        'Foo-Bar': 'baz',
+        'Accept-Languages': 'fa-IR'
+    }):
         assert status == 200

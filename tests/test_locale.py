@@ -7,15 +7,15 @@ def test_locales(app, httpreq):
     @app.route()
     @json
     def get(req):
-        return req.locales
+        return [req.locales, req.language]
 
     with httpreq(headers={'Accept-Languages': 'en-US,*;q=0.5,fa;q=0.7'}):
         assert status == 200
-        assert response.json == ['en-US', 'fa', '*']
+        assert response.json == [['en-US', 'fa', '*'], 'en']
 
         when(headers={})
         assert status == 200
-        assert response.json == ['*']
+        assert response.json == [['*'], None]
 
         when(headers={'Accept-Languages': ';;'})
         assert status == 400
