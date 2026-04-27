@@ -1,4 +1,5 @@
 import wsgiref.util as wsgiutil
+from urllib.parse import urlencode
 from http import cookies
 from functools import partial, cached_property
 from urllib.parse import parse_qs, unquote, quote
@@ -73,22 +74,6 @@ class Request:
         return self.environ['REQUEST_METHOD'].lower()
 
     @cached_property
-    def path(self):
-        """Request URL without query string and ``scheme://domain.ext``."""
-        p = self.environ.get('PATH_INFO', '')
-        p = quote(p, safe='/;=,', encoding='latin1')
-        p = unquote(p)
-        if not p.startswith('/'):
-            return f'/{p}'
-
-        return p
-
-    @cached_property
-    def fullpath(self):
-        """Request full URI including query string."""
-        return wsgiutil.request_uri(self.environ, include_query=True)
-
-    @cached_property
     def contentlength(self):
         """HTTP Request ``Content-Length`` header value."""
         v = self.environ.get('CONTENT_LENGTH')
@@ -101,6 +86,27 @@ class Request:
         if contenttype:
             return contenttype.split(';')[0]
         return None
+
+    @cached_property
+    def path(self):
+        """Request URL without query string and ``scheme://domain.ext``."""
+        p = self.environ.get('PATH_INFO', '')
+        p = quote(p, safe='/;=,', encoding='latin1')
+        p = unquote(p)
+        if not p.startswith('/'):
+            return f'/{p}'
+
+        return p
+
+    @property
+    def fullpath(self):
+        """Request full URI including query string."""
+        result = self.path
+        query = urlencode(self.query, doseq=True)
+        if query:
+            result += f'?{query}'
+
+        return result
 
     @cached_property
     def query(self):

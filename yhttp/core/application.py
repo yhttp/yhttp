@@ -62,6 +62,7 @@ class BaseApplication:
         self.events = {}
         self.cliarguments = []
         self.settings = pymlconf.Root(self._builtinsettings)
+        self.middlewares = []
 
     def when(self, func):
         """Return decorator to registers the ``func`` into :attr:`events` by
@@ -296,17 +297,25 @@ class Application(BaseApplication):
 
         """
         response = self.response_factory(self, environ, startresponse)
+        request = self.request_factory(self, environ, response)
 
         try:
-            request = self.request_factory(self, environ, response)
-            handler, pathparams, info = self._findhandler(request)
-            body = handler(request, *pathparams, **info['kwonly'])
 
-            if isinstance(body, statuses.HTTPStatus):
-                raise body
+            # execute middlewares if any
+            for middleware in self.middlewares:
+                body = middleware(request)
+                if body:
+                    break
 
-            if isinstance(body, types.GeneratorType):
-                response.stream_firstchunk = next(body)
+            else:
+                handler, pathparams, info = self._findhandler(request)
+                body = handler(request, *pathparams, **info['kwonly'])
+
+                if isinstance(body, statuses.HTTPStatus):
+                    raise body
+
+                if isinstance(body, types.GeneratorType):
+                    response.stream_firstchunk = next(body)
 
             response.body = body
 
