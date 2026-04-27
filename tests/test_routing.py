@@ -235,3 +235,56 @@ def test_routing_replace(app, httpreq):
     with httpreq('/'):
         assert status == 200
         assert response.text == 'bar'
+
+
+def test_routing_trailingslash(app, httpreq):
+    with pytest.raises(ValueError):
+        app.route(trailingslash='invalid')
+
+    @app.route()
+    def get(req):
+        return req.path
+
+    @app.route(trailingslash='remove')
+    def remove(req):
+        return req.path
+
+    @app.route(trailingslash='redirect')
+    def redirect(req):
+        return req.path
+
+    @app.route('/foo/?', )
+    def get(req):
+        return req.path
+
+    @app.route('/foo/?', trailingslash='remove')
+    def remove(req):
+        return req.path
+
+    @app.route('/foo/?', trailingslash='redirect')
+    def redirect(req):
+        return req.path
+
+    with httpreq():
+        assert status == 200
+        assert response == '/'
+
+        when(verb='REMOVE')
+        assert status == 200
+        assert response == ''
+
+        when(verb='REDIRECT')
+        assert status == 302
+        assert response.headers['location'] == ''
+
+    with httpreq('/foo/'):
+        assert status == 200
+        assert response == '/foo/'
+
+        when(verb='REMOVE')
+        assert status == 200
+        assert response == '/foo'
+
+        when(verb='REDIRECT')
+        assert status == 302
+        assert response.headers['location'] == '/foo'

@@ -237,18 +237,19 @@ class Application(BaseApplication):
         super().__init__(version=version, name=name)
 
     def _matchrequest(self, patterns, request):
-        for pattern, handler, info in patterns:
+        for pattern, handler, info_ in patterns:
             match = pattern.match(request.path)
             if not match:
                 continue
 
             pathparams = [a for a in match.groups() if a is not None]
-            kwonly = info['kwonly'].copy()
-            for k in kwonly:
-                if k in request.query:
-                    kwonly[k] = request.query[k]
+            info = info_.copy()
+            info['kwonly'] = {
+                k: request.query[k] for k in info_['kwonly']
+                if k in request.query
+            }
 
-            return handler, pathparams, kwonly
+            return handler, pathparams, info
 
         return None, None, None
 
@@ -256,20 +257,27 @@ class Application(BaseApplication):
         # All verbs
         patterns = self.routes.get('*', [])
         if patterns:
-            handler, args, kwonly = self._matchrequest(patterns, request)
+            handler, args, info = self._matchrequest(patterns, request)
             if handler is not None:
-                return handler, args, kwonly
+                return handler, args, info
 
         # Specific verb
         patterns = self.routes.get(request.verb.upper())
         if not patterns:
             raise statuses.methodnotallowed()
 
-        handler, args, kwonly = self._matchrequest(patterns, request)
+        handler, args, info = self._matchrequest(patterns, request)
         if handler is None:
             raise statuses.notfound()
 
-        return handler, args, kwonly
+        trailingslash = info['trailingslash']
+        if request.path.endswith('/') and trailingslash:
+            if trailingslash == 'remove':
+                request.path = request.path[:-1]
+            else:
+                raise statuses.found(request.path[:-1])
+
+        return handler, args, info
 
     def __call__(self, environ, startresponse):
         """Actual WSGI Application.
@@ -292,8 +300,8 @@ class Application(BaseApplication):
 
         try:
             request = self.request_factory(self, environ, response)
-            handler, pathparams, kwonly = self._findhandler(request)
-            body = handler(request, *pathparams, **kwonly)
+            handler, pathparams, info = self._findhandler(request)
+            body = handler(request, *pathparams, **info['kwonly'])
 
             if isinstance(body, statuses.HTTPStatus):
                 raise body
@@ -335,7 +343,7 @@ class Application(BaseApplication):
         raise ValueError(f'Route not exists: {pattern}')
 
     def route(self, pattern='/', flags=0, verb=None, insert=None,
-              exists='error'):
+              exists='error', trailingslash=None):
         r"""Return a decorator to register a handler for given regex pattern.
 
         if ``verb`` is ``None`` then the function name will used instead.
@@ -405,16 +413,27 @@ class Application(BaseApplication):
                        values: ``error``(default) and ``remove`` to remove the
                        existing route before appending and or inserting the new
                        one.
+        :param trailingslash: String to determine the path trailing slash
+                              behaviour, if ``remove``, trailing slash will be
+                              removed before calling the handler.
+                              if ``redirect``, handler will not called and
+                              instead response with ``302 Found`` with the
+                              current path wihtout the trailing slash and
+                              finally if ``None``, do nothonig.
 
         .. versionadded:: 2.9
-
            ``insert``
 
         .. versionadded:: 6.1
-
            ``exists``
 
+        .. versionadded:: 8.2
+            ``trailingslash``
+
         """
+        if trailingslash not in (None, 'redirect', 'remove'):
+            raise ValueError('Invalid trailingslash argument')
+
         if exists not in ('error', 'remove'):
             raise ValueError('Invalid value for exists argument, use one of '
                              '`error` (the default) and or `remove`.')
@@ -433,7 +452,8 @@ class Application(BaseApplication):
                     kwonly={
                         k: v.default for k, v in signature.parameters.items()
                         if v.kind == inspect.Parameter.KEYWORD_ONLY
-                    }
+                    },
+                    trailingslash=trailingslash,
                 )
                 pat = re.compile(f'^{pattern}$', flags)
                 for r in routes:

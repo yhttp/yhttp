@@ -48,7 +48,7 @@ class HTTPStatus(Exception):
                     :attr:`.Response.headers` when preparing the response
                     regardless of the ``keepheaders`` argument.
 
-    .. versionchanged:: 9
+    .. versionchanged:: 8.1
     """
 
     def __init__(self, code, text, headers=None, keepheaders=False):
@@ -114,7 +114,7 @@ class HTTPStandardStatus(HTTPStatus):
     enum. The rest of arguments are the same as the parent class:
     :class:`HTTPSTatus`.
 
-    .. versionadded:: 9
+    .. versionadded:: 8.1
     """
 
     #: A dictionary of ``{code: text}`` to map the status code to text.
@@ -138,7 +138,7 @@ class HTTPError(HTTPStandardStatus):
 
     For other arguments check the parrent class: :class:`HTTPStatus`.
 
-    .. versionadded:: 9
+    .. versionadded:: 8.1
     """
     def __init__(self, *args, message=None, contenttype='text/plain', **kw):
         if contenttype not in ('text/plain', 'application/json'):
