@@ -1,4 +1,5 @@
 import inspect
+import traceback
 import functools
 import re
 import types
@@ -62,7 +63,7 @@ class BaseApplication:
         self.events = {}
         self.cliarguments = []
         self.settings = pymlconf.Root(self._builtinsettings)
-        self.middlewares = []
+        self.request_middlewares = []
 
     def when(self, func):
         """Return decorator to registers the ``func`` into :attr:`events` by
@@ -302,7 +303,7 @@ class Application(BaseApplication):
         try:
 
             # execute middlewares if any
-            for middleware in self.middlewares:
+            for middleware in self.request_middlewares:
                 body = middleware(request)
                 if body:
                     break
@@ -322,6 +323,7 @@ class Application(BaseApplication):
         except statuses.HTTPStatus as exc:
             self.handlestatus(request, exc)
         except Exception as exc:
+            traceback.print_exc(exc)
             self.handlestatus(request, statuses.internalservererror(
                 error=exc if self.settings.debug else None
             ))
