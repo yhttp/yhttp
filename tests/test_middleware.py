@@ -7,7 +7,7 @@ def test_middleware_returnnone(app, httpreq):
     def middleware(request):
         request.query['baz'] = 'qux'
 
-    app.middlewares.append(middleware)
+    app.request_middlewares.append(middleware)
 
     @app.route()
     def get(req):
@@ -22,7 +22,7 @@ def test_middleware_returnbody(app, httpreq):
     def middleware(request):
         return 'something else'
 
-    app.middlewares.append(middleware)
+    app.request_middlewares.append(middleware)
 
     @app.route()
     def get(req):
@@ -37,7 +37,7 @@ def test_middleware_raise(app, httpreq):
     def middleware(request):
         raise statuses.found('/foo')
 
-    app.middlewares.append(middleware)
+    app.request_middlewares.append(middleware)
 
     @app.route()
     def get(req):

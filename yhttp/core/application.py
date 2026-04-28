@@ -323,7 +323,7 @@ class Application(BaseApplication):
         except statuses.HTTPStatus as exc:
             self.handlestatus(request, exc)
         except Exception as exc:
-            traceback.print_exc(exc)
+            traceback.print_exc()
             self.handlestatus(request, statuses.internalservererror(
                 error=exc if self.settings.debug else None
             ))
