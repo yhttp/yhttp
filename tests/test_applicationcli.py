@@ -1,5 +1,4 @@
 import os
-import tempfile
 import platform
 
 from bddcli import Application as CLIApplication, Given, stdout, status, \
@@ -54,8 +53,9 @@ foo:
 ''')
 
 
-def test_applicationcli():
+def test_applicationcli(mktmpfile):
     cliapp = CLIApplication('foo', 'tests.test_applicationcli:app.climain')
+    configfile = mktmpfile(content='title: bar')
     with Given(cliapp, '--help'):
         assert status == 0
 
@@ -63,20 +63,17 @@ def test_applicationcli():
         assert status == 0
         assert stdout == 'foo\n.\n'
 
-        with tempfile.NamedTemporaryFile() as f:
-            f.write(b'title: bar')
-            f.flush()
-            when(f'--configuration-file {f.name} foo')
-            assert status == 73
-            assert stdout == 'bar\n.\n'
+        when(f'--configuration-file {configfile} foo')
+        assert status == 73
+        assert stdout == 'bar\n.\n'
 
-            when('--directory /tmp foo')
-            assert status == 0
-            assert stdout == 'foo\n/tmp\n'
+        when('--directory /tmp foo')
+        assert status == 0
+        assert stdout == 'foo\n/tmp\n'
 
-            when('--option title=\'baz\' foo')
-            assert status == 0
-            assert stdout == 'baz\n.\n'
+        when('--option title=\'baz\' foo')
+        assert status == 0
+        assert stdout == 'baz\n.\n'
 
 
 def test_applicationcli_option():
