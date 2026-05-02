@@ -39,7 +39,7 @@ class BaseApplication:
     debug: true
     '''
 
-    #: Instance of :class:`pymlconf.Root` as the global configuration instance.
+    #: Instance of :class:`pymlconf.Meld` as the global configuration instance.
     settings = None
 
     #: A list of :class:`easycli.Argument` or :class:`easycli.SubCommand`.
@@ -62,7 +62,7 @@ class BaseApplication:
         self.name = name
         self.events = {}
         self.cliarguments = []
-        self.settings = pymlconf.Root(self._builtinsettings)
+        self.settings = pymlconf.Meld(self._builtinsettings)
         self.request_middlewares = []
 
     def when(self, func):

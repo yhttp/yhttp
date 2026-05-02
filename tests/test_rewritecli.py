@@ -19,7 +19,7 @@ class Foo(SubCommand):
 
 
 app = Rewrite()
-app.settings.merge('title: foo')
+app.settings |= 'title: foo'
 app.cliarguments.append(Foo)
 
 

@@ -29,7 +29,7 @@ class Foo(SubCommand):
         else:
             print(os.curdir)
         if app.settings.title == 'bar':
-            return 73  # The best number ever, as Sheldon says.
+            return 73  # Best number ever, as the Sheldon Cooper told already.
 
         return 0
 
@@ -45,12 +45,12 @@ class Bar(SubCommand):
 app = Application('0.1.0', 'foo')
 app.cliarguments.append(Foo)
 app.cliarguments.append(Bar)
-app.settings.merge('title: foo')
-app.settings.merge('''
+app.settings |= '''
+title: foo
 foo:
   bar:
     baz: qux
-''')
+'''
 
 
 def test_applicationcli(mktmpfile):

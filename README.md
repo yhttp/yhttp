@@ -13,10 +13,6 @@
 ### python-makelib
 Install [python-makelib](https://github.com/pylover/python-makelib).
 
-### Clone 
-```bash
-git clone git@github.com:yhttp/yhttp.git
-```
 
 ### Virtualenv
 
@@ -80,12 +76,6 @@ make sdist
 make wheel
 ```
 
-Or 
-```bash
-make dist
-```
-to create both `sdidst` and `wheel` packages.
-
 
 ### Clean build directory
 Execute: 
@@ -111,14 +101,16 @@ to upload `sdists` and `wheel` packages on [PyPI](https://pypi.org).
 ## Documentation
 
 ```bash
+source activate.sh
 make doc
-make livedoc
+make doclive
 make doctest
 ```
 
 Or 
 
 ```bash
+source activate.sh
 cd sphinx
 make doctest
 make html

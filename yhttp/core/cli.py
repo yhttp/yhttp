@@ -207,7 +207,7 @@ class Main(Root):
             os.chdir(args.directory)
 
         if args.configurationfile:
-            self.application.settings.loadfile(args.configurationfile)
+            self.application.settings.load(args.configurationfile)
 
         else:  # pragma: no cover
             # try to find user specific config file
@@ -219,7 +219,7 @@ class Main(Root):
 
             if os.path.exists(filename):
                 print(f'loading config file: {filename}')
-                self.application.settings.loadfile(filename)
+                self.application.settings.load(filename)
 
         for o in args.option:
             try:
@@ -240,7 +240,7 @@ class Main(Root):
                 indent += 2
 
             yml += f' {value}'
-            self.application.settings.merge(yml)
+            self.application.settings |= yml
 
         return super()._execute_subcommand(args)
 
