@@ -207,7 +207,7 @@ class Main(Root):
             os.chdir(args.directory)
 
         if args.configurationfile:
-            self.application.settings.load(args.configurationfile)
+            self.application.settings <<= args.configurationfile
 
         else:  # pragma: no cover
             # try to find user specific config file
@@ -219,7 +219,7 @@ class Main(Root):
 
             if os.path.exists(filename):
                 print(f'loading config file: {filename}')
-                self.application.settings.load(filename)
+                self.application.settings <<= filename
 
         for o in args.option:
             try:

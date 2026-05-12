@@ -64,6 +64,7 @@ def test_applicationcli(mktmpfile):
         assert stdout == 'foo\n.\n'
 
         when(f'--configuration-file {configfile} foo')
+        assert stderr == ''
         assert status == 73
         assert stdout == 'bar\n.\n'
 
