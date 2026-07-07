@@ -186,6 +186,12 @@ class Main(Root):
             help='Set a configutation entry: -O foo.bar.baz=\'qux\'. this '
                  'argument can passed multiple times.'
         ),
+        Argument(
+            '-v', '--verbose',
+            action='store_true',
+            default=False,
+            help='Verbose mode'
+        ),
         Serve,
     ]
 
@@ -207,6 +213,8 @@ class Main(Root):
             os.chdir(args.directory)
 
         if args.configurationfile:
+            if args.verbose:
+                print(f'loading config file: {args.configurationfile}')
             self.application.settings <<= args.configurationfile
 
         else:  # pragma: no cover
@@ -218,7 +226,8 @@ class Main(Root):
                 filename = f'/home/{user}/.config/{appname}/{appname}.yml'
 
             if os.path.exists(filename):
-                print(f'loading config file: {filename}')
+                if args.verbose:
+                    print(f'loading config file: {filename}')
                 self.application.settings <<= filename
 
         for o in args.option:

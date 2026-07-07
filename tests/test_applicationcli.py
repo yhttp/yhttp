@@ -68,6 +68,11 @@ def test_applicationcli(mktmpfile):
         assert status == 73
         assert stdout == 'bar\n.\n'
 
+        when(f'--verbose --configuration-file {configfile} foo')
+        assert stderr == ''
+        assert status == 73
+        assert stdout == f'loading config file: {configfile}\nbar\n.\n'
+
         when('--directory /tmp foo')
         assert status == 0
         assert stdout == 'foo\n/tmp\n'
