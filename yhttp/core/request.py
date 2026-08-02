@@ -38,6 +38,21 @@ class Request:
         self.response = response
 
     @cached_property
+    def locales_oldstyle(self):
+        """Same as the :attr:`Request.locales` but in old-style(system) format.
+
+        It means the dash(`-`) replaced with underscore(`_`) in all entries.
+        for example it returns `fa_IR` instead of `fa-IR`.
+
+        It will be ``['*']`` if ``Accept-Languages`` header is not presents in
+        the request.
+
+        .. versionadded:: 9.3
+        """
+
+        return [locale.replace('-', '_') for locale in self.locales]
+
+    @cached_property
     def locales(self):
         """List of agent's locales ordered based on priority.
 
