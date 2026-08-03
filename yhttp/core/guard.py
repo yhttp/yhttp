@@ -15,7 +15,7 @@ class Field:
                     implies the ``optional``. default: ``None``.
     """
 
-    statusfactory_missing = statuses.badrequest
+    statusfactory_missing = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     the field is missing in the request.
     """
@@ -101,12 +101,12 @@ class String(Field):
     :param pattern: A regex pattern to specify the data format for the field.
     """
 
-    statusfactory_badlength = statuses.badrequest
+    statusfactory_badlength = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     value length is not permitted.
     """
 
-    statusfactory_badformat = statuses.badrequest
+    statusfactory_badformat = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     value format is not match with given pattern.
     """
@@ -160,7 +160,7 @@ class String(Field):
 
 
 class NonStringField(Field):
-    statusfactory_badtype = statuses.badrequest
+    statusfactory_badtype = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     the type cast to integer ``int(value)`` is raises :exc:`ValueError`.
     """
@@ -180,7 +180,7 @@ class Integer(NonStringField):
                   minimum and maximum allowed value.
     """
 
-    statusfactory_outofrange = statuses.badrequest
+    statusfactory_outofrange = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     value is not in specified range.
     """
@@ -244,7 +244,7 @@ class File(Field):
     :param extensions: list[str], allowd file extensions
     """
 
-    statusfactory_badfileextension = statuses.badrequest
+    statusfactory_badfileextension = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
        the received file's extension is not acceptable.
     """
@@ -303,7 +303,7 @@ class Guard:
                    define the allowed fields and field attributes.
 
     """
-    statusfactory_unknownfields = statuses.badrequest
+    statusfactory_unknownfields = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     the field is not desired.
     """
@@ -359,7 +359,7 @@ class BodyGuard(Guard):
                          ``content-types``.
     """
 
-    statusfactory_invalidcontenttype = statuses.badrequest
+    statusfactory_invalidcontenttype = staticmethod(statuses.badrequest)
     """A callable to create an instance of :class:`.statuses.HTTPStatus` when
     the request's content-type is not supported.
     """
