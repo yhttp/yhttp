@@ -95,13 +95,11 @@ class Serve(SubCommand):  # pragma: no cover
     def _start(self, app, host, port):  # pragma: no cover
         app.ready()
         httpd = make_server(host, port, app)
-        logging.logger.info(
-            f'Development server started: http://{host}:{port}'
-        )
+        print(f'Development server started: http://{host}:{port}')
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            logging.logger.info('CTRL+C pressed.')
+            print('CTRL+C pressed.', file=sys.stderr)
         finally:
             app.shutdown()
 
@@ -165,7 +163,7 @@ class Serve(SubCommand):  # pragma: no cover
 
             self._serve(args)
         except KeyboardInterrupt:
-            logging.logger.info('CTRL+C pressed.')
+            print('CTRL+C pressed.', file=sys.stderr)
 
         finally:
             self._subprocess_killall()
