@@ -38,7 +38,7 @@ class BaseApplication:
     _builtinsettings = '''
     debug: true
     logging:
-      verbosity: info
+      verbosity: warning
     '''
 
     #: Instance of :class:`snam.Meld` as the global configuration instance.
