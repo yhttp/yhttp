@@ -4,6 +4,7 @@ from glob import glob
 import fnmatch
 
 from inotify_simple import INotify, flags
+from .logging import logger
 
 
 DEFAULT_EXCLUDEDIRECTORIES = [
@@ -77,7 +78,7 @@ class FSWatcher(INotify):
                     self._watchfiles.add(node)
 
     def watch(self, node, mask):
-        print(f'Adding watch for: {node}')
+        logger.info(f'Adding watch for: {node}')
         wd = self.add_watch(node, mask)
         self._wds[wd] = node
 

@@ -6,7 +6,7 @@ import types
 
 import snam
 
-from . import statuses, static
+from . import statuses, static, logging
 from .request import Request
 from .response import Response
 from .cli import Main
@@ -37,6 +37,8 @@ class BaseApplication:
 
     _builtinsettings = '''
     debug: true
+    logging:
+      verbosity: info
     '''
 
     #: Instance of :class:`snam.Meld` as the global configuration instance.
@@ -156,6 +158,9 @@ class BaseApplication:
                app.ready()
         """
         self.hook('configure', self)
+        logging.configure(logging.getlevelnamesmapping().get(
+            self.settings.logging.verbosity.upper()
+        ))
         self.hook('ready', self)
 
     def shutdown(self):
@@ -223,8 +228,7 @@ class Application(BaseApplication):
     :param name: Application name
     """
 
-    _builtinsettings = '''
-    debug: true
+    _builtinsettings = BaseApplication._builtinsettings + '''
     staticdir:
         autoindex: true
         default: index.html

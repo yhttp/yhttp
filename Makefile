@@ -4,14 +4,15 @@ PYDEPS_COMMON += \
 	'coveralls >= 4.1.0' \
 	'pytest >= 7.4.4, < 8' \
 	'bddrest >= 6.3.3, < 7' \
-	'bddcli >= 2.10.1, < 3' \
+	'bddcli >= 2.10.3, < 3' \
 	'pytest-fixkit >= 1.0.3' \
-	'requests' 
+	'requests' \
+	'time_machine' 
 
 
 
 # Assert the python-makelib version
-PYTHON_MAKELIB_VERSION_REQUIRED = 4.0.1
+PYTHON_MAKELIB_VERSION_REQUIRED = 4.1
 
 
 # Ensure the python-makelib is installed

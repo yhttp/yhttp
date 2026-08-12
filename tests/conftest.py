@@ -3,6 +3,7 @@ import shutil
 import tempfile
 import functools
 
+from bddcli.fixtures import bootstrapper_patch
 import bddrest
 import pytest
 
@@ -17,3 +18,8 @@ def app():
 @pytest.fixture
 def httpreq(app):
     return functools.partial(bddrest.Given, app)
+
+
+@pytest.fixture
+def bddcli_bootpatch():
+    return bootstrapper_patch

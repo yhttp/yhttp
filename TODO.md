@@ -1,3 +1,4 @@
+- wsgi start, logging configure
 - documentation for middlewares
 - guards, default must be implies the optional argument
 - update demo/demo.py

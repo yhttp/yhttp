@@ -1,6 +1,7 @@
 import tempfile
 
-from bddcli import Application as CLIApplication, Given, stdout, status, when
+from bddcli import Application as CLIApplication, Given, stdout, status, \
+    when, stderr
 from easycli import SubCommand
 
 from yhttp.core import Rewrite
@@ -36,5 +37,6 @@ def test_rewritecli_default():
             f.write(b'title: bar')
             f.flush()
             when(f'--configuration-file {f.name} foo')
+            assert stderr == ''
             assert status == 73
             assert stdout == 'bar\n'

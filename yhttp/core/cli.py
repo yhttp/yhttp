@@ -1,11 +1,13 @@
 import os
 import time
 import sys
+import argparse
 import subprocess
 from wsgiref.simple_server import make_server
 
+from . import logging
 from .fswatcher import FSWatcher
-from easycli import Root, Argument, SubCommand
+from easycli import Root, Argument, SubCommand, Mutex
 
 
 DEFAULT_ADDRESS = '8080'
@@ -93,11 +95,13 @@ class Serve(SubCommand):  # pragma: no cover
     def _start(self, app, host, port):  # pragma: no cover
         app.ready()
         httpd = make_server(host, port, app)
-        print(f'Development server started: http://{host}:{port}')
+        logging.logger.info(
+            f'Development server started: http://{host}:{port}'
+        )
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print("CTRL+C pressed.")
+            logging.logger.info('CTRL+C pressed.')
         finally:
             app.shutdown()
 
@@ -127,8 +131,10 @@ class Serve(SubCommand):  # pragma: no cover
                 if not changes:
                     continue
 
-                print(f'Filesystem has been changed: {",".join(changes)}, '
-                      'restarting...')
+                logging.logger.info(
+                    f'Filesystem has been changed: {",".join(changes)}, '
+                    'restarting...'
+                )
                 sp.kill()
                 sp.wait()
                 sp = self._subprocess_serve(host, port)
@@ -159,10 +165,35 @@ class Serve(SubCommand):  # pragma: no cover
 
             self._serve(args)
         except KeyboardInterrupt:
-            print('\nInterrupted by user: (CTRL+C)', file=sys.stdout)
+            logging.logger.info('CTRL+C pressed.')
 
         finally:
             self._subprocess_killall()
+
+
+class VerbosityAction(argparse.Action):
+    def __init__(self, option_strings, dest, **kwargs):
+        super().__init__(option_strings, dest, nargs=0, type=int, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        value = getattr(namespace, self.dest)
+        if option_string in ('-v', '--verbose'):
+            if value <= 10:
+                parser.error(
+                    f'option {option_string} only allowed up to twice'
+                )
+
+            value -= 10
+
+        elif option_string in ('-q', '--quiet'):
+            if value >= 60:
+                parser.error(
+                    f'option {option_string} only allowed up to 3 times'
+                )
+
+            value += 10
+
+        setattr(namespace, self.dest, value)
 
 
 class Main(Root):
@@ -170,7 +201,7 @@ class Main(Root):
     __arguments__ = [
         Argument(
             '-c', '--configuration-file',
-            metavar="FILE",
+            metavar='FILE',
             dest='configurationfile',
             help='Configuration file',
         ),
@@ -186,11 +217,26 @@ class Main(Root):
             help='Set a configutation entry: -O foo.bar.baz=\'qux\'. this '
                  'argument can passed multiple times.'
         ),
-        Argument(
-            '-v', '--verbose',
-            action='store_true',
-            default=False,
-            help='Verbose mode'
+        Mutex(
+            Argument(
+                '-v', '--verbose',
+                action=VerbosityAction,
+                default=logging.WARNING,
+                dest='verbosity',
+                help='Give more output. Option is additive, and can be used '
+                     'up to 2 times (corresponding to INFO and DEBUG '
+                     'logging levels). default logging level is WARNING.'
+            ),
+            Argument(
+                '-q', '--quiet',
+                action=VerbosityAction,
+                default=logging.WARNING,
+                dest='verbosity',
+                help='Give less output. Option is additive, and can be used '
+                     'up to 3 times (corresponding to ERROR, CRITICAL and '
+                     'SILENT logging levels). default logging level is '
+                     'WARNING.'
+            ),
         ),
         Serve,
     ]
@@ -207,14 +253,16 @@ class Main(Root):
         super().__init__()
 
     def _execute_subcommand(self, args):
+        logging.configure(args.verbosity)
         args.application = self.application
 
         if args.directory != '.':
             os.chdir(args.directory)
 
         if args.configurationfile:
-            if args.verbose:
-                print(f'loading config file: {args.configurationfile}')
+            logging.logger.info(
+                f'loading config file: {args.configurationfile}'
+            )
             self.application.settings <<= args.configurationfile
 
         else:  # pragma: no cover
@@ -226,8 +274,7 @@ class Main(Root):
                 filename = f'/home/{user}/.config/{appname}/{appname}.yml'
 
             if os.path.exists(filename):
-                if args.verbose:
-                    print(f'loading config file: {filename}')
+                logging.logger.info(f'loading config file: {filename}')
                 self.application.settings <<= filename
 
         for o in args.option:

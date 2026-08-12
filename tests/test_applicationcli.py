@@ -53,10 +53,15 @@ foo:
 '''
 
 
-def test_applicationcli(mktmpfile):
+def test_applicationcli(mktmpfile, bddcli_bootpatch):
     cliapp = CLIApplication('foo', 'tests.test_applicationcli:app.climain')
     configfile = mktmpfile(content='title: bar')
-    with Given(cliapp, '--help'):
+    freezetime = \
+        'import time_machine;' \
+        'time_machine.travel("2012-02-14 16:00:01", tick=False).start()\n'
+
+    with bddcli_bootpatch(freezetime), Given(cliapp, '--help'):
+        assert stderr == ''
         assert status == 0
 
         when('foo')
@@ -71,7 +76,10 @@ def test_applicationcli(mktmpfile):
         when(f'--verbose --configuration-file {configfile} foo')
         assert stderr == ''
         assert status == 73
-        assert stdout == f'loading config file: {configfile}\nbar\n.\n'
+        assert stdout == (
+            '2012-02-14 16:00:01.000 INFO yhttp: loading config file: '
+            f'{configfile}\nbar\n.\n'
+        )
 
         when('--directory /tmp foo')
         assert status == 0
