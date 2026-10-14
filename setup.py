@@ -18,7 +18,7 @@ dependencies = [
     'snam >= 1.0.2',
     'easycli >= 1.10.1, < 2',
     'ujson',
-    'inotify-simple',
+    'watchdog',
 ]
 
 

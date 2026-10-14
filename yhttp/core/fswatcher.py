@@ -1,9 +1,12 @@
-import time
-from os import path
-from glob import glob
 import fnmatch
+from glob import glob
+from os import path
+from queue import Empty, Queue
+import time
 
-from inotify_simple import INotify, flags
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
 from .logging import logger
 
 
@@ -19,119 +22,124 @@ DEFAULT_EXCLUDEFILES = [
 ]
 
 
-class FSWatcher(INotify):
+class _EventHandler(FileSystemEventHandler):
+    def __init__(self, watcher):
+        self.watcher = watcher
+
+    def on_any_event(self, event):
+        if event.event_type not in ('created', 'deleted', 'modified', 'moved'):
+            return
+        # Watchdog reports a directory modification when an entry inside it
+        # changes. Inotify only reported the entry itself for the masks we
+        # used, so directory metadata events must not become change results.
+        if event.is_directory and event.event_type == 'modified':
+            return
+        self.watcher._events.put(event)
+
+
+class FSWatcher:
     def __init__(self, directories=None, files=None, excludedirectories=None,
                  excludefiles=None):
         assert directories or files
-        super().__init__(closefd=False)
-        self._directorymask = flags.CREATE \
-            | flags.DELETE \
-            | flags.DELETE_SELF \
-            | flags.MOVE_SELF \
-            | flags.MOVED_FROM \
-            | flags.MOVED_TO \
-            | flags.MODIFY
-
-        self._filemask = flags.MODIFY | flags.DELETE_SELF | flags.MOVE_SELF
         self.directories = directories or []
         self.files = files or []
-        self._wds = {}
+        self._observer = Observer()
+        self._events = Queue()
+        self._handler = _EventHandler(self)
+        self._watched_directories = set()
+        self._watchfiles = set()
 
-        self.excludedirectories = []
-        self.excludedirectories.extend(DEFAULT_EXCLUDEDIRECTORIES)
+        self.excludedirectories = list(DEFAULT_EXCLUDEDIRECTORIES)
         if excludedirectories:
             self.excludedirectories.extend(excludedirectories)
 
-        self.excludefiles = []
-        self.excludefiles.extend(DEFAULT_EXCLUDEFILES)
+        self.excludefiles = list(DEFAULT_EXCLUDEFILES)
         if excludefiles:
             self.excludefiles.extend(excludefiles)
 
     def _excludedirectory(self, node):
-        for pattern in self.excludedirectories:
-            if fnmatch.fnmatchcase(node, pattern):
-                return True
-
-        return False
+        return any(fnmatch.fnmatchcase(node, pattern)
+                   for pattern in self.excludedirectories)
 
     def _excludefile(self, node):
-        for pattern in self.excludefiles:
-            if fnmatch.fnmatchcase(node, pattern):
-                return True
-
-        return False
+        return any(fnmatch.fnmatchcase(node, pattern)
+                   for pattern in self.excludefiles)
 
     def _refine_watches(self):
-        self._watchdirectories = set()
+        self._watched_directories = set()
         self._watchfiles = set()
 
         for pattern in self.directories:
-            matches = glob(pattern, recursive=True)
-            for node in matches:
+            for node in glob(pattern, recursive=True):
                 if path.isdir(node) and not self._excludedirectory(node):
-                    self._watchdirectories.add(node)
+                    self._watched_directories.add(path.abspath(node))
 
         for pattern in self.files:
-            matches = glob(pattern, recursive=True)
-            for node in matches:
+            for node in glob(pattern, recursive=True):
                 if path.isfile(node) and not self._excludefile(node):
-                    self._watchfiles.add(node)
-
-    def watch(self, node, mask):
-        logger.info(f'Adding watch for: {node}')
-        wd = self.add_watch(node, mask)
-        self._wds[wd] = node
+                    self._watchfiles.add(path.abspath(node))
 
     def start(self):
         self._refine_watches()
-        for node in self._watchdirectories:
-            self.watch(node, self._directorymask)
-
-        for node in self._watchfiles:
-            self.watch(node, self._filemask)
+        directories = set(self._watched_directories)
+        directories.update(path.dirname(node) for node in self._watchfiles)
+        for directory in directories:
+            logger.info(f'Adding watch for: {directory}')
+            self._observer.schedule(self._handler, directory, recursive=False)
+        self._observer.start()
 
     def stop(self):
-        self._readall()
-        for wd in self._wds:
-            self.rm_watch(wd)
-
-        self._wds = {}
+        if self._observer.is_alive():
+            self._observer.stop()
+            self._observer.join()
+        self._clear_events()
 
     def close(self):
-        self._poller.unregister(self.fileno())
-        super().close()
+        self.stop()
+
+    def _clear_events(self):
+        while True:
+            try:
+                self._events.get_nowait()
+            except Empty:
+                break
+
+    def _event_paths(self, event):
+        paths = [event.src_path]
+        if event.event_type == 'moved':
+            paths.append(event.dest_path)
+
+        matching = set()
+        for node in paths:
+            node = path.abspath(node)
+            if self._excludefile(node):
+                continue
+            if node in self._watchfiles:
+                matching.add(node)
+            if (node in self._watched_directories or path.dirname(node) in
+                    self._watched_directories):
+                matching.add(node)
+        return matching
 
     def wait(self, timeout=0):
         changes = set()
-        starttime = None
+        deadline = time.monotonic() + max(timeout, 0) / 1000
+        # Watchdog delivers notifications asynchronously. A short initial wait
+        # lets zero-debounce callers observe events caused just before wait().
+        initial_wait = 0.25 if timeout <= 0 else max(timeout, 0) / 1000
         while True:
-            for e in self.read(timeout):
-                # cannot simulate this situation, but I think it's enough to
-                # raise error
-                if e.wd == -1:  # pragma: no cover
-                    raise OSError('INotify event queue overflow')
-
-                # uncomment to debug masks(flags)
-                # fl = [f.name for f in flags.from_mask(e.mask)]
-                if e.mask & flags.IGNORED:
-                    continue
-
-                if not (e.mask & flags.ISDIR) and e.name:
-                    fn = path.join(self._wds[e.wd], e.name)
-                    if e.name and self._excludefile(fn):
-                        continue
-                else:
-                    fn = self._wds[e.wd]
-
-                changes.add(fn)
-
-            if changes:
-                if starttime is None:
-                    starttime = time.perf_counter()
-                    continue
-                timeout -= (time.perf_counter() - starttime) * 1000
-
             if timeout <= 0:
+                remaining = initial_wait
+            else:
+                remaining = max(0, deadline - time.monotonic())
+            try:
+                event = self._events.get(timeout=remaining)
+            except Empty:
                 break
-
+            changes.update(self._event_paths(event))
+            if changes and timeout > 0 and time.monotonic() >= deadline:
+                break
+            if changes and timeout <= 0:
+                # Drain notifications already queued in this delivery batch.
+                continue
         return changes
