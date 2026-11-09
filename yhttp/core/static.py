@@ -8,21 +8,94 @@ from . import statuses
 CHUNKSIZE = 1024 * 10
 
 
+def _byte_range(request, length):
+    """Return the selected byte interval, or None when Range is ignored."""
+    if request.verb != 'get' or 'HTTP_IF_RANGE' in request.environ:
+        return None
+
+    value = request.environ.get('HTTP_RANGE')
+    if not value or '=' not in value:
+        return None
+
+    unit, spec = value.split('=', 1)
+    if unit.strip().lower() != 'bytes' or ',' in spec:
+        # Multiple ranges are optional; ignore them and send the full entity.
+        return None
+
+    spec = spec.strip()
+    if '-' not in spec:
+        return None
+    first, last = (part.strip() for part in spec.split('-', 1))
+    if not first and not last:
+        return None
+
+    try:
+        if not first:
+            suffix_length = int(last)
+            if suffix_length < 0:
+                return None
+            if suffix_length == 0 or length == 0:
+                return False
+            return max(0, length - suffix_length), length - 1
+
+        start = int(first)
+        if last:
+            end = int(last)
+            if end < start:
+                return None
+        else:
+            end = length - 1
+    except ValueError:
+        return None
+
+    if start >= length:
+        return False
+    return start, min(end, length - 1)
+
+
+def _stream_file(request, filename, length, contenttype):
+    response = request.response
+    response.contenttype = contenttype
+    response.headers['accept-ranges'] = 'bytes'
+
+    byte_range = _byte_range(request, length)
+    if byte_range is False:
+        response.status = '416 Range Not Satisfiable'
+        response.headers['content-range'] = f'bytes */{length}'
+        response.length = 0
+        yield b''
+        return
+
+    if byte_range is None:
+        response.length = length
+        start, end = 0, length - 1
+    else:
+        start, end = byte_range
+        response.status = '206 Partial Content'
+        response.headers['content-range'] = f'bytes {start}-{end}/{length}'
+        response.length = end - start + 1
+
+    if not response.length:
+        yield b''
+        return
+
+    with open(filename, 'rb') as f:
+        f.seek(start)
+        remaining = response.length
+        while remaining:
+            chunk = f.read(min(CHUNKSIZE, remaining))
+            if not chunk:
+                break
+            remaining -= len(chunk)
+            yield chunk
+
+
 def file(filename):
     length = path.getsize(filename)
     type_ = guess_type(path.split(filename)[1])[0]
 
     def get(request):
-        response = request.response
-        response.length = length
-        response.contenttype = type_
-        with open(filename, 'rb') as f:
-            while True:
-                chunk = f.read(CHUNKSIZE)
-                if not chunk:
-                    break
-
-                yield chunk
+        yield from _stream_file(request, filename, length, type_)
 
     return get
 
@@ -145,14 +218,11 @@ def directory(rootpath, default=False, autoindex=True, fallback=False):
             if not path.exists(target):
                 raise statuses.notfound()
 
-        response.length = path.getsize(target)
-        response.contenttype = guess_type(path.split(target)[1])[0]
-        with open(target, 'rb') as f:
-            while True:
-                chunk = f.read(CHUNKSIZE)
-                if not chunk:
-                    break
-
-                yield chunk
+        yield from _stream_file(
+            request,
+            target,
+            path.getsize(target),
+            guess_type(path.split(target)[1])[0],
+        )
 
     return get

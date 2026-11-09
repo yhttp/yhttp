@@ -1,6 +1,11 @@
 from os import path
+from types import SimpleNamespace
 
 from bddrest import status, response, when
+import pytest
+
+from yhttp.core.headerset import HeaderSet
+from yhttp.core.static import file as staticfile
 
 
 def test_staticfile(app, httpreq, tmpdir):
@@ -15,6 +20,117 @@ def test_staticfile(app, httpreq, tmpdir):
         assert response.headers['content-type'] == 'text/plain'
         assert response.headers['content-length'] == '3'
         assert response == 'foo'
+
+
+def test_staticfile_byte_ranges(app, httpreq, tmpdir):
+    filename = path.join(tmpdir, 'range.txt')
+    with open(filename, 'wb') as f:
+        f.write(b'0123456789')
+
+    app.staticfile(r'/range\.txt', filename)
+
+    with httpreq('/range.txt', headers={'Range': 'bytes=2-5'}):
+        assert status == 206
+        assert response.headers['accept-ranges'] == 'bytes'
+        assert response.headers['content-range'] == 'bytes 2-5/10'
+        assert response.headers['content-length'] == '4'
+        assert response == '2345'
+
+    with httpreq('/range.txt', headers={'Range': 'bytes=-3'}):
+        assert status == 206
+        assert response.headers['content-range'] == 'bytes 7-9/10'
+        assert response == '789'
+
+    with httpreq('/range.txt', headers={'Range': 'bytes=20-'}):
+        assert status == 416
+        assert response.headers['content-range'] == 'bytes */10'
+
+    with httpreq('/range.txt', headers={'Range': 'bytes=-0'}):
+        assert status == 416
+        assert response.headers['content-range'] == 'bytes */10'
+
+    with httpreq('/range.txt', headers={'Range': 'invalid'}):
+        assert status == 200
+        assert response.headers['content-length'] == '10'
+        assert response == '0123456789'
+
+    with httpreq(
+        '/range.txt', headers={'Range': 'bytes=0-1,4-5'}
+    ):
+        assert status == 200
+        assert response == '0123456789'
+
+
+@pytest.mark.parametrize('range_header', [
+    'bytes=10',
+    'bytes=-',
+    'bytes=3-1',
+    'bytes=abc-def',
+    'bytes=--1',
+])
+def test_malformed_or_unsupported_ranges_send_full_file(
+    app, httpreq, tmpdir, range_header,
+):
+    filename = path.join(tmpdir, 'range.txt')
+    with open(filename, 'wb') as f:
+        f.write(b'0123456789')
+    app.staticfile(r'/range\.txt', filename)
+
+    with httpreq('/range.txt', headers={'Range': range_header}):
+        assert status == 200
+        assert response == '0123456789'
+
+
+def test_empty_static_file(app, httpreq, tmpdir):
+    filename = path.join(tmpdir, 'empty.txt')
+    open(filename, 'wb').close()
+    app.staticfile(r'/empty\.txt', filename)
+
+    with httpreq('/empty.txt'):
+        assert status == 200
+        assert response.headers['content-length'] == '0'
+        assert response == ''
+
+
+def test_staticfile_short_read_after_size_lookup(tmpdir):
+    filename = path.join(tmpdir, 'short.txt')
+    with open(filename, 'wb') as f:
+        f.write(b'content')
+
+    handler = staticfile(filename)
+    request = SimpleNamespace(
+        verb='get', environ={},
+        response=SimpleNamespace(headers=HeaderSet()),
+    )
+    open(filename, 'wb').close()
+
+    assert list(handler(request)) == []
+
+
+def test_staticdirectory_byte_ranges(app, httpreq, tmpdir):
+    filename = path.join(tmpdir, 'range.txt')
+    with open(filename, 'wb') as f:
+        f.write(b'0123456789')
+    app.staticdirectory('/static', tmpdir)
+
+    with httpreq('/static/range.txt', headers={'Range': 'bytes=3-'}):
+        assert status == 206
+        assert response.headers['content-range'] == 'bytes 3-9/10'
+        assert response == '3456789'
+
+
+def test_range_request_with_if_range_sends_full_file(app, httpreq, tmpdir):
+    filename = path.join(tmpdir, 'range.txt')
+    with open(filename, 'wb') as f:
+        f.write(b'0123456789')
+    app.staticfile(r'/range\.txt', filename)
+
+    with httpreq('/range.txt', headers={
+        'Range': 'bytes=2-5',
+        'If-Range': '"unknown-validator"',
+    }):
+        assert status == 200
+        assert response == '0123456789'
 
 
 def test_staticdirectory(app, httpreq, mktmptree):
